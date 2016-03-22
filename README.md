@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Metrol\DBSql
 ## Writing SQL syntax with PHP
 
@@ -52,10 +51,3 @@ Then we also get the binding, all ready to go into a PDO execute statement.  To 
 $statement = $pdo->prepare($select->output());
 $statement->execute($select->getBindings());
 ```
-
-
-
-=======
-# dbsql
-A PHP library for generating SQL
->>>>>>> 6bdf6c5d29175610caa11be0aa63ad76fb3c5250
