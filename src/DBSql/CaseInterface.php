@@ -12,7 +12,7 @@ namespace Metrol\DBSql;
  * Define what the Case/When class should look like
  *
  */
-interface CaseInterface
+interface CaseInterface extends StatementInterface
 {
     /**
      * Adds a WHEN statement to the stack and provides the WHEN object

@@ -69,6 +69,18 @@ class CaseField implements CaseFieldInterface
     }
 
     /**
+     * Added so as to properly support the Statement interface and debugging.
+     * You should not normally need this when called from a Select statement
+     * as this was intended.
+     *
+     * @return string
+     */
+    public function output(): string
+    {
+        return $this->buildSQL();
+    }
+
+    /**
      * Adds a WHEN statement to the stack and provides the WHEN object
      * to provide the stack.
      *

@@ -12,16 +12,8 @@ namespace Metrol\DBSql;
  * Define what the When part of a Case/When class should look like
  *
  */
-interface WhenInterface
+interface WhenInterface extends StatementInterface
 {
-    /**
-     * Provide the output of this WHEN object all ready to be included into the
-     * CASE statement
-     *
-     * @return string
-     */
-    public function output(): string;
-
     /**
      * Adds a WHEN statement to the stack and provides the WHEN object
      * to provide the stack.

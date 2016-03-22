@@ -87,7 +87,7 @@ SQL;
                 ->then("'Get er done'")
                 ->enableQuoting(false) // then() returns a Case object, so need to turn off quoting here as well
                 ->elseThen("'Got er did'")
-            ->endCase('foo')
+                ->endCase('foo')
             ->output();
 
         $this->assertEquals($expected, $actual);
