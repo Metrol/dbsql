@@ -33,6 +33,15 @@ interface SelectInterface extends StatementInterface
     public function fields(array $fieldNames);
 
     /**
+     * Adds a CASE/WHEN/THEN structure to the field stack.
+     * When chaining calls, you must call the Case->end() method to get this
+     * object back.
+     *
+     * @return CaseFieldInterface
+     */
+    public function caseField();
+
+    /**
      * Add a data source to the FROM clause of the query.
      *
      * @param string $fromName
