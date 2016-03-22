@@ -1,0 +1,22 @@
+{
+    "name"       : "metrol/dbsql",
+    "description": "A PHP library for generating SQL",
+    "type"       : "library",
+    "license"    : "MIT License",
+    "homepage"   : "https://github.com/Metrol/dbsql",
+    "version"    : "0.1.0",
+
+    "require" : {
+        "php"           : ">=7.0.1"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "5.1.*"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Metrol\\": "src/"
+        }
+    }
+}
