@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Metrol\DBSql
 ## Writing SQL syntax with PHP
 
@@ -54,3 +55,7 @@ $statement->execute($select->getBindings());
 
 
 
+=======
+# dbsql
+A PHP library for generating SQL
+>>>>>>> 6bdf6c5d29175610caa11be0aa63ad76fb3c5250
