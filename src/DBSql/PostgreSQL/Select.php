@@ -555,15 +555,19 @@ class Select implements SelectInterface
     /**
      * Add a HAVING clause to the stack of criteria in the SELECT statement.
      * Each new clause called will be included with an "AND" in between.
-     * Field names will not be quoted.  You must quote where needed yourself.
+     * Field names will not be quoted.
+     * You must quote where needed yourself.
      *
      * @param string $criteria   Criteria for an aggregate
+     * @param array  $bindValues
      *
      * @return self
      */
-    public function having(string $criteria): self
+    public function having(string $criteria, array $bindValues = null): self
     {
-        $this->havingStack[] = $criteria;
+        $havingClause = $this->bindAssign($criteria, $bindValues);
+
+        $this->havingStack[] = $havingClause;
 
         return $this;
     }

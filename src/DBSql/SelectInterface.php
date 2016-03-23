@@ -176,8 +176,9 @@ interface SelectInterface extends StatementInterface
      * Each new clause called will be included with an "AND" in between.
      *
      * @param string $criteria Criteria for an aggregate
+     * @param array  $bindValues
      *
      * @return self
      */
-    public function having(string $criteria);
+    public function having(string $criteria, array $bindValues = null);
 }
