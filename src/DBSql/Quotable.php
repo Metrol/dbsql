@@ -78,7 +78,7 @@ class Quotable
         $this->tableCloseQuote = '"';
 
         $this->symbols = [
-            '<', '<>', '>', '=', '+', '-', '*', '/'
+            '<', '<>', '>', '=', '+', '-', '*', '/', '(', ')'
         ];
 
         $this->keywords = [
@@ -269,23 +269,15 @@ class Quotable
      *
      * @return string
      */
-    protected function dotFieldQuote($in): string
+    protected function dotFieldQuote(string $in): string
     {
-        $parts = explode('.', $in);
+        $out = $in;
 
-        foreach ( $parts as $i => $part )
-        {
-            if ( strpos($part, '(') )
-            {
-                $parts[ $i ] = $this->parenthesesFieldQuote($part);
-            }
-            else
-            {
-                $parts[ $i ] = $this->fieldWrapWord($part);
-            }
-        }
-
-        $out = implode('.', $parts);
+        $out = preg_replace('/\((\w+)/', '("$1"', $out);
+        $out = preg_replace('/(\w+)\(/', '"$1"(', $out);
+        $out = preg_replace('/(\w+)\.(\w+)/', '"$1"."$2"', $out);
+        $out = preg_replace('/\.(\w+)/', '."$1"', $out);
+        $out = preg_replace('/(\w+)\./', '"$1".', $out);
 
         return $out;
     }
@@ -297,19 +289,12 @@ class Quotable
      *
      * @return string
      */
-    protected function parenthesesFieldQuote($in): string
+    protected function parenthesesFieldQuote(string $in): string
     {
         $out = $in;
 
-        $firstWord = substr($in, 0, strpos($in, '(') );
-
-        if ( $firstWord !== strtolower($firstWord) )
-        {
-            $out = $this->fieldOpenQuote;
-            $out .= $firstWord;
-            $out .= $this->fieldCloseQuote;
-            $out .= substr($in, strpos($in, '('));
-        }
+        $out = preg_replace('/\((\w+)/', '("$1"', $out);
+        $out = preg_replace('/(\w+)\(/', '"$1"(', $out);
 
         return $out;
     }
