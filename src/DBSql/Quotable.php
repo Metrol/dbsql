@@ -273,11 +273,14 @@ class Quotable
     {
         $out = $in;
 
-        $out = preg_replace('/\((\w+)/', '("$1"', $out);
-        $out = preg_replace('/(\w+)\(/', '"$1"(', $out);
-        $out = preg_replace('/(\w+)\.(\w+)/', '"$1"."$2"', $out);
-        $out = preg_replace('/\.(\w+)/', '."$1"', $out);
-        $out = preg_replace('/(\w+)\./', '"$1".', $out);
+        $oq = $this->fieldOpenQuote;
+        $cq = $this->fieldCloseQuote;
+
+        $out = preg_replace('/\((\w+)/', '('.$oq.'$1'.$cq, $out); // (word
+        $out = preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out); // word(
+        $out = preg_replace('/(\w+)\.(\w+)/', $oq.'$1'.$cq.'.'.$oq.'$2'.$cq, $out); // word.word
+        $out = preg_replace('/\.(\w+)/', '.'.$oq.'$1'.$cq, $out); // .word
+        $out = preg_replace('/(\w+)\./', $oq.'$1'.$cq.'.', $out); // word.
 
         return $out;
     }
@@ -293,8 +296,11 @@ class Quotable
     {
         $out = $in;
 
-        $out = preg_replace('/\((\w+)/', '("$1"', $out);
-        $out = preg_replace('/(\w+)\(/', '"$1"(', $out);
+        $oq = $this->fieldOpenQuote;
+        $cq = $this->fieldCloseQuote;
+
+        $out = preg_replace('/\((\w+)/', '('.$oq.'$1'.$cq, $out);
+        $out = preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out);
 
         return $out;
     }
