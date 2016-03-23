@@ -445,5 +445,96 @@ SQL;
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * Testing the Group By and Having methods
+     *
+     */
+    public function testGroupByHaving()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $select->fields(['id', 'stuff', 'moreStuff', 'count(*) "Table Count"'])
+            ->from('tableWithData twd')
+            ->groupBy('id')                         // Adding only a single field at a time
+            ->groupByFields(['stuff', 'moreStuff']) // Multiple group by fields
+            ->having('count(*) > ?', [2])           // Check that binding works properly
+            ->having('max(stuff) > "moreStuff"');   // Having doesn't quote automatically
+
+        $bindings = $select->getBindings();
+        $label = key($bindings);
+
+        $this->assertCount(1, $bindings);
+        $this->assertContains(2, $bindings);
+
+        $actual = $select->output();
+
+        $expected = <<<SQL
+SELECT
+    "id",
+    "stuff",
+    "moreStuff",
+    count(*) "Table Count"
+FROM
+    "tableWithData" "twd"
+GROUP BY
+    "id",
+    "stuff",
+    "moreStuff"
+HAVING
+    count(*) > {$label}
+    AND
+    max(stuff) > "moreStuff"
+
+SQL;
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Put in a Limit and and Offset into the Select statement
+     *
+     */
+    public function testLimitOffset()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $select
+            ->from('tableWithData twd')
+            ->limit(22);
+
+        $actual = $select->output();
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+LIMIT 22
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+
+        $select = DBSql::PostgreSQL()->select();
+
+        $select
+            ->from('tableWithData twd')
+            ->limit(22)
+            ->offset(45);
+
+        $actual = $select->output();
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+LIMIT 22
+OFFSET 45
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
 }
 
