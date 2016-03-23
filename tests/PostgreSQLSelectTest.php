@@ -92,4 +92,65 @@ SQL;
 
         $this->assertEquals($expected, $actual);
     }
+
+    /**
+     * See if some basic binding into a WHERE clause is working correctly.
+     *
+     */
+    public function testAutoSingleBindingInWhere()
+    {
+        $select = DBSql::PostgreSQL()->select()
+            ->from('tableWithData twd')
+            ->where('twd.value = ?', [42]);
+
+        $bindings = $select->getBindings();
+
+        $this->assertCount(1, $bindings);
+        $this->assertContains(42, $bindings);
+
+        $label = key($bindings);
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+WHERE
+    "twd"."value" = {$label}
+
+SQL;
+
+        $this->assertEquals($expected, $select->output());
+    }
+
+    /**
+     * Test multiple automatic bindings into a WHERE clause is working correctly.
+     *
+     */
+    public function testAutoMultiBindingInWhere()
+    {
+        $select = DBSql::PostgreSQL()->select()
+            ->from('tableWithData twd')
+            ->where('(twd.Value = ? OR twd.Value = ?)', [42, 36]);
+
+        $bindings = $select->getBindings();
+
+        $this->assertCount(2, $bindings);
+        $this->assertContains(42, $bindings);
+        $this->assertContains(36, $bindings);
+
+        list($label1, $label2) = array_keys($bindings);
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+WHERE
+    ("twd"."Value" = {$label1} OR "twd"."Value" = {$label2})
+
+SQL;
+
+        $this->assertEquals($expected, $select->output());
+    }
 }
