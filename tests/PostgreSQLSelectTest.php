@@ -17,7 +17,10 @@ use \Metrol\DBSql\PostgreSQL;
 class PostgreSQLSelectTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Testing some basic Select work
+     * Testing some basic Select work.
+     * Starts into testing the ability to reset the FROM stack.
+     * Properly quote fields and tables.
+     * Default indenting must also be working.
      *
      */
     public function testSelectBasic()
@@ -62,6 +65,7 @@ SQL;
 
     /**
      * Testing a SELECT statement with CASE/WHEN structure in it.
+     * Can disable quoting on the fly.
      *
      */
     public function testSelectCaseWhen()
@@ -95,6 +99,7 @@ SQL;
 
     /**
      * See if some basic binding into a WHERE clause is working correctly.
+     * Did the label get put into the binding as well as the SQL.
      *
      */
     public function testAutoSingleBindingInWhere()
@@ -199,8 +204,8 @@ SQL;
     }
 
     /**
-     * See if the sub select works properly in a WHERE IN statement.  To keep
-     * things interesting, mix that in with other criteria in the WHERE
+     * See if the sub select works properly in a WHERE IN statement.
+     * To keep things interesting, mix that in with other criteria in the WHERE
      * statement.
      *
      */
@@ -306,6 +311,135 @@ WHERE
     )
     AND
     "twd"."id" < {$label3}
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test the ability to pass into a WHERE clause a list of values that can
+     * be a match for a field.
+     *
+     */
+    public function testWhereInValues()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $valueChar = ['Bob',
+                      'Mary',
+                      'Sally',
+                      'Fred',
+                      'George'];
+
+        $select->from('tableWithData twd')
+            ->whereIn('twd.name', $valueChar);
+
+        $bindings = $select->getBindings();
+
+        $this->assertCount(5, $bindings);
+        $this->assertContains('Bob',    $bindings);
+        $this->assertContains('Mary',   $bindings);
+        $this->assertContains('Sally',  $bindings);
+        $this->assertContains('Fred',   $bindings);
+        $this->assertContains('George', $bindings);
+
+        $label1 = array_search('Bob',    $bindings);
+        $label2 = array_search('Mary',   $bindings);
+        $label3 = array_search('Sally',  $bindings);
+        $label4 = array_search('Fred',   $bindings);
+        $label5 = array_search('George', $bindings);
+
+        $actual = $select->output();
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+WHERE
+    "twd"."name" IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+
+        // Run through it again, this time with numeric values
+        $select = DBSql::PostgreSQL()->select();
+        $valueNum = [45, 32, 65, 21, 44];
+
+        $select->from('tableWithData twd')
+               ->whereIn('twd.index', $valueNum);
+
+        $bindings = $select->getBindings();
+
+        $this->assertCount(5, $bindings);
+        $this->assertContains(45, $bindings);
+        $this->assertContains(32, $bindings);
+        $this->assertContains(65, $bindings);
+        $this->assertContains(21, $bindings);
+        $this->assertContains(44, $bindings);
+
+        $label1 = array_search(45, $bindings);
+        $label2 = array_search(32, $bindings);
+        $label3 = array_search(65, $bindings);
+        $label4 = array_search(21, $bindings);
+        $label5 = array_search(44, $bindings);
+
+        $actual = $select->output();
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+WHERE
+    "twd"."index" IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test the ability to pass into a WHERE clause a list of values that should
+     * not be a match for a field.
+     *
+     */
+    public function testWhereNotInValues()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $valueChar = ['Bob',
+                      'Mary',
+                      'Sally',
+                      'Fred',
+                      'George'];
+
+        $select->from('tableWithData twd')
+            ->whereNotIn('twd.name', $valueChar);
+
+        $bindings = $select->getBindings();
+
+        $this->assertCount(5, $bindings);
+        $this->assertContains('Bob',    $bindings);
+        $this->assertContains('Mary',   $bindings);
+        $this->assertContains('Sally',  $bindings);
+        $this->assertContains('Fred',   $bindings);
+        $this->assertContains('George', $bindings);
+
+        $label1 = array_search('Bob',    $bindings);
+        $label2 = array_search('Mary',   $bindings);
+        $label3 = array_search('Sally',  $bindings);
+        $label4 = array_search('Fred',   $bindings);
+        $label5 = array_search('George', $bindings);
+
+        $actual   = $select->output();
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+WHERE
+    "twd"."name" NOT IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
 
 SQL;
 
