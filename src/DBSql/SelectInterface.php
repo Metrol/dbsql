@@ -107,6 +107,17 @@ interface SelectInterface extends StatementInterface
     public function whereIn(string $fieldName, array $values);
 
     /**
+     * Sets up a WHERE entry to see if a field does not have value in the array
+     * provided.
+     *
+     * @param string $fieldName
+     * @param array  $values
+     *
+     * @return self
+     */
+    public function whereNotIn(string $fieldName, array $values);
+
+    /**
      * Sets up a WHERE field is in the results of a sub query.  Bindings from
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
@@ -119,17 +130,28 @@ interface SelectInterface extends StatementInterface
     public function whereInSub(string $fieldName, SelectInterface $subSelect);
 
     /**
+     * Sets up a WHERE field is not in the results of a sub query.  Bindings from
+     * the specified sub query are merged as able.  This object (the parent
+     * query) has the final say on a binding value when there is a conflict.
+     *
+     * @param string          $fieldName
+     * @param SelectInterface $subSelect
+     *
+     * @return self
+     */
+    public function whereNotInSub(string $fieldName, SelectInterface $subSelect);
+
+    /**
      * Add fields to order the result set by
      *
      * @param string $fieldName
-     * @param string $direction
+     * @param string $direction ASC by default
      * @param string $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
      *
      * @return self
      */
     public function order(string $fieldName, string $direction = null,
                           string $nullOrder = null);
-
 
     /**
      * Add a field to the GROUP BY clause.
