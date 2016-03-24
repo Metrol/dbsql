@@ -53,7 +53,7 @@ trait Where
             return $this;
         }
 
-        $fieldString = $this->indent().$this->quoter()->quoteField($fieldName);
+        $fieldString = $this->quoter()->quoteField($fieldName);
 
         $placeHolders = '(';
         $placeHolders .= implode(', ', array_fill(0, count($values), '?') );
@@ -84,7 +84,7 @@ trait Where
             return $this;
         }
 
-        $fieldString = $this->indent().$this->quoter()->quoteField($fieldName);
+        $fieldString = $this->quoter()->quoteField($fieldName);
 
         $placeHolders = '(';
         $placeHolders .= implode(', ', array_fill(0, count($values), '?') );
@@ -110,7 +110,7 @@ trait Where
      */
     public function whereInSub(string $fieldName, SelectInterface $subSelect): self
     {
-        $fieldString = $this->indent().$this->quoter()->quoteField($fieldName);
+        $fieldString = $this->quoter()->quoteField($fieldName);
 
         $whereClause = $fieldString.' IN'.PHP_EOL;
         $whereClause .= $this->indent().'('.PHP_EOL;
@@ -136,7 +136,7 @@ trait Where
      */
     public function whereNotInSub(string $fieldName, SelectInterface $subSelect): self
     {
-        $fieldString = $this->indent().$this->quoter()->quoteField($fieldName);
+        $fieldString = $this->quoter()->quoteField($fieldName);
 
         $whereClause = $fieldString.' NOT IN'.PHP_EOL;
         $whereClause .= $this->indent().'('.PHP_EOL;
