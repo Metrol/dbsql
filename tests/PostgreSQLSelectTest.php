@@ -536,5 +536,217 @@ SQL;
 
         $this->assertEquals($expected, $actual);
     }
-}
 
+    /**
+     * Test the most basic JOIN that's for an INNER join bringing in the
+     * criteria with an ON clause.
+     *
+     */
+    public function testJoinInnerOn()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $select->from('tableWithData twd')
+            ->join('otherTable ot',      // The table with alias
+                   'ot.twdID = twd.id'); // The ON criteria without bindings
+
+        $actual = $select->output();
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+    JOIN "otherTable" "ot"
+        ON "ot"."twdID" = "twd"."id"
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+
+        $select = DBSql::PostgreSQL()->select();
+        $select->from('tableWithData twd')  // The primary table data is from
+               ->join('moreData md', 'md.twdID = twd.id') // Simple join
+               ->join('otherTable ot', // Join Table
+                      'ot.twdID = ?',  // Criteria with a binding place holder
+                      [42]);           // The bound value
+
+        $actual   = $select->output();
+        $bindings = $select->getBindings();
+        $label    = key($bindings);
+
+        $this->assertCount(1, $bindings);
+        $this->assertContains(42, $bindings);
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+    JOIN "moreData" "md"
+        ON "md"."twdID" = "twd"."id"
+    JOIN "otherTable" "ot"
+        ON "ot"."twdID" = {$label}
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test a JOIN USING that's an INNER join.  Probably the simplest form of
+     * a table join that you can do.  No data binding happening here.
+     *
+     */
+    public function testJoinInnerUsing()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $select->from('tableWithData twd')  // The primary table data is from
+               ->join('moreData md', 'md.twdID = twd.id') // Simple join
+               ->joinUsing('otherData od', // Table with alias
+                           'id, name');    // List of comma separated fields
+
+        $actual = $select->output();
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+    JOIN "moreData" "md"
+        ON "md"."twdID" = "twd"."id"
+    JOIN "otherData" "od"
+        USING ("id", "name")
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test a natural join.
+     *
+     */
+    public function testJoinNatural()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $select->from('tableWithData twd')  // The primary table data is from
+               ->joinNatural('moreData md');
+
+        $actual = $select->output();
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+    NATURAL JOIN "moreData" "md"
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Testing the outer joins with ON
+     *
+     */
+    public function testJoinOuterOn()
+    {
+        $select = DBSql::PostgreSQL()->select();
+        $select->from('tableWithData twd')  // The primary table data is from
+               ->join('moreData md', 'md.twdID = twd.id') // Simple join
+               ->joinOuter(PostgreSQL\Select::LEFT,
+                      'otherTable ot', // Join Table
+                      'ot.twdID = ?',  // Criteria with a binding place holder
+                      [42]);           // The bound value
+
+        $actual   = $select->output();
+        $bindings = $select->getBindings();
+        $label    = key($bindings);
+
+        $this->assertCount(1, $bindings);
+        $this->assertContains(42, $bindings);
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+    JOIN "moreData" "md"
+        ON "md"."twdID" = "twd"."id"
+    LEFT OUTER JOIN "otherTable" "ot"
+        ON "ot"."twdID" = {$label}
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test a JOIN USING that's an OUTER join.  Probably the simplest form of
+     * a table join that you can do.  No data binding happening here.
+     *
+     */
+    public function testJoinOuterUsing()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $select->from('tableWithData twd')  // The primary table data is from
+               ->join('moreData md', 'md.twdID = twd.id') // Simple join
+               ->joinOuterUsing(PostgreSQL\Select::FULL,
+                     'otherData od', // Table with alias
+                     'id, name');    // List of comma separated fields
+
+        $actual = $select->output();
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+    JOIN "moreData" "md"
+        ON "md"."twdID" = "twd"."id"
+    FULL JOIN "otherData" "od"
+        USING ("id", "name")
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test ordering the output of the Select statement
+     *
+     */
+    public function testOrderBy()
+    {
+        $select = DBSql::PostgreSQL()->select();
+
+        $select->from('tableWithData twd')
+            ->fields(['id', 'name', 'update'])
+            ->order('twd.name', PostgreSQL\Select::ASCENDING)
+            ->order('twd.update',
+                    PostgreSQL\Select::DESCENDING,
+                    PostgreSQL\Select::NULLS_FIRST);
+
+        $actual = $select->output();
+
+        $expected = <<<SQL
+SELECT
+    "id",
+    "name",
+    "update"
+FROM
+    "tableWithData" "twd"
+ORDER BY
+    "twd"."name" ASC,
+    "twd"."update" DESC NULLS FIRST
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+}
