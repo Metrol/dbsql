@@ -342,11 +342,12 @@ class Select implements SelectInterface
     }
 
     /**
-     * Adds an INNER JOIN clause to the SELECT statement with USING as the the join
-     * criteria.  No data binding is provided here.
+     * Adds an INNER JOIN clause to the SELECT statement with USING as the join
+     * criteria.
+     * - No data binding is provided here.
      *
      * @param string $tableName
-     * @param string $criteria   Field names for the USING clause
+     * @param string $criteria  Field names for the USING clause
      *
      * @return self
      */
@@ -393,7 +394,7 @@ class Select implements SelectInterface
     }
 
     /**
-     * Adds a LEFT/RIGHT OUTER JOIN clause to the SELECT statement.
+     * Adds a LEFT/RIGHT/FULL OUTER JOIN clause to the SELECT statement.
      *
      * @param string $joinType   LEFT|RIGHT|FULL
      * @param string $tableName
