@@ -18,8 +18,7 @@ use Metrol\DbSql\StatementInterface;
  */
 class Union implements StatementInterface
 {
-    use Bindings;
-    use Indent;
+    use Bindings, Indent, Quoter;
 
     /**
      * The kinds of Unions supported
@@ -34,7 +33,7 @@ class Union implements StatementInterface
      *
      * @const
      */
-    const DEFAULT_UNION  = self::UNION_DISTINCT;
+    const DEFAULT_UNION = self::UNION_DISTINCT;
 
     /**
      * The collection of Select Statements and Union types
