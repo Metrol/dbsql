@@ -10,8 +10,8 @@ namespace Metrol\DBSql\MySQL;
 
 use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
-use Metrol\DbSql\StatementInterface;
-use Metrol\DbSql\WithInterface;
+use Metrol\DBSql\StatementInterface;
+use Metrol\DBSql\WithInterface;
 
 /**
  * Creates a collection of statements within a WITH Common Table Expression
@@ -127,7 +127,7 @@ class With implements WithInterface
 
         if ( !empty($this->suffix) )
         {
-            $sql .= $this->suffix.';'.PHP_EOL;
+            $sql .= $this->suffix;
         }
 
         return $sql;
