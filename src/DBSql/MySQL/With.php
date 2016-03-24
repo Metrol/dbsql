@@ -10,7 +10,6 @@ namespace Metrol\DBSql\MySQL;
 
 use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
-use Metrol\DbSql\SelectInterface;
 use Metrol\DbSql\StatementInterface;
 use Metrol\DbSql\WithInterface;
 
@@ -70,38 +69,17 @@ class With implements WithInterface
     }
 
     /**
-     * Sets this With statement up as Recursive
+     * Adds a statement to the stack
      *
-     * @param bool $recursiveFlag
-     *
-     * @return self
-     */
-    public function setRecursive(bool $recursiveFlag = true)
-    {
-        if ( $recursiveFlag )
-        {
-            $this->recursiveFlag = true;
-        }
-        else
-        {
-            $this->recursiveFlag = false;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Adds a select statement to the stack
-     *
-     * @param string          $alias
-     * @param SelectInterface $select
+     * @param string             $alias
+     * @param StatementInterface $statement
      *
      * @return self
      */
-    public function setSelect(string $alias, SelectInterface $select)
+    public function setStatement(string $alias, StatementInterface $statement)
     {
-        $this->withStack[$alias] = $select;
-        $this->mergeBindings($select);
+        $this->withStack[$alias] = $statement;
+        $this->mergeBindings($statement);
 
         return $this;
     }
@@ -136,12 +114,12 @@ class With implements WithInterface
         $sql = 'WITH';
         $sql .= PHP_EOL;
 
-        foreach ( $this->withStack as $alias => $select )
+        foreach ( $this->withStack as $alias => $statement )
         {
             $sql .= $this->quoter()->quoteField($alias);
             $sql .= ' AS '.PHP_EOL;
             $sql .= '('.PHP_EOL;
-            $sql .= $this->indentStatement($select, 1);
+            $sql .= $this->indentStatement($statement, 1);
             $sql .= '),'.PHP_EOL;
         }
 

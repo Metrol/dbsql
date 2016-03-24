@@ -15,14 +15,14 @@ namespace Metrol\DBSql;
 interface WithInterface extends StatementInterface
 {
     /**
-     * Adds a select statement to the stack
+     * Adds a statement to the stack
      *
-     * @param string $alias
-     * @param SelectInterface $select
+     * @param string             $alias
+     * @param StatementInterface $statement
      *
      * @return self
      */
-    public function setSelect(string $alias, SelectInterface $select);
+    public function setStatement(string $alias, StatementInterface $statement);
 
     /**
      * Sets the suffix of the SQL that is appended after the clauses of the
