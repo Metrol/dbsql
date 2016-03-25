@@ -91,8 +91,7 @@ SQL;
 
         $sel1->fields(['sub_part', 'part', 'quantity'])
             ->from('parts')
-            ->where('part = ?', ['our_product'])
-        ;
+            ->where('part = ?', ['our_product']);
 
         $sel2->fields(['p.sub_part', 'p.part', 'p.quantity'])
             ->from('included_parts pr')
@@ -108,11 +107,6 @@ SQL;
 
         $union->setSelect($sel1)
             ->setSelect($sel2, $union::UNION_ALL);
-
-        // print PHP_EOL.$sel1->output();
-        // print PHP_EOL.$sel2->output().'X';
-        // print PHP_EOL.$suff->output();
-        // print PHP_EOL.$union->output().'X';
 
         // First pass, just make sure that all the queries so far are solid
         $actual   = $sel1->output();
