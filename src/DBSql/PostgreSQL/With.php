@@ -6,11 +6,11 @@
  * @copyright (c) 2016, Michael Collette
  */
 
-
 namespace Metrol\DBSql\PostgreSQL;
 
 use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
+use Metrol\DBSql\PostgreSQL\With\Recursive;
 use Metrol\DBSql\WithInterface;
 use Metrol\DBSql\StatementInterface;
 
@@ -36,13 +36,13 @@ class With implements WithInterface
      */
     protected $suffix;
 
-
     /**
-     * When set, the RECURSIVE keyword will be set for this With statement
+     * Contains the Select statement, the fields, and alias for a recursive
+     * With statement.
      *
-     * @var bool
+     * @var With/Recursive
      */
-    protected $recursiveFlag;
+    protected $recursive;
 
     /**
      * Instantiate and initialize the object
@@ -55,7 +55,7 @@ class With implements WithInterface
 
         $this->withStack     = array();
         $this->suffix        = '';
-        $this->recursiveFlag = false;
+        $this->recursive     = new Recursive;
     }
 
     /**
@@ -79,22 +79,27 @@ class With implements WithInterface
     }
 
     /**
-     * Sets this With statement up as Recursive
+     * Sets up the first clause of the With statement to be recursive.
+     * This needs the alias of the clause, a union statement to appear within it,
+     * and optional fields.
      *
-     * @param bool $recursiveFlag
+     * @param string $alias
+     * @param Union  $union
+     * @param array  $fields
      *
      * @return self
      */
-    public function setRecursive(bool $recursiveFlag = true)
+    public function setRecursive(string $alias, Union $union,
+                                 array $fields = null): self
     {
-        if ( $recursiveFlag )
+        $this->recursive->setUnion($alias, $union);
+
+        if ( $fields !== null and !empty($fields) )
         {
-            $this->recursiveFlag = true;
+            $this->recursive->setFields($fields);
         }
-        else
-        {
-            $this->recursiveFlag = false;
-        }
+
+        $this->mergeBindings($union);
 
         return $this;
     }
@@ -137,16 +142,16 @@ class With implements WithInterface
      */
     protected function buildSQL()
     {
-        if ( empty($this->withStack) )
+        if ( empty($this->withStack) and !$this->recursive->isReady() )
         {
-            return '';
+            // return '';
         }
 
         $sql = 'WITH';
 
-        if ( $this->recursiveFlag )
+        if ( $this->recursive->isReady() )
         {
-            $sql .= ' RECURSIVE';
+            $sql .= $this->recursive->output();
         }
 
         $sql .= PHP_EOL;
