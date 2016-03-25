@@ -135,10 +135,10 @@ class Union implements StatementInterface
 
             if ( !empty($type) )
             {
-                $sql .= $type.PHP_EOL.PHP_EOL;
+                $sql .= PHP_EOL.$type.PHP_EOL.PHP_EOL;
             }
 
-            $sql .= $select->output().PHP_EOL;
+            $sql .= $select->output();
         }
 
         return $sql;
