@@ -327,5 +327,59 @@ SQL;
         $this->assertEquals($expected, $actual);
         $this->assertCount(1, $with->getBindings());
         $this->assertContains('our_product', $with->getBindings());
+
+        // Now add another SQL statement (just reusing $sel2) on to the with
+        // statement to insure it all works together.
+        $with->setStatement('moresql', $sel2);
+
+        $actual = $with->output();
+
+        $expected = <<<SQL
+WITH RECURSIVE "included_parts"("sub_part", "part", "quantity") AS 
+(
+    SELECT
+        "sub_part",
+        "part",
+        "quantity"
+    FROM
+        "parts"
+    WHERE
+        "part" = {$label}
+    
+    UNION ALL
+    
+    SELECT
+        "p"."sub_part",
+        "p"."part",
+        "p"."quantity"
+    FROM
+        "included_parts" "pr",
+        "parts" "p"
+    WHERE
+        "p"."part" = "pr"."sub_part"
+),
+"moresql" AS 
+(
+    SELECT
+        "p"."sub_part",
+        "p"."part",
+        "p"."quantity"
+    FROM
+        "included_parts" "pr",
+        "parts" "p"
+    WHERE
+        "p"."part" = "pr"."sub_part"
+)
+SELECT
+    "sub_part",
+    SUM(quantity) total_quantity
+FROM
+    "included_parts"
+GROUP BY
+    "sub_part"
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
     }
 }
