@@ -114,7 +114,7 @@ class Insert implements InsertInterface
      *
      * @return self
      */
-    public function fieldValue(string $fieldName, $value, $boundValue = null)
+    public function fieldValue(string $fieldName, $value, $boundValue = null): self
     {
         $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
 
