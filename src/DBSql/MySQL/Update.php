@@ -29,13 +29,6 @@ class Update implements UpdateInterface
     protected $table;
 
     /**
-     * Can be set to request a value to be returned from the update
-     *
-     * @var string
-     */
-    protected $returningField;
-
-    /**
      * Instantiate and initialize the object
      *
      */
@@ -46,7 +39,6 @@ class Update implements UpdateInterface
         $this->initStacks();
 
         $this->table          = '';
-        $this->returningField = null;
     }
 
     /**
