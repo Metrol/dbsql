@@ -21,13 +21,13 @@ class PostgreSQLInsertTest extends \PHPUnit_Framework_TestCase
      */
     public function testInsertFieldValueNoBindings()
     {
-        $ins = DBSql::PostgreSQL()->insert();
+        $insert = DBSql::PostgreSQL()->insert();
 
-        $ins->into('tableNeedingData tnd')
+        $insert->into('tableNeedingData tnd')
             ->fieldValue('fname', ':firstname')
             ->fieldValue('lname', ':lastname');
 
-        $actual = $ins->output();
+        $actual = $insert->output();
         $expected = <<<SQL
 INSERT
 INTO
@@ -41,22 +41,55 @@ SQL;
     }
 
     /**
-     * Assemble Insert statment with bindings both named and automatic
+     * Assemble asimple Insert statment without bindings
+     *
+     */
+    public function testInsertFieldValueAutomaticBindings()
+    {
+        $insert = DBSql::PostgreSQL()->insert();
+
+        $insert->into('tableNeedingData tnd')
+            ->fieldValue('fname', '?', 'Fred')
+            ->fieldValue('lname', '?', 'Flinstone');
+
+        $actual   = $insert->output();
+        $bindings = $insert->getBindings();
+
+        list($label1, $label2) = array_keys($bindings);
+
+        $expected = <<<SQL
+INSERT
+INTO
+    "tableNeedingData" "tnd"
+    ("fname", "lname")
+VALUES
+    ({$label1}, {$label2})
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+        $this->assertCount(2, $bindings);
+        $this->assertEquals('Fred', $bindings[$label1]);
+        $this->assertEquals('Flinstone', $bindings[$label2]);
+    }
+
+    /**
+     * Assemble Insert statment with named bindings
      *
      */
     public function testInsertFieldValueWithBindings()
     {
-        $ins = DBSql::PostgreSQL()->insert();
+        $insert = DBSql::PostgreSQL()->insert();
 
-        $ins->into('tableNeedingData tnd');
-        $ins->fieldValue('fname', ':firstname', 'Fred');
-        $ins->fieldValue('lname', ':lastname',  'Flinstone');
+        $insert->into('tableNeedingData tnd');
+        $insert->fieldValue('fname', ':firstname', 'Fred');
+        $insert->fieldValue('lname', ':lastname',  'Flinstone');
 
-        $bindings = $ins->getBindings();
+        $bindings = $insert->getBindings();
         $label1 = ':firstname';
         $label2 = ':lastname';
 
-        $actual = $ins->output();
+        $actual = $insert->output();
         $expected = <<<SQL
 INSERT
 INTO
@@ -81,20 +114,20 @@ SQL;
      */
     public function testInsertWithFieldValueArrayAutomaticBinding()
     {
-        $ins = DBSql::PostgreSQL()->insert();
-        $ins->into('tableNeedingData tnd');
+        $insert = DBSql::PostgreSQL()->insert();
+        $insert->into('tableNeedingData tnd');
         $data = [
             'fname' => '"Fred"',
             'lname' => '"Flinstone"'
         ];
 
-        $ins->fieldValues($data);
+        $insert->fieldValues($data);
 
-        $bindings = $ins->getBindings();
+        $bindings = $insert->getBindings();
 
         list($label1, $label2) = array_keys($bindings);
 
-        $actual = $ins->output();
+        $actual = $insert->output();
         $expected = <<<SQL
 INSERT
 INTO
@@ -124,7 +157,7 @@ SQL;
      */
     public function testInsertPushingFieldsAndValuesSeparately()
     {
-        $ins = DBSql::PostgreSQL()->insert();
+        $insert = DBSql::PostgreSQL()->insert();
 
         $fields = ['firstName',
                    'lastName',
@@ -135,9 +168,9 @@ SQL;
                    '"Bronto Crane Operator"',
                    '"Slate Rock"'];
 
-        $ins->fields($fields)->values($values)->into('tableNeedingData');
+        $insert->fields($fields)->values($values)->into('tableNeedingData');
 
-        $actual   = $ins->output();
+        $actual   = $insert->output();
         $expected = <<<SQL
 INSERT
 INTO
@@ -159,7 +192,7 @@ SQL;
      */
     public function testInsertPushingFieldsAndValuesManualBinding()
     {
-        $ins = DBSql::PostgreSQL()->insert();
+        $insert = DBSql::PostgreSQL()->insert();
 
         $fields = ['firstName', 'lastName', 'title', 'company'];
         $values = [
@@ -169,13 +202,13 @@ SQL;
             ':company' => 'Slate Rock'];
         $labels = array_keys($values);
 
-        $ins->fields($fields)
+        $insert->fields($fields)
             ->values($labels)
             ->setBindings($values)
             ->into('tableNeedingData');
 
-        $actual   = $ins->output();
-        $bindings = $ins->getBindings();
+        $actual   = $insert->output();
+        $bindings = $insert->getBindings();
         $expected = <<<SQL
 INSERT
 INTO
@@ -206,12 +239,12 @@ SQL;
                         'title'     => 'Bronto Crane Operator',
                         'company'   => 'Slate Rock'];
 
-        $ins = DBSql::PostgreSQL()->insert();
+        $insert = DBSql::PostgreSQL()->insert();
 
-        $ins->into('tableNeedingData')->fieldValues($fieldValues);
+        $insert->into('tableNeedingData')->fieldValues($fieldValues);
 
-        $actual   = $ins->output();
-        $bindings = $ins->getBindings();
+        $actual   = $insert->output();
+        $bindings = $insert->getBindings();
 
         // I should mention that you should never do something like this in
         // production.  Only in a case when you are 132% certain no other code
@@ -283,14 +316,14 @@ SQL;
      */
     public function testReturningFieldInsert()
     {
-        $ins = DBSql::PostgreSQL()->insert();
+        $insert = DBSql::PostgreSQL()->insert();
 
-        $ins->into('tableNeedingData tnd')
+        $insert->into('tableNeedingData tnd')
             ->fieldValue('fname', ':firstname')
             ->fieldValue('lname', ':lastname')
             ->returning('primaryKeyValue');
 
-        $actual = $ins->output();
+        $actual = $insert->output();
         $expected = <<<SQL
 INSERT
 INTO
