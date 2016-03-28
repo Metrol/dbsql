@@ -124,9 +124,9 @@ class Insert implements InsertInterface
             $this->setBinding($label, $boundValue);
             $this->valueStack[] = $label;
         }
-        else if ( substr($value, 0, 1) === ':'  // Starts with a colon
-              and $boundValue !== null          // Has a bound value
-              and strpos($value, ' ') === false // No spaces in the named binding
+        else if ( substr($value, 0, 1) === ':' // Starts with a colon
+            and $boundValue !== null           // Has a bound value
+            and strpos($value, ' ') === false  // No spaces in the named binding
         )
         {
             $this->setBinding($value, $boundValue);
@@ -136,8 +136,9 @@ class Insert implements InsertInterface
         {
             $this->valueStack[] = $value;
         }
-    }
 
+        return $this;
+    }
 
     /**
      * Add a set of the field names to show up in the INSERT statement.
