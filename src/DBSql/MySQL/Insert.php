@@ -90,8 +90,11 @@ class Insert implements InsertInterface
     /**
      * Add a field and an optionally bound value to the stack.
      *
-     * To automatically bind a value, the 2nd argument needs to be a question
-     * mark, '?' and the 3rd argument must be provided a value.
+     * To automatically bind a value, the 2nd argument needs to be...
+     * - Question mark '?'
+     * - Empty string ''
+     * - null
+     * And the 3rd argument must be provided a value.
      *
      * A named binding can be accepted if the 2nd argument is a string that
      * starts with a colon and contains no empty spaces.  Also needs a 3rd
@@ -110,7 +113,10 @@ class Insert implements InsertInterface
     {
         $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
 
-        if ( $value === '?' and $boundValue !== null )
+        if ( $boundValue !== null and (   $value === '?'
+                                       or $value === ''
+                                       or $value === null)
+        )
         {
             $label = $this->getBindLabel();
             $this->setBinding($label, $boundValue);
