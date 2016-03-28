@@ -24,26 +24,28 @@ interface UpdateInterface extends StatementInterface
     public function table(string $tableName);
 
     /**
-     * Adds a field = value pair to be updated.  Values automatically have
-     * bindings created for them.
+     * Add a field and an optionally bound value to the stack.
+     *
+     * To automatically bind a value, the 3rd argument must be provided a value
+     * and the 2nd argument needs to be...
+     * - Question mark '?'
+     * - Empty string ''
+     * - null
+     *
+     * A named binding can be accepted when the 3rd argument has a value and
+     * the 2nd argument is a string that starts with a colon that contains no
+     * empty spaces.
+     *
+     * A non-bound value is not quoted or escaped in any way.  Use with all
+     * due caution.
      *
      * @param string $fieldName
      * @param mixed  $value
+     * @param mixed  $boundValue
      *
      * @return self
      */
-    public function fieldValue(string $fieldName, $value);
-
-    /**
-     * Adds a field = value pair to be updated.  Fields will be quoted, but
-     * values are passed along as is, without binding or escaping.
-     *
-     * @param string $fieldName
-     * @param mixed  $value
-     *
-     * @return self
-     */
-    public function fieldValueNoBind(string $fieldName, $value);
+    public function fieldValue(string $fieldName, $value, $boundValue = null);
 
     /**
      * Add a set of fields with values to be assigned values to the UPDATE
