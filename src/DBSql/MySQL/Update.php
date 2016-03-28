@@ -84,43 +84,52 @@ class Update implements UpdateInterface
     }
 
     /**
-     * Adds a field = value pair to be updated.  Values automatically have
-     * bindings created for them.
+     * Add a field and an optionally bound value to the stack.
+     *
+     * To automatically bind a value, the 3rd argument must be provided a value
+     * and the 2nd argument needs to be...
+     * - Question mark '?'
+     * - Empty string ''
+     * - null
+     *
+     * A named binding can be accepted when the 3rd argument has a value and
+     * the 2nd argument is a string that starts with a colon that contains no
+     * empty spaces.
+     *
+     * A non-bound value is not quoted or escaped in any way.  Use with all
+     * due caution.
      *
      * @param string $fieldName
      * @param mixed  $value
+     * @param mixed  $boundValue
      *
      * @return self
      */
-    public function fieldValue(string $fieldName, $value): self
-    {
-        // Assign the value to a new binding label
-        $bindLabel = $this->getBindLabel();
-        $this->setBinding($bindLabel, $value);
-
-        $fieldName = $this->quoter()->quoteField($fieldName);
-
-        // Save the binding label against the quoted field name
-        $this->fieldStack[$fieldName] = $bindLabel;
-
-        return $this;
-    }
-
-    /**
-     * Adds a field = value pair to be updated.  Fields will be quoted, but
-     * values are passed along as is, without binding or escaping.
-     *
-     * @param string $fieldName
-     * @param mixed  $value
-     *
-     * @return self
-     */
-    public function fieldValueNoBind(string $fieldName, $value): self
+    public function fieldValue(string $fieldName, $value, $boundValue = null): self
     {
         $fieldName = $this->quoter()->quoteField($fieldName);
 
-        // For better or worse, push the value as it came in
-        $this->fieldStack[$fieldName] = $value;
+        if ( $boundValue !== null and (   $value === '?'
+                or $value === ''
+                or $value === null)
+        )
+        {
+            $bindLabel = $this->getBindLabel();
+            $this->setBinding($bindLabel, $boundValue);
+            $this->fieldStack[$fieldName] = $bindLabel;
+        }
+        else if ( substr($value, 0, 1) === ':' // Starts with a colon
+            and $boundValue !== null           // Has a bound value
+            and strpos($value, ' ') === false  // No spaces in the named binding
+        )
+        {
+            $this->setBinding($value, $boundValue);
+            $this->fieldStack[$fieldName] = $value;
+        }
+        else
+        {
+            $this->fieldStack[$fieldName] = $value;
+        }
 
         return $this;
     }
@@ -142,20 +151,6 @@ class Update implements UpdateInterface
             $fieldNameQuoted = $this->quoter()->quoteField($fieldName);
             $this->fieldStack[$fieldNameQuoted] = $bindLabel;
         }
-
-        return $this;
-    }
-
-    /**
-     * Request back an auto sequencing field by name
-     *
-     * @param string $fieldName
-     *
-     * @return self
-     */
-    public function returning($fieldName): self
-    {
-        $this->returningField = $this->quoter()->quoteField($fieldName);
 
         return $this;
     }
@@ -196,11 +191,6 @@ class Update implements UpdateInterface
             $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL;
             $sql .= 'WHERE'.PHP_EOL;
             $sql .= implode($delimeter, $this->whereStack ).PHP_EOL;
-        }
-
-        if ( $this->returningField !== null )
-        {
-            $sql .= 'RETURNING '.$this->returningField.PHP_EOL;
         }
 
         return $sql;
