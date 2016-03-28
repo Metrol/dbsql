@@ -96,6 +96,50 @@ class Insert implements InsertInterface
     }
 
     /**
+     * Add a field and an optionally bound value to the stack.
+     *
+     * To automatically bind a value, the 2nd argument needs to be a question
+     * mark, '?' and the 3rd argument must be provided a value.
+     *
+     * A named binding can be accepted if the 2nd argument is a string that
+     * starts with a colon and contains no empty spaces.  Also needs a 3rd
+     * argument with a value
+     *
+     * A non-bound value is not quoted or escaped in any way.  Use with all
+     * due caution.
+     *
+     * @param string $fieldName
+     * @param mixed  $value
+     * @param mixed  $boundValue
+     *
+     * @return self
+     */
+    public function fieldValue(string $fieldName, $value, $boundValue = null)
+    {
+        $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
+
+        if ( $value === '?' and $boundValue !== null )
+        {
+            $label = $this->getBindLabel();
+            $this->setBinding($label, $boundValue);
+            $this->valueStack[] = $label;
+        }
+        else if ( substr($value, 0, 1) === ':'  // Starts with a colon
+              and $boundValue !== null          // Has a bound value
+              and strpos($value, ' ') === false // No spaces in the named binding
+        )
+        {
+            $this->setBinding($value, $boundValue);
+            $this->valueStack[] = $value;
+        }
+        else
+        {
+            $this->valueStack[] = $value;
+        }
+    }
+
+
+    /**
      * Add a set of the field names to show up in the INSERT statement.
      * - No value binding provided.
      *
