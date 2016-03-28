@@ -90,15 +90,15 @@ class Insert implements InsertInterface
     /**
      * Add a field and an optionally bound value to the stack.
      *
-     * To automatically bind a value, the 2nd argument needs to be...
+     * To automatically bind a value, the 3rd argument must be provided a value
+     * and the 2nd argument needs to be...
      * - Question mark '?'
      * - Empty string ''
      * - null
-     * And the 3rd argument must be provided a value.
      *
-     * A named binding can be accepted if the 2nd argument is a string that
-     * starts with a colon and contains no empty spaces.  Also needs a 3rd
-     * argument with a value
+     * A named binding can be accepted when the 3rd argument has a value and
+     * the 2nd argument is a string that starts with a colon that contains no
+     * empty spaces.
      *
      * A non-bound value is not quoted or escaped in any way.  Use with all
      * due caution.
