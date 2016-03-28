@@ -49,28 +49,32 @@ SQL;
         $insert = DBSql::PostgreSQL()->insert();
 
         $insert->into('tableNeedingData tnd')
-            ->fieldValue('fname', '?', 'Fred')
-            ->fieldValue('lname', '?', 'Flinstone');
+            ->fieldValue('fname', '?', 'Fred')                 // ? sets up an
+            ->fieldValue('lname', '?', 'Flinstone')            // auto binding.
+            ->fieldValue('title', '', 'Bronto Crane Operator') // Empty string.
+            ->fieldValue('company', null, 'Slate Rock');       // null value.
 
         $actual   = $insert->output();
         $bindings = $insert->getBindings();
 
-        list($label1, $label2) = array_keys($bindings);
+        list($label1, $label2, $label3, $label4) = array_keys($bindings);
 
         $expected = <<<SQL
 INSERT
 INTO
     "tableNeedingData" "tnd"
-    ("fname", "lname")
+    ("fname", "lname", "title", "company")
 VALUES
-    ({$label1}, {$label2})
+    ({$label1}, {$label2}, {$label3}, {$label4})
 
 SQL;
 
         $this->assertEquals($expected, $actual);
-        $this->assertCount(2, $bindings);
+        $this->assertCount(4, $bindings);
         $this->assertEquals('Fred', $bindings[$label1]);
         $this->assertEquals('Flinstone', $bindings[$label2]);
+        $this->assertEquals('Bronto Crane Operator', $bindings[$label3]);
+        $this->assertEquals('Slate Rock', $bindings[$label4]);
     }
 
     /**
@@ -116,6 +120,7 @@ SQL;
     {
         $insert = DBSql::PostgreSQL()->insert();
         $insert->into('tableNeedingData tnd');
+        
         $data = [
             'fname' => '"Fred"',
             'lname' => '"Flinstone"'
