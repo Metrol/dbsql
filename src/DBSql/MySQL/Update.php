@@ -180,8 +180,9 @@ class Update implements UpdateInterface
 
         if ( ! empty($this->whereStack) )
         {
-            $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL;
+            $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
             $sql .= 'WHERE'.PHP_EOL;
+            $sql .= $this->indent();
             $sql .= implode($delimeter, $this->whereStack ).PHP_EOL;
         }
 
