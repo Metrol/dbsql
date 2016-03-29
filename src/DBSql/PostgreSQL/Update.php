@@ -209,7 +209,8 @@ class Update implements UpdateInterface
 
         if ( $this->returningField !== null )
         {
-            $sql .= 'RETURNING '.$this->returningField.PHP_EOL;
+            $sql .= 'RETURNING'.PHP_EOL;
+            $sql .= $this->indent().$this->returningField.PHP_EOL;
         }
 
         return $sql;
