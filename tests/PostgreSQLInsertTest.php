@@ -41,7 +41,7 @@ SQL;
     }
 
     /**
-     * Assemble asimple Insert statment without bindings
+     * Assemble an Insert statment with automatic bindings
      *
      */
     public function testInsertFieldValueAutomaticBindings()
@@ -120,7 +120,7 @@ SQL;
     {
         $insert = DBSql::PostgreSQL()->insert();
         $insert->into('tableNeedingData tnd');
-        
+
         $data = [
             'fname' => '"Fred"',
             'lname' => '"Flinstone"'
