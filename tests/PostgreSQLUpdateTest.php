@@ -115,4 +115,47 @@ SQL;
         $this->assertEquals('Flinstone', $bindings[$label2]);
     }
 
+    /**
+     * Test assigning an array of fields and values with automatic binding
+     *
+     */
+    public function testUpdateWithFieldValueArrayAutomaticBinding()
+    {
+        $insert = DBSql::PostgreSQL()->update();
+        $insert->table('tableNeedingData');
+
+        $data = [
+            'fname' => 'Fred',
+            'lname' => 'Flinstone'
+        ];
+
+        $insert->fieldValues($data)
+            ->where('id = ? and status = ?', [12, 'true']);
+
+        $bindings = $insert->getBindings();
+
+        list($label1, $label2, $label3, $label4) = array_keys($bindings);
+
+        $actual = $insert->output();
+
+        $expected = <<<SQL
+UPDATE
+    "tableNeedingData"
+SET
+    "fname" = {$label1},
+    "lname" = {$label2}
+WHERE
+    "id" = {$label3} and "status" = {$label4}
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+        $this->assertCount(4, $bindings);
+        $this->assertContains('Fred', $bindings);
+        $this->assertContains('Flinstone', $bindings);
+        $this->assertEquals('Fred', $bindings[$label1]);
+        $this->assertEquals('Flinstone', $bindings[$label2]);
+        $this->assertEquals(12, $bindings[$label3]);
+        $this->assertEquals('true', $bindings[$label4]);
+    }
 }
