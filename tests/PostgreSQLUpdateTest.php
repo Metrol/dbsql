@@ -158,4 +158,51 @@ SQL;
         $this->assertEquals(12, $bindings[$label3]);
         $this->assertEquals('true', $bindings[$label4]);
     }
+
+    /**
+     * Put a returning field into the mix of an Update statement.
+     *
+     */
+    public function testReturningFieldUpdate()
+    {
+        $insert = DBSql::PostgreSQL()->update();
+
+        $insert->table('tableNeedingData')
+               ->fieldValue('fname', ':firstname', 'Barney')
+               ->fieldValue('lname', ':lastname', 'Rubble')
+               ->where('fname = ?', ['Fred'])
+               ->where('lname = ?', ['Flinstone'])
+               ->returning('tndID');
+
+        $actual = $insert->output();
+        $bindings = $insert->getBindings();
+
+        list($label1, $label2, $label3, $label4 ) = array_keys($bindings);
+
+        // print PHP_EOL.$actual;
+        // var_dump($bindings);
+        // return;
+
+        $expected = <<<SQL
+UPDATE
+    "tableNeedingData"
+SET
+    "fname" = {$label1},
+    "lname" = {$label2}
+WHERE
+    "fname" = {$label3}
+    AND
+    "lname" = {$label4}
+RETURNING
+    "tndID"
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+        $this->assertCount(4, $bindings);
+        $this->assertEquals('Barney', $bindings[$label1]);
+        $this->assertEquals('Rubble', $bindings[$label2]);
+        $this->assertEquals('Fred', $bindings[$label3]);
+        $this->assertEquals('Flinstone', $bindings[$label4]);
+    }
 }
