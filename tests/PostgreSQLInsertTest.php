@@ -23,7 +23,7 @@ class PostgreSQLInsertTest extends \PHPUnit_Framework_TestCase
     {
         $insert = DBSql::PostgreSQL()->insert();
 
-        $insert->into('tableNeedingData tnd')
+        $insert->table('tableNeedingData tnd')
             ->fieldValue('fname', ':firstname')
             ->fieldValue('lname', ':lastname');
 
@@ -48,7 +48,7 @@ SQL;
     {
         $insert = DBSql::PostgreSQL()->insert();
 
-        $insert->into('tableNeedingData tnd')
+        $insert->table('tableNeedingData tnd')
             ->fieldValue('fname', '?', 'Fred')                 // ? sets up an
             ->fieldValue('lname', '?', 'Flinstone')            // auto binding.
             ->fieldValue('title', '', 'Bronto Crane Operator') // Empty string.
@@ -85,7 +85,7 @@ SQL;
     {
         $insert = DBSql::PostgreSQL()->insert();
 
-        $insert->into('tableNeedingData tnd');
+        $insert->table('tableNeedingData tnd');
         $insert->fieldValue('fname', ':firstname', 'Fred');
         $insert->fieldValue('lname', ':lastname',  'Flinstone');
 
@@ -119,7 +119,7 @@ SQL;
     public function testInsertWithFieldValueArrayAutomaticBinding()
     {
         $insert = DBSql::PostgreSQL()->insert();
-        $insert->into('tableNeedingData tnd');
+        $insert->table('tableNeedingData tnd');
 
         $data = [
             'fname' => '"Fred"',
@@ -173,7 +173,7 @@ SQL;
                    '"Bronto Crane Operator"',
                    '"Slate Rock"'];
 
-        $insert->fields($fields)->values($values)->into('tableNeedingData');
+        $insert->fields($fields)->values($values)->table('tableNeedingData');
 
         $actual   = $insert->output();
         $expected = <<<SQL
@@ -210,7 +210,7 @@ SQL;
         $insert->fields($fields)
             ->values($labels)
             ->setBindings($values)
-            ->into('tableNeedingData');
+            ->table('tableNeedingData');
 
         $actual   = $insert->output();
         $bindings = $insert->getBindings();
@@ -246,7 +246,7 @@ SQL;
 
         $insert = DBSql::PostgreSQL()->insert();
 
-        $insert->into('tableNeedingData')->fieldValues($fieldValues);
+        $insert->table('tableNeedingData')->fieldValues($fieldValues);
 
         $actual   = $insert->output();
         $bindings = $insert->getBindings();
@@ -283,7 +283,7 @@ SQL;
             ->where('primaryKeyValue = ?', [12]);
 
         $insert = DBSql::PostgreSQL()->insert()
-            ->into('tableNeedingData')
+            ->table('tableNeedingData')
             ->fields(['firstName', 'lastName', 'title', 'company'])
             ->valueSelect($select);
 
@@ -323,7 +323,7 @@ SQL;
     {
         $insert = DBSql::PostgreSQL()->insert();
 
-        $insert->into('tableNeedingData tnd')
+        $insert->table('tableNeedingData tnd')
             ->fieldValue('fname', ':firstname')
             ->fieldValue('lname', ':lastname')
             ->returning('primaryKeyValue');

@@ -88,7 +88,7 @@ class Insert implements InsertInterface
      *
      * @return self
      */
-    public function into(string $tableName): self
+    public function table(string $tableName): self
     {
         $this->tableInto = $this->quoter()->quoteTable($tableName);
 

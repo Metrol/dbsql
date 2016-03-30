@@ -21,7 +21,7 @@ interface InsertInterface extends StatementInterface
      *
      * @return self
      */
-    public function into(string $tableName);
+    public function table(string $tableName);
 
     /**
      * Add a set of the field names to show up in the INSERT statement.
