@@ -157,6 +157,9 @@ WHERE
 SQL;
 
         $this->assertEquals($expected, $select->output());
+        $this->assertCount(2, $bindings);
+        $this->assertEquals(42, $bindings[$label1]);
+        $this->assertEquals(36, $bindings[$label2]);
     }
 
     /**
@@ -179,10 +182,6 @@ SQL;
         // Fetch bindings from the parent SELECT.  The sub select should have
         // merged with the parent.
         $bindings = $select->getBindings();
-
-        $this->assertCount(1, $bindings);
-        $this->assertContains(86, $bindings);
-
         $label = key($bindings);
 
         $expected = <<<SQL
@@ -201,6 +200,9 @@ FROM
 SQL;
 
         $this->assertEquals($expected, $select->output());
+        $this->assertCount(1, $bindings);
+        $this->assertContains(86, $bindings);
+        $this->assertEquals(86, $bindings[$label]);
     }
 
     /**
@@ -235,6 +237,10 @@ SQL;
         $label1 = array_search(86, $bindings);
         $label2 = array_search(42, $bindings);
         $label3 = array_search(97, $bindings);
+
+        $this->assertEquals(86, $bindings[$label1]);
+        $this->assertEquals(42, $bindings[$label2]);
+        $this->assertEquals(97, $bindings[$label3]);
 
         $expected = <<<SQL
 SELECT
@@ -291,6 +297,10 @@ SQL;
         $label1 = array_search(86, $bindings);
         $label2 = array_search(42, $bindings);
         $label3 = array_search(97, $bindings);
+
+        $this->assertEquals(86, $bindings[$label1]);
+        $this->assertEquals(42, $bindings[$label2]);
+        $this->assertEquals(97, $bindings[$label3]);
 
         $expected = <<<SQL
 SELECT
