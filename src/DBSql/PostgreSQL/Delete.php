@@ -106,24 +106,64 @@ class Delete implements DeleteInterface
     {
         $sql = 'DELETE'.PHP_EOL;
 
+        $sql .= $this->buildTable();
+        $sql .= $this->buildWhere();
+        $sql .= $this->buildReturning();
+
+        return $sql;
+    }
+
+    /**
+     * Build out the table that will have records deleted from
+     *
+     * @return string
+     */
+    protected function buildTable(): string
+    {
         if ( empty($this->table) )
         {
-            return $sql;
+            return '';
         }
 
-        $sql .= 'FROM'.PHP_EOL;
+        $sql = 'FROM'.PHP_EOL;
         $sql .= $this->indent().$this->table.PHP_EOL;
+
+        return $sql;
+    }
+
+    /**
+     * Build out the WHERE clause
+     *
+     * @return string
+     */
+    protected function buildWhere(): string
+    {
+        $sql = '';
+        $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
 
         if ( ! empty($this->whereStack) )
         {
-            $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL;
             $sql .= 'WHERE'.PHP_EOL;
+            $sql .= $this->indent();
             $sql .= implode($delimeter, $this->whereStack ).PHP_EOL;
         }
 
+        return $sql;
+    }
+
+    /**
+     * Build the returning clause of the statement
+     *
+     * @return string
+     */
+    protected function buildReturning(): string
+    {
+        $sql = '';
+
         if ( $this->returningField !== null )
         {
-            $sql .= 'RETURNING '.$this->returningField.PHP_EOL;
+            $sql .= 'RETURNING'.PHP_EOL;
+            $sql .= $this->indent().$this->returningField.PHP_EOL;
         }
 
         return $sql;
