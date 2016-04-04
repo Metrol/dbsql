@@ -142,16 +142,50 @@ class With implements WithInterface
      */
     protected function buildSQL()
     {
-        if ( empty($this->withStack) and !$this->recursive->isReady() )
-        {
-            // return '';
-        }
-
         $sql = 'WITH';
+
+        $sql .= $this->buildRecursive();
+        $sql .= $this->buildStatements();
+        $sql .= $this->buildSuffix();
+
+        return $sql;
+    }
+
+    /**
+     * Build the Recursive portion of the SQL
+     *
+     * @return string
+     */
+    protected function buildRecursive()
+    {
+        $sql = '';
 
         if ( $this->recursive->isReady() )
         {
             $sql .= $this->recursive->output();
+            $sql = substr($sql, 0, -1);
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Builds the statements and returns the result
+     *
+     * @return string
+     */
+    protected function buildStatements()
+    {
+        if ( empty($this->withStack) )
+        {
+            return '';
+        }
+
+        $sql = '';
+
+        if ( $this->recursive->isReady() )
+        {
+            $sql .= ',';
         }
 
         $sql .= PHP_EOL;
@@ -165,10 +199,23 @@ class With implements WithInterface
             $sql .= '),'.PHP_EOL;
         }
 
-        $sql = substr($sql, 0, -2).PHP_EOL;
+        $sql = substr($sql, 0, -2);
+
+        return $sql;
+    }
+
+    /**
+     * Build the suffix portion of the With statement
+     *
+     * @return string
+     */
+    protected function buildSuffix()
+    {
+        $sql = '';
 
         if ( !empty($this->suffix) )
         {
+            $sql .= PHP_EOL;
             $sql .= $this->suffix;
         }
 
