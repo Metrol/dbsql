@@ -122,8 +122,8 @@ SQL;
         $insert->table('tableNeedingData tnd');
 
         $data = [
-            'fname' => '"Fred"',
-            'lname' => '"Flinstone"'
+            'fname' => "'Fred'",
+            'lname' => "'Flinstone'"
         ];
 
         $insert->fieldValues($data);
@@ -145,10 +145,10 @@ SQL;
 
         $this->assertEquals($expected, $actual);
         $this->assertCount(2, $bindings);
-        $this->assertContains('"Fred"', $bindings);
-        $this->assertContains('"Flinstone"', $bindings);
-        $this->assertEquals('"Fred"', $bindings[$label1]);
-        $this->assertEquals('"Flinstone"', $bindings[$label2]);
+        $this->assertContains("'Fred'", $bindings);
+        $this->assertContains("'Flinstone'", $bindings);
+        $this->assertEquals("'Fred'", $bindings[$label1]);
+        $this->assertEquals("'Flinstone'", $bindings[$label2]);
     }
 
     /**
@@ -168,10 +168,10 @@ SQL;
                    'lastName',
                    'title',
                    'company'];
-        $values = ['"Fred"',
-                   '"Flinstone"',
-                   '"Bronto Crane Operator"',
-                   '"Slate Rock"'];
+        $values = ["'Fred'",
+                   "'Flinstone'",
+                   "'Bronto Crane Operator'",
+                   "'Slate Rock'"];
 
         $insert->fields($fields)->values($values)->table('tableNeedingData');
 
@@ -182,7 +182,7 @@ INTO
     "tableNeedingData"
     ("firstName", "lastName", "title", "company")
 VALUES
-    ("Fred", "Flinstone", "Bronto Crane Operator", "Slate Rock")
+    ('Fred', 'Flinstone', 'Bronto Crane Operator', 'Slate Rock')
 
 SQL;
 
