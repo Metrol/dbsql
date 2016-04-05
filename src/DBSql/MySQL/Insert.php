@@ -220,9 +220,26 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         $sql = 'INSERT'.PHP_EOL;
+
+        $sql .= $this->buildTable();
+        $sql .= $this->buildFields();
+        $sql .= $this->buildValues();
+        $sql .= $this->buildValuesFromSelect();
+
+        return $sql;
+    }
+
+    /**
+     * Build the table that will have data inserted into
+     *
+     * @return string
+     */
+    protected function buildTable(): string
+    {
+        $sql = '';
 
         if ( empty($this->tableInto) )
         {
@@ -233,29 +250,65 @@ class Insert implements InsertInterface
         $sql .= $this->indent();
         $sql .= $this->tableInto.PHP_EOL;
 
+        return $sql;
+    }
+
+    /**
+     * Build the field stack
+     *
+     * @return string
+     */
+    protected function buildFields(): string
+    {
+        $sql = '';
+
         // A set of fields isn't really required, even if it's a really good
         // idea to have them.  If nothings there, leave it empty.
-        if ( !empty($this->fieldStack) )
+        if ( empty($this->fieldStack) )
         {
-            $sql .= $this->indent().'(';
-
-            $sql .= implode(', ', $this->fieldStack);
-
-            $sql .= ')'.PHP_EOL;
+            return $sql;
         }
+
+        $sql .= $this->indent().'(';
+        $sql .= implode(', ', $this->fieldStack);
+        $sql .= ')'.PHP_EOL;
+
+        return $sql;
+    }
+
+    /**
+     * Build out the values to be inserted
+     *
+     * @return string
+     */
+    protected function buildValues(): string
+    {
+        $sql = '';
 
         // Only add values when something is on the stack and there isn't a
         // SELECT statement waiting to go in there instead.
-        if ( !empty($this->valueStack) and $this->select === null )
+        if ( empty($this->valueStack) or $this->select !== null )
         {
-            $sql .= 'VALUES'.PHP_EOL;
-
-            $sql .= $this->indent().'(';
-
-            $sql .= implode(', ', $this->valueStack);
-
-            $sql .= ')'.PHP_EOL;
+            return $sql;
         }
+
+        $sql .= 'VALUES'.PHP_EOL;
+        $sql .= $this->indent().'(';
+        $sql .= implode(', ', $this->valueStack);
+        $sql .= ')'.PHP_EOL;
+
+        return $sql;
+    }
+
+    /**
+     * If the values are coming from a sub-select, this builds this for the
+     * larger query.
+     *
+     * @return string
+     */
+    protected function buildValuesFromSelect(): string
+    {
+        $sql = '';
 
         // Check for a SELECT statement and append if available
         if ( is_object($this->select) )
