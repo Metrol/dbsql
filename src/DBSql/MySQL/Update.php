@@ -156,12 +156,38 @@ class Update implements UpdateInterface
     {
         $sql = 'UPDATE';
 
+        $sql .= $this->buildTable();
+        $sql .= $this->buildFieldValues();
+        $sql .= $this->buildWhere();
+
+        return $sql;
+    }
+
+    /**
+     * Build the table that will be getting updated
+     *
+     * @return string
+     */
+    protected function buildTable(): string
+    {
         if ( empty($this->table) )
         {
-            return $sql;
+            return PHP_EOL;
         }
 
-        $sql .= PHP_EOL.$this->indent().$this->table.PHP_EOL;
+        $sql = PHP_EOL.$this->indent().$this->table.PHP_EOL;
+
+        return $sql;
+    }
+
+    /**
+     * Build the field value assignements area of the statement
+     *
+     * @return string
+     */
+    protected function buildFieldValues(): string
+    {
+        $sql = '';
 
         if ( empty($this->fieldStack) )
         {
@@ -178,9 +204,21 @@ class Update implements UpdateInterface
         $sql .= 'SET'.PHP_EOL;
         $sql .= implode(','.PHP_EOL, $assign).PHP_EOL;
 
+        return $sql;
+    }
+
+    /**
+     * Build out the WHERE clause
+     *
+     * @return string
+     */
+    protected function buildWhere(): string
+    {
+        $sql = '';
+        $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
+
         if ( ! empty($this->whereStack) )
         {
-            $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
             $sql .= 'WHERE'.PHP_EOL;
             $sql .= $this->indent();
             $sql .= implode($delimeter, $this->whereStack ).PHP_EOL;
