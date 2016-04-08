@@ -75,7 +75,7 @@ class CaseField implements CaseFieldInterface
      *
      * @return string
      */
-    public function output(): string
+    public function output()
     {
         return $this->buildSQL();
     }
@@ -89,7 +89,7 @@ class CaseField implements CaseFieldInterface
      *
      * @return WhenInterface
      */
-    public function when(string $criteria, array $bindValues = null): WhenInterface
+    public function when($criteria, array $bindValues = null)
     {
         $when = new When($this);
         $when->setCriteria($criteria, $bindValues);
@@ -105,9 +105,9 @@ class CaseField implements CaseFieldInterface
      * @param string $elseResult
      * @param array  $bindValues
      *
-     * @return CaseInterface
+     * @return $this
      */
-    public function elseThen(string $elseResult, array $bindValues = null): CaseInterface
+    public function elseThen($elseResult, array $bindValues = null)
     {
         $this->elseResult = $this->bindAssign($elseResult, $bindValues);
         $this->elseResult = $this->quoter()->quoteField($this->elseResult);
@@ -123,7 +123,7 @@ class CaseField implements CaseFieldInterface
      *
      * @return SelectInterface
      */
-    public function endCase(string $alias): SelectInterface
+    public function endCase($alias)
     {
         $this->alias = $alias;
 
@@ -143,7 +143,7 @@ class CaseField implements CaseFieldInterface
      *
      * @retrun string
      */
-    protected function buildSQL(): string
+    protected function buildSQL()
     {
         $sql = 'CASE'.PHP_EOL;
 

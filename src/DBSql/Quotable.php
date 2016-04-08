@@ -92,9 +92,9 @@ class Quotable
      *
      * @param bool $flag
      *
-     * @return self
+     * @return $this
      */
-    public function enableQuoting(bool $flag): self
+    public function enableQuoting($flag)
     {
         $this->quoteOn = $flag;
 
@@ -104,9 +104,9 @@ class Quotable
     /**
      * Checks to see if quoting is enabled or not
      *
-     * @return bool
+     * @return boolean
      */
-    public function isEnabled(): bool
+    public function isEnabled()
     {
         return $this->quoteOn;
     }
@@ -118,7 +118,7 @@ class Quotable
      *
      * @return string
      */
-    public function quoteField(string $field): string
+    public function quoteField($field)
     {
         // No need to go further if quoting has been turned off
         if ( ! $this->quoteOn )
@@ -186,7 +186,7 @@ class Quotable
      *
      * @return string
      */
-    public function quoteTable(string $table): string
+    public function quoteTable($table)
     {
         // No need to go further if quoting has been turned off
         if ( ! $this->quoteOn )
@@ -236,7 +236,7 @@ class Quotable
      *
      * @return string
      */
-    protected function fieldWrapWord($in): string
+    protected function fieldWrapWord($in)
     {
         $out = $this->fieldOpenQuote;
         $out .= $in;
@@ -252,7 +252,7 @@ class Quotable
      *
      * @return string
      */
-    protected function tableWrapWord($in): string
+    protected function tableWrapWord($in)
     {
         $out = $this->tableOpenQuote;
         $out .= $in;
@@ -269,7 +269,7 @@ class Quotable
      *
      * @return string
      */
-    protected function dotFieldQuote(string $in): string
+    protected function dotFieldQuote($in)
     {
         $out = $in;
 
@@ -292,7 +292,7 @@ class Quotable
      *
      * @return string
      */
-    protected function parenthesesFieldQuote(string $in): string
+    protected function parenthesesFieldQuote($in)
     {
         $out = $in;
 
@@ -313,7 +313,7 @@ class Quotable
      *
      * @return string
      */
-    protected function dotTableQuote($in): string
+    protected function dotTableQuote($in)
     {
         $parts = explode('.', $in);
 
@@ -341,7 +341,7 @@ class Quotable
      *
      * @return string
      */
-    protected function parenthesesTableQuote($in): string
+    protected function parenthesesTableQuote($in)
     {
         $out = $in;
 

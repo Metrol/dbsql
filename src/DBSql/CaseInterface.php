@@ -23,7 +23,7 @@ interface CaseInterface extends StatementInterface
      *
      * @return WhenInterface
      */
-    public function when(string $criteria, array $bindValues = null): WhenInterface;
+    public function when($criteria, array $bindValues = null);
 
     /**
      * The final fall through if none of the WHEN cases match.
@@ -33,5 +33,5 @@ interface CaseInterface extends StatementInterface
      *
      * @return CaseInterface
      */
-    public function elseThen(string $elseResult, array $bindValues = null): CaseInterface;
+    public function elseThen($elseResult, array $bindValues = null);
 }

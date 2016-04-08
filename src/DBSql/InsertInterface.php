@@ -19,9 +19,9 @@ interface InsertInterface extends StatementInterface
      *
      * @param string $tableName
      *
-     * @return self
+     * @return $this
      */
-    public function table(string $tableName);
+    public function table($tableName);
 
     /**
      * Add a set of the field names to show up in the INSERT statement.
@@ -29,7 +29,7 @@ interface InsertInterface extends StatementInterface
      *
      * @param string[] $fields
      *
-     * @return self
+     * @return $this
      */
     public function fields(array $fields);
 
@@ -39,7 +39,7 @@ interface InsertInterface extends StatementInterface
      *
      * @param array $values
      *
-     * @return self
+     * @return $this
      */
     public function values(array $values);
 
@@ -50,7 +50,7 @@ interface InsertInterface extends StatementInterface
      *
      * @param SelectInterface $select
      *
-     * @return self
+     * @return $this
      */
     public function valueSelect(SelectInterface $select);
 
@@ -61,7 +61,7 @@ interface InsertInterface extends StatementInterface
      *
      * @param array $fieldValues
      *
-     * @return self
+     * @return $this
      */
     public function fieldValues(array $fieldValues);
 }

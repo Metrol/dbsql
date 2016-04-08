@@ -19,9 +19,9 @@ interface DeleteInterface extends StatementInterface
      *
      * @param string $tableName
      *
-     * @return self
+     * @return $this
      */
-    public function table(string $tableName);
+    public function table($tableName);
 
     /**
      * Add a WHERE clause to the stack of criteria in the DELETE statement.
@@ -30,9 +30,9 @@ interface DeleteInterface extends StatementInterface
      * @param string $criteria
      * @param array  $bindValues
      *
-     * @return self
+     * @return $this
      */
-    public function where(string $criteria, array $bindValues = null);
+    public function where($criteria, array $bindValues = null);
 
     /**
      * Sets up a WHERE entry to see if a field has a value in the array provided
@@ -40,9 +40,9 @@ interface DeleteInterface extends StatementInterface
      * @param string $fieldName
      * @param array  $values
      *
-     * @return self
+     * @return $this
      */
-    public function whereIn(string $fieldName, array $values);
+    public function whereIn($fieldName, array $values);
 
     /**
      * Sets up a WHERE field is in the results of a sub query.  Bindings from
@@ -52,7 +52,7 @@ interface DeleteInterface extends StatementInterface
      * @param string          $fieldName
      * @param SelectInterface $subSelect
      *
-     * @return self
+     * @return $this
      */
-    public function whereInSub(string $fieldName, SelectInterface $subSelect);
+    public function whereInSub($fieldName, SelectInterface $subSelect);
 }

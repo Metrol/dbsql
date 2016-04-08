@@ -59,7 +59,7 @@ class Union implements StatementInterface
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->output().PHP_EOL;
     }
@@ -69,7 +69,7 @@ class Union implements StatementInterface
      *
      * @return string Formatted SQL
      */
-    public function output(): string
+    public function output()
     {
         return $this->buildSQL();
     }
@@ -81,9 +81,9 @@ class Union implements StatementInterface
      * @param string $unionType Ignored for the first Select, then applied to
      *                          other statements as they are added.
      *
-     * @return self
+     * @return $this
      */
-    public function setSelect(Select $select, string $unionType = null): self
+    public function setSelect(Select $select, string $unionType = null)
     {
         $ut = '';
 

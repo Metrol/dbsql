@@ -53,7 +53,7 @@ class With implements WithInterface
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->output().PHP_EOL;
     }
@@ -63,7 +63,7 @@ class With implements WithInterface
      *
      * @return string Formatted SQL
      */
-    public function output(): string
+    public function output()
     {
         return $this->buildSQL();
     }
@@ -74,9 +74,9 @@ class With implements WithInterface
      * @param string             $alias
      * @param StatementInterface $statement
      *
-     * @return self
+     * @return $this
      */
-    public function setStatement(string $alias, StatementInterface $statement)
+    public function setStatement($alias, StatementInterface $statement)
     {
         $this->withStack[$alias] = $statement;
         $this->mergeBindings($statement);
@@ -90,7 +90,7 @@ class With implements WithInterface
      *
      * @param StatementInterface $statement
      *
-     * @return self
+     * @return $this
      */
     public function setSuffix(StatementInterface $statement)
     {

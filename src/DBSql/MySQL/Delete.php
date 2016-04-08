@@ -54,7 +54,7 @@ class Delete implements DeleteInterface
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->output().PHP_EOL;
     }
@@ -64,7 +64,7 @@ class Delete implements DeleteInterface
      *
      * @return string Formatted SQL
      */
-    public function output(): string
+    public function output()
     {
         return $this->buildSQL();
     }
@@ -74,9 +74,9 @@ class Delete implements DeleteInterface
      *
      * @param string $tableName
      *
-     * @return self
+     * @return $this
      */
-    public function table(string $tableName): self
+    public function table($tableName)
     {
         $this->table = $this->quoter()->quoteTable($tableName);
 
@@ -103,7 +103,7 @@ class Delete implements DeleteInterface
      *
      * @return string
      */
-    protected function buildTable(): string
+    protected function buildTable()
     {
         if ( empty($this->table) )
         {
@@ -121,7 +121,7 @@ class Delete implements DeleteInterface
      *
      * @return string
      */
-    protected function buildWhere(): string
+    protected function buildWhere()
     {
         $sql = '';
         $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();

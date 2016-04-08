@@ -21,7 +21,7 @@ interface WhenInterface extends StatementInterface
      * @param string $criteria
      * @param array  $bindValues
      */
-    public function setCriteria(string $criteria, array $bindValues = null);
+    public function setCriteria($criteria, array $bindValues = null);
 
     /**
      * Attaches the THEN portion of the WHEN clause and provides back the CASE
@@ -32,5 +32,5 @@ interface WhenInterface extends StatementInterface
      *
      * @return CaseInterface
      */
-    public function then(string $thenResult, array $bindValues = null): CaseInterface;
+    public function then($thenResult, array $bindValues = null);
 }

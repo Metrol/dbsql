@@ -32,7 +32,7 @@ trait Bindings
     /**
      * Initialize the binding values, and clears out any existing ones
      *
-     * @return self
+     * @return $this
      */
     public function initBindings()
     {
@@ -46,7 +46,7 @@ trait Bindings
      *
      * @return array
      */
-    public function getBindings(): array
+    public function getBindings()
     {
         return $this->bindings;
     }
@@ -57,9 +57,9 @@ trait Bindings
      * @param string $bindName
      * @param mixed  $bindValue
      *
-     * @return self
+     * @return $this
      */
-    public function setBinding(string $bindName, $bindValue): self
+    public function setBinding($bindName, $bindValue)
     {
         $this->bindings[$bindName] = $bindValue;
 
@@ -71,9 +71,9 @@ trait Bindings
      *
      * @param array $bindings
      *
-     * @return self
+     * @return $this
      */
-    public function setBindings(array $bindings): self
+    public function setBindings(array $bindings)
     {
         foreach ( $bindings as $key => $value )
         {
@@ -92,7 +92,7 @@ trait Bindings
      *
      * @param StatementInterface $statement
      *
-     * @return self
+     * @return $this
      */
     protected function mergeBindings(StatementInterface $statement)
     {
@@ -114,7 +114,7 @@ trait Bindings
      *
      * @return string
      */
-    public function getBindLabel(): string
+    public function getBindLabel()
     {
         $label = ':_' . uniqid() . '_';
 
@@ -135,7 +135,7 @@ trait Bindings
      * @return string Provide the same clause back, with every ? replaced with
      *                a named binding as it has been assigned in this object
      */
-    protected function bindAssign(string $in, array $values = null)
+    protected function bindAssign($in, array $values = null)
     {
         $out = $in;
 

@@ -19,16 +19,16 @@ interface SelectInterface extends StatementInterface
      *
      * @param string $fieldName  Must be quoted correctly for the database
      *
-     * @return self
+     * @return $this
      */
-    public function field(string $fieldName);
+    public function field($fieldName);
 
     /**
      * Add a set of fields to the select request.
      *
      * @param array $fieldNames
      *
-     * @return self
+     * @return $this
      */
     public function fields(array $fieldNames);
 
@@ -46,9 +46,9 @@ interface SelectInterface extends StatementInterface
      *
      * @param string $fromName
      *
-     * @return self
+     * @return $this
      */
-    public function from(string $fromName);
+    public function from($fromName);
 
     /**
      * Add a sub select as a data source in the FROM clause of the query.
@@ -58,9 +58,9 @@ interface SelectInterface extends StatementInterface
      * @param string          $alias
      * @param SelectInterface $subSelect
      *
-     * @return self
+     * @return $this
      */
-    public function fromSub(string $alias, SelectInterface $subSelect);
+    public function fromSub($alias, SelectInterface $subSelect);
 
     /**
      * Adds an INNER JOIN clause to the SELECT statement.
@@ -69,10 +69,9 @@ interface SelectInterface extends StatementInterface
      * @param string $onCriteria ON criteria for the JOIN.
      * @param array  $bindValues List of values to bind into the criteria
      *
-     * @return self
+     * @return $this
      */
-    public function join(string $tableName, string $onCriteria,
-                         array $bindValues = null);
+    public function join($tableName, $onCriteria, array $bindValues = null);
 
     /**
      * Adds an INNER JOIN clause to the SELECT statement with USING as the the join
@@ -81,9 +80,9 @@ interface SelectInterface extends StatementInterface
      * @param string $tableName
      * @param string $criteria   Field names for the USING clause
      *
-     * @return self
+     * @return $this
      */
-    public function joinUsing(string $tableName, string $criteria);
+    public function joinUsing($tableName, $criteria);
 
     /**
      * Add a WHERE clause to the stack of criteria in the SELECT statement.
@@ -92,9 +91,9 @@ interface SelectInterface extends StatementInterface
      * @param string $criteria
      * @param array  $bindValues
      *
-     * @return self
+     * @return $this
      */
-    public function where(string $criteria, array $bindValues = null);
+    public function where($criteria, array $bindValues = null);
 
     /**
      * Sets up a WHERE entry to see if a field has a value in the array provided
@@ -102,9 +101,9 @@ interface SelectInterface extends StatementInterface
      * @param string $fieldName
      * @param array  $values
      *
-     * @return self
+     * @return $this
      */
-    public function whereIn(string $fieldName, array $values);
+    public function whereIn($fieldName, array $values);
 
     /**
      * Sets up a WHERE entry to see if a field does not have value in the array
@@ -113,9 +112,9 @@ interface SelectInterface extends StatementInterface
      * @param string $fieldName
      * @param array  $values
      *
-     * @return self
+     * @return $this
      */
-    public function whereNotIn(string $fieldName, array $values);
+    public function whereNotIn($fieldName, array $values);
 
     /**
      * Sets up a WHERE field is in the results of a sub query.  Bindings from
@@ -125,9 +124,9 @@ interface SelectInterface extends StatementInterface
      * @param string          $fieldName
      * @param SelectInterface $subSelect
      *
-     * @return self
+     * @return $this
      */
-    public function whereInSub(string $fieldName, SelectInterface $subSelect);
+    public function whereInSub($fieldName, SelectInterface $subSelect);
 
     /**
      * Sets up a WHERE field is not in the results of a sub query.  Bindings from
@@ -137,9 +136,9 @@ interface SelectInterface extends StatementInterface
      * @param string          $fieldName
      * @param SelectInterface $subSelect
      *
-     * @return self
+     * @return $this
      */
-    public function whereNotInSub(string $fieldName, SelectInterface $subSelect);
+    public function whereNotInSub($fieldName, SelectInterface $subSelect);
 
     /**
      * Add fields to order the result set by
@@ -148,17 +147,16 @@ interface SelectInterface extends StatementInterface
      * @param string $direction ASC by default
      * @param string $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
      *
-     * @return self
+     * @return $this
      */
-    public function order(string $fieldName, string $direction = null,
-                          string $nullOrder = null);
+    public function order($fieldName, $direction = null, $nullOrder = null);
 
     /**
      * Add a field to the GROUP BY clause.
      *
      * @param string $fieldName
      *
-     * @return self
+     * @return $this
      */
     public function groupBy($fieldName);
 
@@ -167,7 +165,7 @@ interface SelectInterface extends StatementInterface
      *
      * @param string[] $fieldNames
      *
-     * @return self
+     * @return $this
      */
     public function groupByFields(array $fieldNames);
 
@@ -178,7 +176,7 @@ interface SelectInterface extends StatementInterface
      * @param string $criteria Criteria for an aggregate
      * @param array  $bindValues
      *
-     * @return self
+     * @return $this
      */
-    public function having(string $criteria, array $bindValues = null);
+    public function having($criteria, array $bindValues = null);
 }

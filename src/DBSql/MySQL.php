@@ -18,7 +18,7 @@ class MySQL
      *
      * @return SelectInterface
      */
-    public function select(): SelectInterface
+    public function select()
     {
         return new MySQL\Select;
     }

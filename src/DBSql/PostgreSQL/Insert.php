@@ -66,7 +66,7 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->output().PHP_EOL;
     }
@@ -76,7 +76,7 @@ class Insert implements InsertInterface
      *
      * @return string Formatted SQL
      */
-    public function output(): string
+    public function output()
     {
         return $this->buildSQL();
     }
@@ -86,9 +86,9 @@ class Insert implements InsertInterface
      *
      * @param string $tableName
      *
-     * @return self
+     * @return $this
      */
-    public function table(string $tableName): self
+    public function table($tableName)
     {
         $this->tableInto = $this->quoter()->quoteTable($tableName);
 
@@ -115,9 +115,9 @@ class Insert implements InsertInterface
      * @param mixed  $value
      * @param mixed  $boundValue
      *
-     * @return self
+     * @return $this
      */
-    public function fieldValue(string $fieldName, $value, $boundValue = null): self
+    public function fieldValue($fieldName, $value, $boundValue = null)
     {
         $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
 
@@ -152,9 +152,9 @@ class Insert implements InsertInterface
      *
      * @param string[] $fields
      *
-     * @return self
+     * @return $this
      */
-    public function fields(array $fields): self
+    public function fields(array $fields)
     {
         foreach ( $fields as $fieldName )
         {
@@ -171,9 +171,9 @@ class Insert implements InsertInterface
      *
      * @param array $values
      *
-     * @return self
+     * @return $this
      */
-    public function values(array $values): self
+    public function values(array $values)
     {
         foreach ( $values as $value )
         {
@@ -191,9 +191,9 @@ class Insert implements InsertInterface
      *
      * @param SelectInterface $select
      *
-     * @return self
+     * @return $this
      */
-    public function valueSelect(SelectInterface $select): self
+    public function valueSelect(SelectInterface $select)
     {
         $this->select = $select;
 
@@ -208,9 +208,9 @@ class Insert implements InsertInterface
      *
      * @param array $fieldValues  Expect array['fieldName'] = 'value to insert'
      *
-     * @return self
+     * @return $this
      */
-    public function fieldValues(array $fieldValues): self
+    public function fieldValues(array $fieldValues)
     {
         foreach ( $fieldValues as $fieldName => $value )
         {
@@ -228,9 +228,9 @@ class Insert implements InsertInterface
      *
      * @param string $fieldName
      *
-     * @return self
+     * @return $this
      */
-    public function returning($fieldName): self
+    public function returning($fieldName)
     {
         $this->returningField = $this->quoter()->quoteField($fieldName);
 
@@ -242,7 +242,7 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    protected function buildSQL(): string
+    protected function buildSQL()
     {
         $sql = 'INSERT'.PHP_EOL;
 
@@ -260,7 +260,7 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    protected function buildTable(): string
+    protected function buildTable()
     {
         $sql = '';
 
@@ -281,7 +281,7 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    protected function buildFields(): string
+    protected function buildFields()
     {
         $sql = '';
 
@@ -304,7 +304,7 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    protected function buildValues(): string
+    protected function buildValues()
     {
         $sql = '';
 
@@ -329,7 +329,7 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    protected function buildValuesFromSelect(): string
+    protected function buildValuesFromSelect()
     {
         $sql = '';
 
@@ -347,7 +347,7 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    protected function buildReturning(): string
+    protected function buildReturning()
     {
         $sql = '';
 

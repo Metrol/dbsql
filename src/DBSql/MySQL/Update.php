@@ -46,7 +46,7 @@ class Update implements UpdateInterface
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->output().PHP_EOL;
     }
@@ -56,7 +56,7 @@ class Update implements UpdateInterface
      *
      * @return string Formatted SQL
      */
-    public function output(): string
+    public function output()
     {
         return $this->buildSQL();
     }
@@ -66,9 +66,9 @@ class Update implements UpdateInterface
      *
      * @param string $tableName
      *
-     * @return self
+     * @return $this
      */
-    public function table(string $tableName): self
+    public function table($tableName)
     {
         $this->table = $this->quoter()->quoteTable($tableName);
 
@@ -95,9 +95,9 @@ class Update implements UpdateInterface
      * @param mixed  $value
      * @param mixed  $boundValue
      *
-     * @return self
+     * @return $this
      */
-    public function fieldValue(string $fieldName, $value, $boundValue = null): self
+    public function fieldValue($fieldName, $value, $boundValue = null)
     {
         $fieldName = $this->quoter()->quoteField($fieldName);
 
@@ -132,9 +132,9 @@ class Update implements UpdateInterface
      *
      * @param array $fieldValues  Expect array['fieldName'] = 'value to update'
      *
-     * @return self
+     * @return $this
      */
-    public function fieldValues(array $fieldValues): self
+    public function fieldValues(array $fieldValues)
     {
         foreach ( $fieldValues as $fieldName => $value )
         {
@@ -168,7 +168,7 @@ class Update implements UpdateInterface
      *
      * @return string
      */
-    protected function buildTable(): string
+    protected function buildTable()
     {
         if ( empty($this->table) )
         {
@@ -185,7 +185,7 @@ class Update implements UpdateInterface
      *
      * @return string
      */
-    protected function buildFieldValues(): string
+    protected function buildFieldValues()
     {
         $sql = '';
 
@@ -212,7 +212,7 @@ class Update implements UpdateInterface
      *
      * @return string
      */
-    protected function buildWhere(): string
+    protected function buildWhere()
     {
         $sql = '';
         $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();

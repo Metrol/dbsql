@@ -43,9 +43,9 @@ trait Quoter
      *
      * @param bool $flag
      *
-     * @return self
+     * @return $this
      */
-    public function enableQuoting(bool $flag): self
+    public function enableQuoting($flag)
     {
         $this->quoter()->enableQuoting($flag);
 

@@ -25,9 +25,9 @@ trait Where
      * @param string $criteria
      * @param array  $bindValues
      *
-     * @return self
+     * @return $this
      */
-    public function where(string $criteria, array $bindValues = null): self
+    public function where($criteria, array $bindValues = null)
     {
         $whereClause = $this->bindAssign($criteria, $bindValues);
         $whereClause = $this->quoter()->quoteField($whereClause);
@@ -43,9 +43,9 @@ trait Where
      * @param string $fieldName
      * @param array  $values
      *
-     * @return self
+     * @return $this
      */
-    public function whereIn(string $fieldName, array $values): self
+    public function whereIn($fieldName, array $values)
     {
         // Don't add a thing without some values to plug in.
         if ( count($values) == 0 )
@@ -74,9 +74,9 @@ trait Where
      * @param string $fieldName
      * @param array  $values
      *
-     * @return self
+     * @return $this
      */
-    public function whereNotIn(string $fieldName, array $values): self
+    public function whereNotIn($fieldName, array $values)
     {
         // Don't add a thing without some values to plug in.
         if ( count($values) == 0 )
@@ -106,9 +106,9 @@ trait Where
      * @param string          $fieldName
      * @param SelectInterface $subSelect
      *
-     * @return self
+     * @return $this
      */
-    public function whereInSub(string $fieldName, SelectInterface $subSelect): self
+    public function whereInSub($fieldName, SelectInterface $subSelect)
     {
         $fieldString = $this->quoter()->quoteField($fieldName);
 
@@ -132,9 +132,9 @@ trait Where
      * @param string          $fieldName
      * @param SelectInterface $subSelect
      *
-     * @return self
+     * @return $this
      */
-    public function whereNotInSub(string $fieldName, SelectInterface $subSelect): self
+    public function whereNotInSub($fieldName, SelectInterface $subSelect)
     {
         $fieldString = $this->quoter()->quoteField($fieldName);
 
@@ -160,9 +160,9 @@ trait Where
      *
      * @param string $whereClause
      *
-     * @return self
+     * @return $this
      */
-    abstract protected function wherePush(string $whereClause);
+    abstract protected function wherePush($whereClause);
 
     /**
      *
@@ -172,16 +172,16 @@ trait Where
      * @return string
      */
     abstract public function indentStatement(StatementInterface $statement,
-                                             int $depth): string;
+                                             $depth);
 
     /**
      * Provide the indentation string to prefix text with.
      *
-     * @param int $depth
+     * @param integer $depth
      *
      * @return string
      */
-    abstract protected function indent(int $depth = 1): string;
+    abstract protected function indent($depth = 1);
 
     /**
      * Looks to the specified statement and adds any missing bindings to this
@@ -192,7 +192,7 @@ trait Where
      *
      * @param StatementInterface $statement
      *
-     * @return self
+     * @return $this
      */
     abstract protected function mergeBindings(StatementInterface $statement);
 
@@ -210,7 +210,7 @@ trait Where
      * @return string Provide the same clause back, with every ? replaced with
      *                a named binding as it has been assigned in this object
      */
-    abstract protected function bindAssign(string $in, array $values = null);
+    abstract protected function bindAssign($in, array $values = null);
 
 
     /**

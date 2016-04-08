@@ -92,7 +92,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->output().PHP_EOL;
     }
@@ -102,7 +102,7 @@ class Select implements SelectInterface
      *
      * @return string Formatted SQL
      */
-    public function output(): string
+    public function output()
     {
         return $this->buildSQL();
     }
@@ -113,9 +113,9 @@ class Select implements SelectInterface
      * @param boolean $flag       Setting to true turns on DISTINCT.
      * @param string  $expression Comma Separated fields to be distinct about
      *
-     * @return self
+     * @return $this
      */
-    public function distinct(bool $flag, string $expression = ''): self
+    public function distinct($flag, $expression = '')
     {
         $this->distinctFlag = $flag;
 
@@ -143,9 +143,9 @@ class Select implements SelectInterface
      *
      * @param string $fieldName  Must be quoted correctly for the database
      *
-     * @return self
+     * @return $this
      */
-    public function field(string $fieldName): self
+    public function field($fieldName)
     {
         $fieldString = $this->quoter()->quoteField($fieldName);
 
@@ -159,9 +159,9 @@ class Select implements SelectInterface
      *
      * @param array $fieldNames
      *
-     * @return self
+     * @return $this
      */
-    public function fields(array $fieldNames): self
+    public function fields(array $fieldNames)
     {
         foreach ( $fieldNames as $fieldName )
         {
@@ -190,9 +190,9 @@ class Select implements SelectInterface
      *
      * @param string $fromName
      *
-     * @return self
+     * @return $this
      */
-    public function from(string $fromName): self
+    public function from($fromName)
     {
         $tableString = $this->quoter()->quoteTable($fromName);
 
@@ -209,9 +209,9 @@ class Select implements SelectInterface
      * @param string          $alias
      * @param SelectInterface $subSelect
      *
-     * @return self
+     * @return $this
      */
-    public function fromSub(string $alias, SelectInterface $subSelect): self
+    public function fromSub($alias, SelectInterface $subSelect)
     {
         // Assemble the string
         $fromClause  = '('.PHP_EOL;
@@ -235,10 +235,9 @@ class Select implements SelectInterface
      * @param string $onCriteria ON criteria for the JOIN.
      * @param array  $bindValues List of values to bind into the criteria
      *
-     * @return self
+     * @return $this
      */
-    public function join(string $tableName, string $onCriteria,
-                         array $bindValues = null): self
+    public function join($tableName, $onCriteria, array $bindValues = null)
     {
         $tableName  = $this->quoter()->quoteTable($tableName);
         $onCriteria = $this->bindAssign($onCriteria, $bindValues);
@@ -262,9 +261,9 @@ class Select implements SelectInterface
      * @param string $tableName
      * @param string $criteria   Field names for the USING clause
      *
-     * @return self
+     * @return $this
      */
-    public function joinUsing(string $tableName, string $criteria): self
+    public function joinUsing($tableName, $criteria)
     {
         $tableName  = $this->quoter()->quoteTable($tableName);
 
@@ -292,9 +291,9 @@ class Select implements SelectInterface
      *
      * @param string $tableName
      *
-     * @return self
+     * @return $this
      */
-    public function joinNatural(string $tableName): self
+    public function joinNatural($tableName)
     {
         $tableName  = $this->quoter()->quoteTable($tableName);
 
@@ -314,11 +313,10 @@ class Select implements SelectInterface
      * @param string $onCriteria ON criteria for the JOIN.
      * @param array  $bindValues List of values to bind into the criteria
      *
-     * @return self
+     * @return $this
      */
-    public function joinOuter(string $joinType, string $tableName,
-                              string $onCriteria,
-                              array $bindValues = null): self
+    public function joinOuter($joinType, $tableName, $onCriteria,
+                              array $bindValues = null)
     {
         $joinType = strtoupper($joinType);
 
@@ -351,10 +349,9 @@ class Select implements SelectInterface
      * @param string $tableName
      * @param string $criteria   Field names for the USING clause
      *
-     * @return self
+     * @return $this
      */
-    public function joinOuterUsing(string $joinType, string $tableName,
-                                   string $criteria): self
+    public function joinOuterUsing($joinType, $tableName, $criteria)
     {
         $tableName  = $this->quoter()->quoteTable($tableName);
 
@@ -392,10 +389,9 @@ class Select implements SelectInterface
      * @param string $direction
      * @param string $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
      *
-     * @return self
+     * @return $this
      */
-    public function order(string $fieldName, string $direction = null,
-                          string $nullOrder = null): self
+    public function order($fieldName, $direction = null, $nullOrder = null)
     {
         if ( $direction === null )
         {
@@ -436,9 +432,9 @@ class Select implements SelectInterface
      *
      * @param string $fieldName
      *
-     * @return self
+     * @return $this
      */
-    public function groupBy($fieldName): self
+    public function groupBy($fieldName)
     {
         $groupString = $this->quoter()->quoteField($fieldName);
 
@@ -452,9 +448,9 @@ class Select implements SelectInterface
      *
      * @param string[] $fieldNames
      *
-     * @return self
+     * @return $this
      */
-    public function groupByFields(array $fieldNames): self
+    public function groupByFields(array $fieldNames)
     {
         foreach ( $fieldNames as $fieldName )
         {
@@ -475,9 +471,9 @@ class Select implements SelectInterface
      * @param string $criteria   Criteria for an aggregate
      * @param array  $bindValues
      *
-     * @return self
+     * @return $this
      */
-    public function having(string $criteria, array $bindValues = null): self
+    public function having($criteria, array $bindValues = null)
     {
         $havingClause = $this->bindAssign($criteria, $bindValues);
 
@@ -491,11 +487,11 @@ class Select implements SelectInterface
      *
      * @param int $rowCount
      *
-     * @return self
+     * @return $this
      */
-    public function limit(int $rowCount): self
+    public function limit($rowCount)
     {
-        $this->limitVal = $rowCount;
+        $this->limitVal = intval($rowCount);
 
         return $this;
     }
@@ -506,11 +502,11 @@ class Select implements SelectInterface
      *
      * @param int $startRow
      *
-     * @return self
+     * @return $this
      */
-    public function offset(int $startRow): self
+    public function offset($startRow)
     {
-        $this->offsetVal = $startRow;
+        $this->offsetVal = intval($startRow);
 
         return $this;
     }
@@ -521,7 +517,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildSQL(): string
+    protected function buildSQL()
     {
         $sql = 'SELECT';
         $sql .= $this->buildDistinct();
@@ -543,7 +539,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildDistinct(): string
+    protected function buildDistinct()
     {
         $rtn = '';
 
@@ -567,7 +563,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildFields(): string
+    protected function buildFields()
     {
         $sql   = '';
         $delim = ','.PHP_EOL.$this->indent();
@@ -590,7 +586,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildFrom(): string
+    protected function buildFrom()
     {
         $sql = '';
         $delim = ','.PHP_EOL.$this->indent();
@@ -610,7 +606,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildJoins(): string
+    protected function buildJoins()
     {
         $sql = '';
         $delim = PHP_EOL.$this->indent();
@@ -629,7 +625,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildWhere(): string
+    protected function buildWhere()
     {
         $sql = '';
         $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
@@ -689,7 +685,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildOrder(): string
+    protected function buildOrder()
     {
         $sql = '';
         $delim = ','.PHP_EOL.$this->indent();
@@ -709,7 +705,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildLimit(): string
+    protected function buildLimit()
     {
         $sql = '';
 
@@ -726,7 +722,7 @@ class Select implements SelectInterface
      *
      * @return string
      */
-    protected function buildOffset(): string
+    protected function buildOffset()
     {
         $sql = '';
 

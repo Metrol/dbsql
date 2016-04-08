@@ -19,12 +19,12 @@ interface StatementInterface
      *
      * @return string Formatted SQL
      */
-    public function output(): string;
+    public function output();
 
     /**
      * Initialize the binding values, and clears out any existing ones
      *
-     * @return self
+     * @return $this
      */
     public function initBindings();
 
@@ -34,7 +34,7 @@ interface StatementInterface
      *
      * @return array
      */
-    public function getBindings(): array;
+    public function getBindings();
 
     /**
      * Set a value for a named binding that appeared somewhere in the SQL
@@ -42,16 +42,16 @@ interface StatementInterface
      * @param string $binding The name of the binding key that was used
      * @param mixed  $value   The value to assign to the binding
      *
-     * @return self
+     * @return $this
      */
-    public function setBinding(string $binding, $value);
+    public function setBinding($binding, $value);
 
     /**
      * Takes in an array of bindings and adds them to the stack
      *
      * @param array $bindings
      *
-     * @return self
+     * @return $this
      */
     public function setBindings(array $bindings);
 
@@ -61,7 +61,7 @@ interface StatementInterface
      *
      * @param bool $flag
      *
-     * @return self
+     * @return $this
      */
-    public function enableQuoting(bool $flag);
+    public function enableQuoting($flag);
 }

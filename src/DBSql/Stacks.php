@@ -91,9 +91,9 @@ trait Stacks
     /**
      * Empty the fields from the SELECT statement
      *
-     * @return self
+     * @return $this
      */
-    public function fieldReset(): self
+    public function fieldReset()
     {
         $this->fieldStack = array();
 
@@ -103,9 +103,9 @@ trait Stacks
     /**
      * Empty the values from the Value stack
      *
-     * @return self
+     * @return $this
      */
-    public function valueReset(): self
+    public function valueReset()
     {
         $this->valueStack = array();
 
@@ -115,9 +115,9 @@ trait Stacks
     /**
      * Empty the tables stack
      *
-     * @return self
+     * @return $this
      */
-    public function fromReset(): self
+    public function fromReset()
     {
         $this->fromStack = array();
 
@@ -127,9 +127,9 @@ trait Stacks
     /**
      * Empty the joins stack
      *
-     * @return self
+     * @return $this
      */
-    public function joinReset(): self
+    public function joinReset()
     {
         $this->joinStack = array();
 
@@ -141,9 +141,9 @@ trait Stacks
      *
      * @param string $whereClause
      *
-     * @return self
+     * @return $this
      */
-    protected function wherePush(string $whereClause)
+    protected function wherePush($whereClause)
     {
         $this->whereStack[] = $whereClause;
 
@@ -153,9 +153,9 @@ trait Stacks
     /**
      * Empty the where clauses
      *
-     * @return self
+     * @return $this
      */
-    public function whereReset(): self
+    public function whereReset()
     {
         $this->whereStack = array();
 
@@ -165,9 +165,9 @@ trait Stacks
     /**
      * Empty the having clauses
      *
-     * @return self
+     * @return $this
      */
-    public function havingReset(): self
+    public function havingReset()
     {
         $this->havingStack = array();
 
@@ -177,9 +177,9 @@ trait Stacks
     /**
      * Empty the ordering
      *
-     * @return self
+     * @return $this
      */
-    public function orderReset(): self
+    public function orderReset()
     {
         $this->orderStack = array();
 
@@ -189,9 +189,9 @@ trait Stacks
     /**
      * Empty the grouping fields
      *
-     * @return self
+     * @return $this
      */
-    public function groupReset(): self
+    public function groupReset()
     {
         $this->groupStack = array();
 

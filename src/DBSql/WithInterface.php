@@ -20,9 +20,9 @@ interface WithInterface extends StatementInterface
      * @param string             $alias
      * @param StatementInterface $statement
      *
-     * @return self
+     * @return $this
      */
-    public function setStatement(string $alias, StatementInterface $statement);
+    public function setStatement($alias, StatementInterface $statement);
 
     /**
      * Sets the suffix of the SQL that is appended after the clauses of the
@@ -30,7 +30,7 @@ interface WithInterface extends StatementInterface
      *
      * @param StatementInterface $statement
      *
-     * @return self
+     * @return $this
      */
     public function setSuffix(StatementInterface $statement);
 }

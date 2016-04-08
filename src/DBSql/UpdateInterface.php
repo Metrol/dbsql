@@ -19,9 +19,9 @@ interface UpdateInterface extends StatementInterface
      *
      * @param string $tableName
      *
-     * @return self
+     * @return $this
      */
-    public function table(string $tableName);
+    public function table($tableName);
 
     /**
      * Add a field and an optionally bound value to the stack.
@@ -43,9 +43,9 @@ interface UpdateInterface extends StatementInterface
      * @param mixed  $value
      * @param mixed  $boundValue
      *
-     * @return self
+     * @return $this
      */
-    public function fieldValue(string $fieldName, $value, $boundValue = null);
+    public function fieldValue($fieldName, $value, $boundValue = null);
 
     /**
      * Add a set of fields with values to be assigned values to the UPDATE
@@ -53,7 +53,7 @@ interface UpdateInterface extends StatementInterface
      *
      * @param array $fieldValues
      *
-     * @return self
+     * @return $this
      */
     public function fieldValues(array $fieldValues);
 
@@ -64,9 +64,9 @@ interface UpdateInterface extends StatementInterface
      * @param string $criteria
      * @param array  $bindValues
      *
-     * @return self
+     * @return $this
      */
-    public function where(string $criteria, array $bindValues = null);
+    public function where($criteria, array $bindValues = null);
 
     /**
      * Sets up a WHERE entry to see if a field has a value in the array provided
@@ -74,9 +74,9 @@ interface UpdateInterface extends StatementInterface
      * @param string $fieldName
      * @param array  $values
      *
-     * @return self
+     * @return $this
      */
-    public function whereIn(string $fieldName, array $values);
+    public function whereIn($fieldName, array $values);
 
     /**
      * Sets up a WHERE field is in the results of a sub query.  Bindings from
@@ -86,7 +86,7 @@ interface UpdateInterface extends StatementInterface
      * @param string          $fieldName
      * @param SelectInterface $subSelect
      *
-     * @return self
+     * @return $this
      */
-    public function whereInSub(string $fieldName, SelectInterface $subSelect);
+    public function whereInSub($fieldName, SelectInterface $subSelect);
 }

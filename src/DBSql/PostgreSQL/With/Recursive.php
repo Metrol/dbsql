@@ -61,7 +61,7 @@ class Recursive
      *
      * @return string
      */
-    public function __toString(): string
+    public function __toString()
     {
         return $this->output().PHP_EOL;
     }
@@ -71,7 +71,7 @@ class Recursive
      *
      * @return string Formatted SQL
      */
-    public function output(): string
+    public function output()
     {
         return $this->buildSQL();
     }
@@ -82,9 +82,9 @@ class Recursive
      * @param string $alias
      * @param Union  $union
      *
-     * @return self
+     * @return $this
      */
-    public function setUnion(string $alias, Union $union): self
+    public function setUnion($alias, Union $union)
     {
         $this->union = $union;
         $this->alias = $alias;
@@ -97,9 +97,9 @@ class Recursive
      *
      * @param array $fields
      *
-     * @return self
+     * @return $this
      */
-    public function setFields(array $fields): self
+    public function setFields(array $fields)
     {
         $this->fields = $fields;
 
@@ -110,9 +110,9 @@ class Recursive
      * Used to determine if this object has been populated.  Must have a
      * union statement and alias to return true.
      *
-     * @return bool
+     * @return boolean
      */
-    public function isReady(): bool
+    public function isReady()
     {
         $rtn = false;
 
@@ -129,7 +129,7 @@ class Recursive
      *
      * @return string
      */
-    protected function buildSQL(): string
+    protected function buildSQL()
     {
         if ( !$this->isReady() )
         {
