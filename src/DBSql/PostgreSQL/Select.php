@@ -117,7 +117,14 @@ class Select implements SelectInterface
      */
     public function distinct($flag, $expression = '')
     {
-        $this->distinctFlag = $flag;
+        if ( $flag )
+        {
+            $this->distinctFlag = true;
+        }
+        else
+        {
+            $this->distinctFlag = false;
+        }
 
         if ( empty($expression) )
         {
