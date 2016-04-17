@@ -282,7 +282,7 @@ class Select implements SelectInterface
             }
             else
             {
-                if ( $bindFlag )
+                if ( $bindFlag === true )
                 {
                     $label = $this->getBindLabel();
                     $this->setBinding($label, $value);
