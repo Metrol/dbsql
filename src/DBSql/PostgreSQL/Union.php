@@ -83,7 +83,7 @@ class Union implements StatementInterface
      *
      * @return $this
      */
-    public function setSelect(Select $select, string $unionType = null)
+    public function setSelect(Select $select, $unionType = null)
     {
         $ut = '';
 
