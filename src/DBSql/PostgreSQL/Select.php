@@ -162,7 +162,8 @@ class Select implements SelectInterface
     }
 
     /**
-     * Add a set of fields to the select request.
+     * Sets the fields going to the select request.
+     * Replaces any fields already set.
      *
      * @param array $fieldNames
      *
@@ -170,6 +171,8 @@ class Select implements SelectInterface
      */
     public function fields(array $fieldNames)
     {
+        $this->fieldStack = array();
+
         foreach ( $fieldNames as $fieldName )
         {
             $fieldString = $this->quoter()->quoteField($fieldName);

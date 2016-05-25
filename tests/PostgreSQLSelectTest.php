@@ -56,8 +56,7 @@ SQL;
         $select->fromReset()
             ->from('tableWithData twd')
             ->from('anotherTable at')
-            ->field('twd.Index')
-            ->fields(['at.aPersonName', 'twd.description'])
+            ->fields(['twd.Index', 'at.aPersonName', 'twd.description'])
             ->where('at.Index = twd.primaryKey');
 
         $this->assertEquals($expected, $select->output());
