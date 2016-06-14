@@ -41,7 +41,6 @@ SQL;
 
         $expected = <<<SQL
 SELECT
-    `twd`.`Index`,
     `at`.`aPersonName`,
     `twd`.`description`
 FROM
