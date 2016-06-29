@@ -29,7 +29,7 @@ class DBSql
     }
 
     /**
-     * 
+     *
      * @return DBSql\MySQL
      */
     static public function MySQL()
@@ -43,7 +43,7 @@ class DBSql
      *
      * @param $type
      *
-     * @return object
+     * @return DBSql\DriverInterface
      *
      * @throws \UnexpectedValueException
      */

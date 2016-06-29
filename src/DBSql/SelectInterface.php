@@ -24,7 +24,8 @@ interface SelectInterface extends StatementInterface
     public function field($fieldName);
 
     /**
-     * Add a set of fields to the select request.
+     * Sets the fields going to the select request.
+     * Replaces any fields already set.
      *
      * @param array $fieldNames
      *
