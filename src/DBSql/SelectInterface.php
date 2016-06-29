@@ -179,4 +179,23 @@ interface SelectInterface extends StatementInterface
      * @return $this
      */
     public function having($criteria, array $bindValues = null);
+
+    /**
+     * Sets the limit for how many rows to pull back from the query.
+     *
+     * @param integer $rowCount
+     *
+     * @return $this
+     */
+    public function limit($rowCount);
+
+    /**
+     * Sets the offset for which row to start with on the result set from the
+     * query.
+     *
+     * @param integer $startRow
+     *
+     * @return $this
+     */
+    public function offset($startRow);
 }
