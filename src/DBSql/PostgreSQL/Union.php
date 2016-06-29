@@ -124,6 +124,10 @@ class Union implements UnionInterface
 
         foreach ( $this->unionStack as $selectUnion )
         {
+            /**
+             * @var string          $type
+             * @var SelectInterface $select
+             */
             $type   = $selectUnion[0];
             $select = $selectUnion[1];
 
