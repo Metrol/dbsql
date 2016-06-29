@@ -16,7 +16,7 @@ class MySQL
 {
     /**
      *
-     * @return SelectInterface
+     * @return MySQL\Select
      */
     public function select()
     {

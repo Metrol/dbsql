@@ -16,7 +16,7 @@ class PostgreSQL
 {
     /**
      *
-     * @return SelectInterface
+     * @return PostgreSQL\Select
      */
     public function select()
     {
