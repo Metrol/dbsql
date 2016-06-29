@@ -12,7 +12,7 @@ namespace Metrol\DBSql;
  * Major statement types for MySQL
  *
  */
-class MySQL
+class MySQL implements DriverInterface
 {
     /**
      *

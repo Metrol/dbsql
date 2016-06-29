@@ -12,7 +12,7 @@ namespace Metrol\DBSql;
  * Major statement types for PostgreSQL
  *
  */
-class PostgreSQL
+class PostgreSQL implements DriverInterface
 {
     /**
      *
