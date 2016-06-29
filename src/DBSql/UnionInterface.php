@@ -15,6 +15,14 @@ namespace Metrol\DBSql;
 interface UnionInterface extends StatementInterface
 {
     /**
+     * The kinds of Unions supported
+     *
+     * @const
+     */
+    const UNION_ALL       = 'ALL';
+    const UNION_DISTINCT  = 'DISTINCT';
+
+    /**
      * Adds a select statement to the stack
      *
      * @param SelectInterface $select

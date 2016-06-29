@@ -10,23 +10,16 @@ namespace Metrol\DBSql\PostgreSQL;
 
 use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
-use Metrol\DbSql\StatementInterface;
+use Metrol\DBSql\UnionInterface;
+use Metrol\DBSql\SelectInterface;
 
 /**
  * Creates a collection of SELECT statements combined with UNION's
  *
  */
-class Union implements StatementInterface
+class Union implements UnionInterface
 {
     use Bindings, Indent, Quoter;
-
-    /**
-     * The kinds of Unions supported
-     *
-     * @const
-     */
-    const UNION_ALL       = 'ALL';
-    const UNION_DISTINCT  = 'DISTINCT';
 
     /**
      * PostgreSQL uses a DISTINCT union by default.
@@ -77,13 +70,14 @@ class Union implements StatementInterface
     /**
      * Adds a select statement to the stack
      *
-     * @param Select $select
-     * @param string $unionType Ignored for the first Select, then applied to
-     *                          other statements as they are added.
+     * @param SelectInterface $select
+     * @param string          $unionType Ignored for the first Select, then
+     *                                   applied to other statements as they
+     *                                   are added.
      *
      * @return $this
      */
-    public function setSelect(Select $select, $unionType = null)
+    public function setSelect(SelectInterface $select, $unionType = null)
     {
         $ut = '';
 
