@@ -17,7 +17,7 @@ class DBSql
     const POSTGRESQL     = 'PostgreSQL';
     const POSTGRESQL_PDO = 'pgsql';
     const MYSQL          = 'MySQL';
-    const MYSQL_PDO      = 'pgsql';
+    const MYSQL_PDO      = 'mysql';
 
     /**
      *
