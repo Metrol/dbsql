@@ -174,7 +174,7 @@ SQL;
 
         $sub->field('description')
             ->from('relatedData')
-            ->where('id = ?', [86]);
+            ->where('id = ?', 86);
 
         $select->fromSub('reldtq', $sub);
 
@@ -221,7 +221,7 @@ SQL;
 
         $select->field('*')
             ->from('tableWithData twd')
-            ->where('twd.value = ?', [42])
+            ->where('twd.value = ?', 42)
             ->whereInSub('twd.description', $sub)
             ->where('twd.id < ?', [97]);
 

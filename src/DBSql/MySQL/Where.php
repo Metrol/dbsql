@@ -22,13 +22,18 @@ trait Where
      * Add a WHERE clause to the stack of criteria in the SELECT statement.
      * Each new clause called will be included with an "AND" in between.
      *
-     * @param string $criteria
-     * @param array  $bindValues
+     * @param string      $criteria
+     * @param mixed|array $bindValues
      *
      * @return $this
      */
-    public function where($criteria, array $bindValues = null)
+    public function where($criteria, $bindValues = null)
     {
+        if ( !is_array($bindValues) )
+        {
+            $bindValues = [$bindValues];
+        }
+
         $whereClause = $this->bindAssign($criteria, $bindValues);
         $whereClause = $this->quoter()->quoteField($whereClause);
 
