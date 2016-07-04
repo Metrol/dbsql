@@ -35,7 +35,7 @@ class Insert implements InsertInterface
      *
      * @var string|null
      */
-    protected $returningField;
+    protected $returningFields;
 
     /**
      * When specified, this SELECT statement will be used as the source of
@@ -55,10 +55,10 @@ class Insert implements InsertInterface
         $this->initIndent();
         $this->initStacks();
 
-        $this->fieldStack     = array();
-        $this->tableInto      = '';
-        $this->returningField = null;
-        $this->select         = null;
+        $this->fieldStack      = array();
+        $this->tableInto       = '';
+        $this->returningFields = array();
+        $this->select          = null;
     }
 
     /**
@@ -226,13 +226,21 @@ class Insert implements InsertInterface
     /**
      * Request back an auto sequencing field by name
      *
-     * @param string $fieldName
+     * @param string|string[]
      *
      * @return $this
      */
     public function returning($fieldName)
     {
-        $this->returningField = $this->quoter()->quoteField($fieldName);
+        if ( !is_array($fieldName) )
+        {
+            $fieldName = [$fieldName];
+        }
+
+        foreach ( $fieldName as $field )
+        {
+            $this->returningFields[] = $this->quoter()->quoteField($field);
+        }
 
         return $this;
     }
@@ -351,10 +359,12 @@ class Insert implements InsertInterface
     {
         $sql = '';
 
-        if ( $this->returningField !== null )
+        if ( ! empty($this->returningFields) )
         {
             $sql .= 'RETURNING'.PHP_EOL;
-            $sql .= $this->indent().$this->returningField.PHP_EOL;
+            $sql .= $this->indent();
+            $sql .= implode(', ', $this->returningFields);
+            $sql .= PHP_EOL;
         }
 
         return $sql;

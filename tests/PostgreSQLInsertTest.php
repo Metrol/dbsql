@@ -342,5 +342,28 @@ RETURNING
 SQL;
 
         $this->assertEquals($expected, $actual);
+
+        // Now check for multiple values being passed into the returning method
+        $insert = DBSql::PostgreSQL()->insert();
+
+        $insert->table('tableNeedingData tnd')
+               ->fieldValue('fname', ':firstname')
+               ->fieldValue('lname', ':lastname')
+               ->returning(['primaryKeyValue', 'blahBlah']);
+
+        $actual = $insert->output();
+        $expected = <<<SQL
+INSERT
+INTO
+    "tableNeedingData" "tnd"
+    ("fname", "lname")
+VALUES
+    (:firstname, :lastname)
+RETURNING
+    "primaryKeyValue", "blahBlah"
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
     }
 }

@@ -216,6 +216,19 @@ class Insert implements InsertInterface
     }
 
     /**
+     * Here to support the insert interface, but MySQL has no actual support
+     * for the RETURNING keyword.
+     *
+     * @param string|string[]
+     *
+     * @return $this
+     */
+    public function returning($fieldName)
+    {
+        return $this;
+    }
+
+    /**
      * Build the INSERT statement
      *
      * @return string

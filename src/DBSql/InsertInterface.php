@@ -64,4 +64,14 @@ interface InsertInterface extends StatementInterface
      * @return $this
      */
     public function fieldValues(array $fieldValues);
+
+    /**
+     * Add a field to return back from the insert statement.  Accepts either a
+     * single field name, or a list of them in the form of an array.
+     *
+     * @param string|string[]
+     *
+     * @return $this
+     */
+    public function returning($fieldName);
 }
