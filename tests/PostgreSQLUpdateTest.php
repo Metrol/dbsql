@@ -179,10 +179,6 @@ SQL;
 
         list($label1, $label2, $label3, $label4 ) = array_keys($bindings);
 
-        // print PHP_EOL.$actual;
-        // var_dump($bindings);
-        // return;
-
         $expected = <<<SQL
 UPDATE
     "tableNeedingData"
@@ -217,7 +213,18 @@ SQL;
         $update->table('tableNeedingData');
         $update->fieldValue('okayToBeNull', '?', null);
 
-        echo $update->output(),PHP_EOL;
+        $bindings = $update->getBindings();
 
+        list($label) = array_keys($bindings);
+
+        $expected = <<<SQL
+UPDATE
+    "tableNeedingData"
+SET
+    "okayToBeNull" = {$label}
+
+SQL;
+
+        $this->assertEquals($expected, $update->output());
     }
 }
