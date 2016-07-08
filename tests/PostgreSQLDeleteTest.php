@@ -54,8 +54,8 @@ SQL;
         $insert->table('tableNeedingData')
                ->fieldValue('fname', '?', 'Fred')                 // ? sets up an
                ->fieldValue('lname', '?', 'Flinstone')            // auto binding.
-               ->fieldValue('title', '', 'Bronto Crane Operator') // Empty string.
-               ->fieldValue('company', null, 'Slate Rock');       // null value.
+               ->fieldValue('title', '?', 'Bronto Crane Operator')
+               ->fieldValue('company', '?', 'Slate Rock');
 
         $actual   = $insert->output();
         $bindings = $insert->getBindings();

@@ -54,8 +54,8 @@ SQL;
         $insert->table('tableNeedingData')
                ->fieldValue('fname', '?', 'Fred')                 // ? sets up an
                ->fieldValue('lname', '?', 'Flinstone')            // auto binding.
-               ->fieldValue('title', '', 'Bronto Crane Operator') // Empty string.
-               ->fieldValue('company', null, 'Slate Rock');       // null value.
+               ->fieldValue('title', '?', 'Bronto Crane Operator')
+               ->fieldValue('company', '?', 'Slate Rock');
 
         $actual   = $insert->output();
         $bindings = $insert->getBindings();
@@ -165,17 +165,17 @@ SQL;
      */
     public function testReturningFieldUpdate()
     {
-        $insert = DBSql::PostgreSQL()->update();
+        $update = DBSql::PostgreSQL()->update();
 
-        $insert->table('tableNeedingData')
+        $update->table('tableNeedingData')
                ->fieldValue('fname', ':firstname', 'Barney')
                ->fieldValue('lname', ':lastname', 'Rubble')
                ->where('fname = ?', ['Fred'])
                ->where('lname = ?', ['Flinstone'])
                ->returning('tndID');
 
-        $actual = $insert->output();
-        $bindings = $insert->getBindings();
+        $actual   = $update->output();
+        $bindings = $update->getBindings();
 
         list($label1, $label2, $label3, $label4 ) = array_keys($bindings);
 
@@ -204,5 +204,20 @@ SQL;
         $this->assertEquals('Rubble', $bindings[$label2]);
         $this->assertEquals('Fred', $bindings[$label3]);
         $this->assertEquals('Flinstone', $bindings[$label4]);
+    }
+
+    /**
+     * Test with assigning null values to fields
+     *
+     */
+    public function testNullValueAssignments()
+    {
+        $update = DBSql::PostgreSQL()->update();
+
+        $update->table('tableNeedingData');
+        $update->fieldValue('okayToBeNull', '?', null);
+
+        echo $update->output(),PHP_EOL;
+
     }
 }
