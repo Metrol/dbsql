@@ -51,8 +51,8 @@ SQL;
         $insert->table('tableNeedingData tnd')
             ->fieldValue('fname', '?', 'Fred')                 // ? sets up an
             ->fieldValue('lname', '?', 'Flinstone')            // auto binding.
-            ->fieldValue('title', '', 'Bronto Crane Operator') // Empty string.
-            ->fieldValue('company', null, 'Slate Rock');       // null value.
+            ->fieldValue('title', '?', 'Bronto Crane Operator')
+            ->fieldValue('company', '?', 'Slate Rock');
 
         $actual   = $insert->output();
         $bindings = $insert->getBindings();
@@ -365,5 +365,33 @@ RETURNING
 SQL;
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Test the ability to properly bind a null value to a field
+     *
+     */
+    public function testNullValueAssignment()
+    {
+        $insert = DBSql::PostgreSQL()->insert();
+
+        $insert->table('tableNeedingData')
+            ->fieldValue('okayToBeNull', '?', null);
+
+        list($label) = array_keys( $insert->getBindings() );
+        $value = $insert->getBindings()[$label];
+
+        $expected =<<<SQL
+INSERT
+INTO
+    "tableNeedingData"
+    ("okayToBeNull")
+VALUES
+    ({$label})
+
+SQL;
+
+        $this->assertEquals($expected, $insert->output());
+        $this->assertNull($value);
     }
 }

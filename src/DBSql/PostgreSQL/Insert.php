@@ -101,8 +101,6 @@ class Insert implements InsertInterface
      * To automatically bind a value, the 3rd argument must be provided a value
      * and the 2nd argument needs to be...
      * - Question mark '?'
-     * - Empty string ''
-     * - null
      *
      * A named binding can be accepted when the 3rd argument has a value and
      * the 2nd argument is a string that starts with a colon that contains no
@@ -121,17 +119,13 @@ class Insert implements InsertInterface
     {
         $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
 
-        if ( $boundValue !== null and (   $value === '?'
-                or $value === ''
-                or $value === null)
-        )
+        if ( $value === '?' )
         {
             $label = $this->getBindLabel();
             $this->setBinding($label, $boundValue);
             $this->valueStack[] = $label;
         }
         else if ( substr($value, 0, 1) === ':' // Starts with a colon
-            and $boundValue !== null           // Has a bound value
             and strpos($value, ' ') === false  // No spaces in the named binding
         )
         {
