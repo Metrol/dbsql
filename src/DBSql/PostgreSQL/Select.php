@@ -438,7 +438,7 @@ class Select implements SelectInterface
     }
 
     /**
-     * Adds an OUTER JOIN clause to the SELECT statement with USING as the the join
+     * Adds an OUTER JOIN clause to the SELECT statement with USING as the join
      * criteria.  No data binding is provided here.
      *
      * @param string $joinType   LEFT|RIGHT|FULL
