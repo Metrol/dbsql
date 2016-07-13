@@ -86,6 +86,31 @@ interface SelectInterface extends StatementInterface
     public function joinUsing($tableName, $criteria);
 
     /**
+     * Adds a LEFT/RIGHT/FULL OUTER JOIN clause to the SELECT statement.
+     *
+     * @param string $joinType   LEFT|RIGHT|FULL
+     * @param string $tableName
+     * @param string $onCriteria ON criteria for the JOIN.
+     * @param array  $bindValues List of values to bind into the criteria
+     *
+     * @return $this
+     */
+    public function joinOuter($joinType, $tableName, $onCriteria,
+                              array $bindValues = null);
+
+    /**
+     * Adds an OUTER JOIN clause to the SELECT statement with USING as the
+     * join criteria.  No data binding is provided here.
+     *
+     * @param string $joinType   LEFT|RIGHT|FULL
+     * @param string $tableName
+     * @param string $criteria   Field names for the USING clause
+     *
+     * @return $this
+     */
+    public function joinOuterUsing($joinType, $tableName, $criteria);
+
+    /**
      * Add a WHERE clause to the stack of criteria in the SELECT statement.
      * Each new clause called will be included with an "AND" in between.
      *
