@@ -12,6 +12,7 @@ use Metrol\DBSql\DeleteInterface;
 use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
 use Metrol\DBSql\Stacks;
+use Metrol\DBSql\Output;
 
 /**
  * Creates an Delete SQL statement for PostgreSQL
@@ -19,7 +20,7 @@ use Metrol\DBSql\Stacks;
  */
 class Delete implements DeleteInterface
 {
-    use Bindings, Indent, Stacks, Quoter, Where;
+    use Output, Bindings, Indent, Stacks, Quoter, Where;
 
     /**
      * The table the delete is targeted at.
@@ -57,16 +58,6 @@ class Delete implements DeleteInterface
     public function __toString()
     {
         return $this->output().PHP_EOL;
-    }
-
-    /**
-     * Produces the output of all the information that was set in the object.
-     *
-     * @return string Formatted SQL
-     */
-    public function output()
-    {
-        return $this->buildSQL();
     }
 
     /**

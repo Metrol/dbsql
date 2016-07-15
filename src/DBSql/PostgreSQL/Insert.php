@@ -14,6 +14,7 @@ use Metrol\DBSql\SelectInterface;
 use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
 use Metrol\DBSql\Stacks;
+use Metrol\DBSql\Output;
 
 /**
  * Creates an Insert SQL statement for PostgreSQL
@@ -21,7 +22,7 @@ use Metrol\DBSql\Stacks;
  */
 class Insert implements InsertInterface
 {
-    use Bindings, Indent, Stacks, Quoter;
+    use Output, Bindings, Indent, Stacks, Quoter;
 
     /**
      * The table the insert is targeted at.
@@ -69,16 +70,6 @@ class Insert implements InsertInterface
     public function __toString()
     {
         return $this->output().PHP_EOL;
-    }
-
-    /**
-     * Produces the output of all the information that was set in the object.
-     *
-     * @return string Formatted SQL
-     */
-    public function output()
-    {
-        return $this->buildSQL();
     }
 
     /**

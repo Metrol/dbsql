@@ -12,6 +12,7 @@ use Metrol\DBSql\SelectInterface;
 use Metrol\DBSql\Stacks;
 use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
+use Metrol\DBSql\Output;
 
 /**
  * Creates an SQL statement for PostgreSQL
@@ -19,7 +20,7 @@ use Metrol\DBSql\Indent;
  */
 class Select implements SelectInterface
 {
-    use Stacks, Bindings, Quoter, Indent, Where;
+    use Stacks, Bindings, Quoter, Indent, Where, Output;
 
     /**
      * Joining keywords for comparisons.
@@ -95,16 +96,6 @@ class Select implements SelectInterface
     public function __toString()
     {
         return $this->output().PHP_EOL;
-    }
-
-    /**
-     * Produces the output of all the information that was set in the object.
-     *
-     * @return string Formatted SQL
-     */
-    public function output()
-    {
-        return $this->buildSQL();
     }
 
     /**

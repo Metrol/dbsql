@@ -12,6 +12,7 @@ use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
 use Metrol\DBSql\UnionInterface;
 use Metrol\DBSql\SelectInterface;
+use Metrol\DBSql\Output;
 
 /**
  * Creates a collection of SELECT statements combined with UNION's
@@ -19,7 +20,7 @@ use Metrol\DBSql\SelectInterface;
  */
 class Union implements UnionInterface
 {
-    use Bindings, Indent, Quoter;
+    use Output, Bindings, Indent, Quoter;
 
     /**
      * PostgreSQL uses a DISTINCT union by default.
@@ -55,16 +56,6 @@ class Union implements UnionInterface
     public function __toString()
     {
         return $this->output().PHP_EOL;
-    }
-
-    /**
-     * Produces the output of all the information that was set in the object.
-     *
-     * @return string Formatted SQL
-     */
-    public function output()
-    {
-        return $this->buildSQL();
     }
 
     /**

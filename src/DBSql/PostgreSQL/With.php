@@ -10,6 +10,7 @@ namespace Metrol\DBSql\PostgreSQL;
 
 use Metrol\DBSql\Bindings;
 use Metrol\DBSql\Indent;
+use Metrol\DBSql\Output;
 use Metrol\DBSql\PostgreSQL\With\Recursive;
 use Metrol\DBSql\WithInterface;
 use Metrol\DBSql\StatementInterface;
@@ -20,7 +21,7 @@ use Metrol\DBSql\StatementInterface;
  */
 class With implements WithInterface
 {
-    use Bindings, Indent, Quoter;
+    use Output, Bindings, Indent, Quoter;
 
     /**
      * The collection of statements that are keyed by their alias name.
@@ -66,16 +67,6 @@ class With implements WithInterface
     public function __toString()
     {
         return $this->output().PHP_EOL;
-    }
-
-    /**
-     * Produces the output of all the information that was set in the object.
-     *
-     * @return string Formatted SQL
-     */
-    public function output()
-    {
-        return $this->buildSQL();
     }
 
     /**
