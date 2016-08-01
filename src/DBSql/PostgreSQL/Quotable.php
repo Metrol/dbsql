@@ -34,5 +34,6 @@ class Quotable extends \Metrol\DBSql\Quotable
 
         $this->keywords[] = 'like';
         $this->keywords[] = 'ilike';
+        $this->keywords[] = 'between';
     }
 }
