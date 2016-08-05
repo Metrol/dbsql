@@ -32,8 +32,6 @@ class Quotable extends \Metrol\DBSql\Quotable
         $this->tableOpenQuote  = self::TABLE_OPEN;
         $this->tableCloseQuote = self::TABLE_CLOSE;
 
-        $this->keywords[] = 'like';
         $this->keywords[] = 'ilike';
-        $this->keywords[] = 'between';
     }
 }

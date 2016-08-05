@@ -83,7 +83,7 @@ class Quotable
 
         $this->keywords = [
             'and', 'or', 'on', 'in', 'not', 'as', 'null', 'true', 'false',
-            'case', 'when', 'then', 'end'
+            'case', 'when', 'then', 'end', 'like', 'between', 'is'
         ];
     }
 
