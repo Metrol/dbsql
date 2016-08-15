@@ -8,10 +8,10 @@
 
 namespace Metrol\DBSql\PostgreSQL\With;
 
-use Metrol\DBSql\PostgreSQL\Quoter;
+use Metrol\DBSql\PostgreSQL\QuoterTrait;
 use Metrol\DBSql\PostgreSQL\Union;
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
 
 /**
  * All the parts of a Recursive clause for a With statement
@@ -19,7 +19,7 @@ use Metrol\DBSql\Indent;
  */
 class Recursive
 {
-    use Bindings, Indent, Quoter;
+    use BindingsTrait, IndentTrait, QuoterTrait;
 
     /**
      * The SQL Union Statement to be included in the Recursive clause

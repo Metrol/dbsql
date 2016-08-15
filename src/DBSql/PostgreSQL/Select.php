@@ -9,10 +9,10 @@
 namespace Metrol\DBSql\PostgreSQL;
 
 use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\Stacks;
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
-use Metrol\DBSql\Output;
+use Metrol\DBSql\StackTrait;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\OutputTrait;
 
 /**
  * Creates an SQL statement for PostgreSQL
@@ -20,7 +20,7 @@ use Metrol\DBSql\Output;
  */
 class Select implements SelectInterface
 {
-    use Stacks, Bindings, Quoter, Indent, Where, Output;
+    use StackTrait, BindingsTrait, QuoterTrait, IndentTrait, WhereTrait, OutputTrait;
 
     /**
      * Joining keywords for comparisons.

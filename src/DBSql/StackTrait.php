@@ -14,7 +14,7 @@ namespace Metrol\DBSql;
  * methods.
  *
  */
-trait Stacks
+trait StackTrait
 {
     /**
      * List of the fields to be used in the SQL

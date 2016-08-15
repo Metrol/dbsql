@@ -9,8 +9,8 @@
 namespace Metrol\DBSql\MySQL;
 
 use Metrol\DBSql\CaseFieldInterface;
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
 use Metrol\DBSql\WhenInterface;
 use Metrol\DBSql\SelectInterface;
 
@@ -20,7 +20,7 @@ use Metrol\DBSql\SelectInterface;
  */
 class CaseField implements CaseFieldInterface
 {
-    use Bindings, Indent, Quoter;
+    use BindingsTrait, IndentTrait, QuoterTrait;
 
     /**
      * Holds all the WHENs that belong to this object

@@ -8,11 +8,11 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
 use Metrol\DBSql\UnionInterface;
 use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\Output;
+use Metrol\DBSql\OutputTrait;
 
 /**
  * Creates a collection of SELECT statements combined with UNION's
@@ -20,7 +20,7 @@ use Metrol\DBSql\Output;
  */
 class Union implements UnionInterface
 {
-    use Output, Bindings, Indent, Quoter;
+    use OutputTrait, BindingsTrait, IndentTrait, QuoterTrait;
 
     /**
      * PostgreSQL uses a DISTINCT union by default.

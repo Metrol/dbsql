@@ -11,10 +11,10 @@ namespace Metrol\DBSql\PostgreSQL;
 
 use Metrol\DBSql\InsertInterface;
 use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
-use Metrol\DBSql\Stacks;
-use Metrol\DBSql\Output;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\StackTrait;
+use Metrol\DBSql\OutputTrait;
 
 /**
  * Creates an Insert SQL statement for PostgreSQL
@@ -22,7 +22,7 @@ use Metrol\DBSql\Output;
  */
 class Insert implements InsertInterface
 {
-    use Output, Bindings, Indent, Stacks, Quoter;
+    use OutputTrait, BindingsTrait, IndentTrait, StackTrait, QuoterTrait;
 
     /**
      * The table the insert is targeted at.

@@ -8,9 +8,9 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\Bindings;
+use Metrol\DBSql\BindingsTrait;
 use Metrol\DBSql\CaseInterface;
-use Metrol\DBSql\Indent;
+use Metrol\DBSql\IndentTrait;
 use Metrol\DBSql\WhenInterface;
 
 /**
@@ -19,7 +19,7 @@ use Metrol\DBSql\WhenInterface;
  */
 class When implements WhenInterface
 {
-    use Bindings, Indent, Quoter;
+    use BindingsTrait, IndentTrait, QuoterTrait;
 
     /**
      * The Case object that called this one into being.  Saved here to pass

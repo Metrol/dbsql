@@ -6,14 +6,14 @@
  * @copyright (c) 2016, Michael Collette
  */
 
-namespace Metrol\DBSql\PostgreSQL;
+namespace Metrol\DBSql\MySQL;
 
 /**
  * Provides the functionality that statements and various helpers use from the
  * Quatoable object
  *
  */
-trait Quoter
+trait QuoterTrait
 {
     /**
      * The object that handles auto quoting field and table names.

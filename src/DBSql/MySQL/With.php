@@ -8,8 +8,8 @@
 
 namespace Metrol\DBSql\MySQL;
 
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
 use Metrol\DBSql\StatementInterface;
 use Metrol\DBSql\WithInterface;
 
@@ -19,7 +19,7 @@ use Metrol\DBSql\WithInterface;
  */
 class With implements WithInterface
 {
-    use Bindings, Indent, Quoter;
+    use BindingsTrait, IndentTrait, QuoterTrait;
 
     /**
      * The collection of statements that are keyed by their alias name.

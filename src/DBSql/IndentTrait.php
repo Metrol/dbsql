@@ -12,7 +12,7 @@ namespace Metrol\DBSql;
  * Provide code indenting support for SQL statements
  *
  */
-trait Indent
+trait IndentTrait
 {
     /**
      * String of spaces used to indent the SQL

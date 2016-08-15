@@ -45,7 +45,7 @@ interface DeleteInterface extends StatementInterface
     public function whereIn($fieldName, array $values);
 
     /**
-     * Sets up a WHERE field is in the results of a sub query.  Bindings from
+     * Sets up a WHERE field is in the results of a sub query.  BindingsTrait from
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
      *

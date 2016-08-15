@@ -9,9 +9,9 @@
 namespace Metrol\DBSql\MySQL;
 
 use Metrol\DBSql\UpdateInterface;
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
-use Metrol\DBSql\Stacks;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\StackTrait;
 
 /**
  * Creates an Update SQL statement for MySQL
@@ -19,7 +19,7 @@ use Metrol\DBSql\Stacks;
  */
 class Update implements UpdateInterface
 {
-    use Bindings, Indent, Stacks, Quoter, Where;
+    use BindingsTrait, IndentTrait, StackTrait, QuoterTrait, WhereTrait;
 
     /**
      * The table the update is targeted at.

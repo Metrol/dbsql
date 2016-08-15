@@ -11,9 +11,9 @@ namespace Metrol\DBSql\MySQL;
 
 use Metrol\DBSql\InsertInterface;
 use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
-use Metrol\DBSql\Stacks;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\StackTrait;
 
 /**
  * Creates an Insert SQL statement for MySQL
@@ -21,7 +21,7 @@ use Metrol\DBSql\Stacks;
  */
 class Insert implements InsertInterface
 {
-    use Bindings, Indent, Stacks, Quoter;
+    use BindingsTrait, IndentTrait, StackTrait, QuoterTrait;
 
     /**
      * The table the insert is targeted at.

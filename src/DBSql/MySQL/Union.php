@@ -8,8 +8,8 @@
 
 namespace Metrol\DBSql\MySQL;
 
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
 use Metrol\DBSql\UnionInterface;
 use Metrol\DBSql\SelectInterface;
 
@@ -19,7 +19,7 @@ use Metrol\DBSql\SelectInterface;
  */
 class Union implements UnionInterface
 {
-    use Bindings, Indent, Quoter;
+    use BindingsTrait, IndentTrait, QuoterTrait;
 
     /**
      * MySQL uses a DISTINCT union by default.

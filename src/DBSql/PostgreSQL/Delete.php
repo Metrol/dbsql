@@ -9,10 +9,10 @@
 namespace Metrol\DBSql\PostgreSQL;
 
 use Metrol\DBSql\DeleteInterface;
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
-use Metrol\DBSql\Stacks;
-use Metrol\DBSql\Output;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\StackTrait;
+use Metrol\DBSql\OutputTrait;
 
 /**
  * Creates an Delete SQL statement for PostgreSQL
@@ -20,7 +20,7 @@ use Metrol\DBSql\Output;
  */
 class Delete implements DeleteInterface
 {
-    use Output, Bindings, Indent, Stacks, Quoter, Where;
+    use OutputTrait, BindingsTrait, IndentTrait, StackTrait, QuoterTrait, WhereTrait;
 
     /**
      * The table the delete is targeted at.

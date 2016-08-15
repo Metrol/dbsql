@@ -8,9 +8,9 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
-use Metrol\DBSql\Output;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\OutputTrait;
 use Metrol\DBSql\PostgreSQL\With\Recursive;
 use Metrol\DBSql\WithInterface;
 use Metrol\DBSql\StatementInterface;
@@ -21,7 +21,7 @@ use Metrol\DBSql\StatementInterface;
  */
 class With implements WithInterface
 {
-    use Output, Bindings, Indent, Quoter;
+    use OutputTrait, BindingsTrait, IndentTrait, QuoterTrait;
 
     /**
      * The collection of statements that are keyed by their alias name.

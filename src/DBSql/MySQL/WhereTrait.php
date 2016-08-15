@@ -13,10 +13,10 @@ use Metrol\DBSql\SelectInterface;
 
 /**
  * Provides handling a WHERE clause for statements that can use it.  This
- * assumes that statement has a Quoter and has include the Stacks.
+ * assumes that statement has a QuoterTrait and has include the StackTrait.
  *
  */
-trait Where
+trait WhereTrait
 {
     /**
      * Add a WHERE clause to the stack of criteria in the SELECT statement.
@@ -104,7 +104,7 @@ trait Where
     }
 
     /**
-     * Sets up a WHERE field is in the results of a sub query.  Bindings from
+     * Sets up a WHERE field is in the results of a sub query.  BindingsTrait from
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
      *
@@ -130,7 +130,7 @@ trait Where
     }
 
     /**
-     * Sets up a WHERE field is not in the results of a sub query.  Bindings from
+     * Sets up a WHERE field is not in the results of a sub query.  BindingsTrait from
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
      *

@@ -13,7 +13,7 @@ namespace Metrol\DBSql;
  * prepared PDO statement.
  *
  */
-trait Bindings
+trait BindingsTrait
 {
     /**
      * Maintains the list of binding key/value pairs.

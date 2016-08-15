@@ -10,18 +10,18 @@ namespace Metrol\DBSql\MySQL;
 
 use Metrol\DBSql\CaseInterface;
 use Metrol\DBSql\CaseWhereInterface;
-use Metrol\DBSql\Bindings;
-use Metrol\DBSql\Indent;
+use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\IndentTrait;
 use Metrol\DBSql\WhenInterface;
 use Metrol\DBSql\SelectInterface;
 
 /**
- * Handles opening and closing CASE statements for the Where clause of a query
+ * Handles opening and closing CASE statements for the WhereTrait clause of a query
  *
  */
 class CaseWhere implements CaseWhereInterface
 {
-    use Bindings, Indent, Quoter;
+    use BindingsTrait, IndentTrait, QuoterTrait;
 
     /**
      * Holds all the WHENs that belong to this object
@@ -104,7 +104,7 @@ class CaseWhere implements CaseWhereInterface
     }
 
     /**
-     * Assembles the CASE statement, pushes it onto the Select object Where
+     * Assembles the CASE statement, pushes it onto the Select object WhereTrait
      * stack, then passes back the Select object to continue chaining the query.
      *
      * @return SelectInterface
