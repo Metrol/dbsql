@@ -8,10 +8,10 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\CaseInterface;
 use Metrol\DBSql\CaseWhereInterface;
 use Metrol\DBSql\BindingsTrait;
 use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\OutputTrait;
 use Metrol\DBSql\WhenInterface;
 use Metrol\DBSql\SelectInterface;
 
@@ -21,7 +21,7 @@ use Metrol\DBSql\SelectInterface;
  */
 class CaseWhere implements CaseWhereInterface
 {
-    use BindingsTrait, IndentTrait, QuoterTrait;
+    use BindingsTrait, IndentTrait, QuoterTrait, OutputTrait;
 
     /**
      * Holds all the WHENs that belong to this object
