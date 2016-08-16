@@ -80,11 +80,11 @@ class Select implements WhereInterface
 
         if ( $this->valueIn )
         {
-            $whereClause .= ' IN ' . PHP_EOL;
+            $whereClause .= ' IN' . PHP_EOL;
         }
         else
         {
-            $whereClause .= ' NOT IN ' . PHP_EOL;
+            $whereClause .= ' NOT IN' . PHP_EOL;
         }
 
         $whereClause .= $this->indent() . '(' . PHP_EOL;
