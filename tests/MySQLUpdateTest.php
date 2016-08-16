@@ -7,7 +7,6 @@
  */
 
 use \Metrol\DBSql;
-use \Metrol\DBSql\MySQL;
 
 /**
  * Verify that various uses of the Update statement work as expected.
@@ -86,17 +85,17 @@ SQL;
      */
     public function testUpdateFieldValueWithBindings()
     {
-        $insert = DBSql::MySQL()->update();
+        $update = DBSql::MySQL()->update();
 
-        $insert->table('tableNeedingData');
-        $insert->fieldValue('fname', ':firstname', 'Fred');
-        $insert->fieldValue('lname', ':lastname',  'Flinstone');
+        $update->table('tableNeedingData');
+        $update->fieldValue('fname', ':firstname', 'Fred');
+        $update->fieldValue('lname', ':lastname',  'Flinstone');
 
-        $bindings = $insert->getBindings();
+        $bindings = $update->getBindings();
         $label1 = ':firstname';
         $label2 = ':lastname';
 
-        $actual = $insert->output();
+        $actual = $update->output();
 
         $expected = <<<SQL
 UPDATE
@@ -121,22 +120,23 @@ SQL;
      */
     public function testUpdateWithFieldValueArrayAutomaticBinding()
     {
-        $insert = DBSql::MySQL()->update();
-        $insert->table('tableNeedingData');
+        $update = DBSql::MySQL()->update();
+        $update->table('tableNeedingData');
 
         $data = [
             'fname' => 'Fred',
             'lname' => 'Flinstone'
         ];
 
-        $insert->fieldValues($data)
+        $update->fieldValues($data)
             ->where('id = ? and status = ?', [12, 'true']);
 
-        $bindings = $insert->getBindings();
+        $update->output();
+        $bindings = $update->getBindings();
 
         list($label1, $label2, $label3, $label4) = array_keys($bindings);
 
-        $actual = $insert->output();
+        $actual = $update->output();
 
         $expected = <<<SQL
 UPDATE
