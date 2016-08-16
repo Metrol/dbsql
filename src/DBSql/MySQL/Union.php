@@ -101,7 +101,6 @@ class Union implements UnionInterface
         }
 
         $this->unionStack[] = [$ut, $select];
-        $this->mergeBindings($select);
 
         return $this;
     }
@@ -136,6 +135,8 @@ class Union implements UnionInterface
             }
 
             $sql .= $select->output().PHP_EOL;
+
+            $this->mergeBindings($select);
         }
 
         return $sql;
