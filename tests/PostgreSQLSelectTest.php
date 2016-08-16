@@ -107,6 +107,7 @@ SQL;
             ->from('tableWithData twd')
             ->where('twd.value = ?', [42]);
 
+        $select->output();
         $bindings = $select->getBindings();
 
         $this->assertCount(1, $bindings);
@@ -137,6 +138,7 @@ SQL;
             ->from('tableWithData twd')
             ->where('(twd.Value = ? OR twd.Value = ?)', [42, 36]);
 
+        $select->output();
         $bindings = $select->getBindings();
 
         $this->assertCount(2, $bindings);
@@ -180,6 +182,7 @@ SQL;
 
         // Fetch bindings from the parent SELECT.  The sub select should have
         // merged with the parent.
+        $select->output();
         $bindings = $select->getBindings();
         $label = key($bindings);
 
@@ -225,8 +228,8 @@ SQL;
             ->whereInSub('twd.description', $sub)
             ->where('twd.id < ?', [97]);
 
-        $bindings = $select->getBindings();
         $actual   = $select->output();
+        $bindings = $select->getBindings();
 
         $this->assertCount(3, $bindings);
         $this->assertContains(86, $bindings);
@@ -285,8 +288,8 @@ SQL;
             ->whereNotInSub('twd.description', $sub)
             ->where('twd.id < ?', [97]);
 
-        $bindings = $select->getBindings();
         $actual   = $select->output();
+        $bindings = $select->getBindings();
 
         $this->assertCount(3, $bindings);
         $this->assertContains(86, $bindings);
@@ -344,6 +347,7 @@ SQL;
         $select->from('tableWithData twd')
             ->whereIn('twd.name', $valueChar);
 
+        $select->output();
         $bindings = $select->getBindings();
 
         $this->assertCount(5, $bindings);
@@ -379,6 +383,7 @@ SQL;
         $select->from('tableWithData twd')
                ->whereIn('twd.index', $valueNum);
 
+        $select->output();
         $bindings = $select->getBindings();
 
         $this->assertCount(5, $bindings);
@@ -426,6 +431,7 @@ SQL;
         $select->from('tableWithData twd')
             ->whereNotIn('twd.name', $valueChar);
 
+        $actual   = $select->output();
         $bindings = $select->getBindings();
 
         $this->assertCount(5, $bindings);
@@ -441,7 +447,6 @@ SQL;
         $label4 = array_search('Fred',   $bindings);
         $label5 = array_search('George', $bindings);
 
-        $actual   = $select->output();
         $expected = <<<SQL
 SELECT
     *
