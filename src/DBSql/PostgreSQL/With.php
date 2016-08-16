@@ -106,7 +106,6 @@ class With implements WithInterface
     public function setStatement($alias, StatementInterface $statement)
     {
         $this->withStack[$alias] = $statement;
-        $this->mergeBindings($statement);
 
         return $this;
     }
@@ -188,6 +187,8 @@ class With implements WithInterface
             $sql .= '('.PHP_EOL;
             $sql .= $this->indentStatement($statement, 1);
             $sql .= '),'.PHP_EOL;
+
+            $this->mergeBindings($statement);
         }
 
         $sql = substr($sql, 0, -2);
