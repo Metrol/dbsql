@@ -20,7 +20,7 @@ use Metrol\DBSql\SelectInterface;
  */
 class Where implements WhereInterface
 {
-    use BindingsTrait, QuoterTrait;
+    use BindingsTrait;
 
     /**
      * The parent statement this where clause belongs to
