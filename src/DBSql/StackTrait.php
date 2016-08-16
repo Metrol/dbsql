@@ -47,7 +47,7 @@ trait StackTrait
     /**
      * Clauses that will make up the WHERE section of a statement
      *
-     * @var array
+     * @var WhereInterface[]
      */
     protected $whereStack;
 
@@ -139,11 +139,11 @@ trait StackTrait
     /**
      * Push a value on to the WHERE stack
      *
-     * @param string $whereClause
+     * @param WhereInterface $whereClause
      *
      * @return $this
      */
-    protected function wherePush($whereClause)
+    protected function wherePush(WhereInterface $whereClause)
     {
         $this->whereStack[] = $whereClause;
 
