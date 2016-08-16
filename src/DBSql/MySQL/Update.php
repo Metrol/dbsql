@@ -217,11 +217,23 @@ class Update implements UpdateInterface
         $sql = '';
         $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
 
-        if ( ! empty($this->whereStack) )
+        $clauses = [];
+
+        foreach ( $this->whereStack as $whereClause )
+        {
+            $clauses[] = $whereClause->output();
+
+            foreach ( $whereClause->getBindings() as $key => $value )
+            {
+                $this->setBinding($key, $value);
+            }
+        }
+
+        if ( ! empty($clauses) )
         {
             $sql .= 'WHERE'.PHP_EOL;
             $sql .= $this->indent();
-            $sql .= implode($delimeter, $this->whereStack ).PHP_EOL;
+            $sql .= implode($delimeter, $clauses).PHP_EOL;
         }
 
         return $sql;
