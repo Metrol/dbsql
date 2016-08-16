@@ -189,8 +189,6 @@ class Insert implements InsertInterface
     {
         $this->select = $select;
 
-        $this->mergeBindings($select);
-
         return $this;
     }
 
@@ -327,6 +325,8 @@ class Insert implements InsertInterface
         if ( is_object($this->select) )
         {
             $sql .= $this->indentStatement($this->select, 1);
+
+            $this->mergeBindings($this->select);
         }
 
         return $sql;
