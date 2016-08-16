@@ -10,6 +10,7 @@ namespace Metrol\DBSql\MySQL;
 
 use Metrol\DBSql\StatementInterface;
 use Metrol\DBSql\SelectInterface;
+use Metrol\DBSql\WhereInterface;
 
 /**
  * Provides handling a WHERE clause for statements that can use it.  This
@@ -34,8 +35,12 @@ trait WhereTrait
             $bindValues = [$bindValues];
         }
 
-        $whereClause = $this->bindAssign($criteria, $bindValues);
-        $whereClause = $this->quoter()->quoteField($whereClause);
+        /**
+         * @var StatementInterface $this
+         */
+        $whereClause = new Where($this);
+
+        $whereClause->setCriteria($criteria, $bindValues);
 
         $this->wherePush($whereClause);
 
@@ -52,20 +57,12 @@ trait WhereTrait
      */
     public function whereIn($fieldName, array $values)
     {
-        // Don't add a thing without some values to plug in.
-        if ( count($values) == 0 )
-        {
-            return $this;
-        }
+        /**
+         * @var StatementInterface $this
+         */
+        $whereClause = new Where($this);
 
-        $fieldString = $this->quoter()->quoteField($fieldName);
-
-        $placeHolders = '(';
-        $placeHolders .= implode(', ', array_fill(0, count($values), '?') );
-        $placeHolders .= ')';
-
-        $whereClause = $fieldString.' IN ';
-        $whereClause .= $this->bindAssign($placeHolders, $values);
+        $whereClause->setInList($fieldName, $values, true);
 
         $this->wherePush($whereClause);
 
@@ -83,20 +80,12 @@ trait WhereTrait
      */
     public function whereNotIn($fieldName, array $values)
     {
-        // Don't add a thing without some values to plug in.
-        if ( count($values) == 0 )
-        {
-            return $this;
-        }
+        /**
+         * @var StatementInterface $this
+         */
+        $whereClause = new Where($this);
 
-        $fieldString = $this->quoter()->quoteField($fieldName);
-
-        $placeHolders = '(';
-        $placeHolders .= implode(', ', array_fill(0, count($values), '?') );
-        $placeHolders .= ')';
-
-        $whereClause = $fieldString.' NOT IN ';
-        $whereClause .= $this->bindAssign($placeHolders, $values);
+        $whereClause->setInList($fieldName, $values, false);
 
         $this->wherePush($whereClause);
 
@@ -115,16 +104,14 @@ trait WhereTrait
      */
     public function whereInSub($fieldName, SelectInterface $subSelect)
     {
-        $fieldString = $this->quoter()->quoteField($fieldName);
+        /**
+         * @var StatementInterface $this
+         */
+        $whereClause = new Where($this);
 
-        $whereClause = $fieldString.' IN'.PHP_EOL;
-        $whereClause .= $this->indent().'('.PHP_EOL;
-        $whereClause .= $this->indentStatement($subSelect, 2);
-        $whereClause .= $this->indent().')';
+        $whereClause->setInSelect($fieldName, $subSelect, true);
 
         $this->wherePush($whereClause);
-
-        $this->mergeBindings($subSelect);
 
         return $this;
     }
@@ -141,16 +128,14 @@ trait WhereTrait
      */
     public function whereNotInSub($fieldName, SelectInterface $subSelect)
     {
-        $fieldString = $this->quoter()->quoteField($fieldName);
+        /**
+         * @var StatementInterface $this
+         */
+        $whereClause = new Where($this);
 
-        $whereClause = $fieldString.' NOT IN'.PHP_EOL;
-        $whereClause .= $this->indent().'('.PHP_EOL;
-        $whereClause .= $this->indentStatement($subSelect, 2);
-        $whereClause .= $this->indent().')';
+        $whereClause->setInSelect($fieldName, $subSelect, false);
 
         $this->wherePush($whereClause);
-
-        $this->mergeBindings($subSelect);
 
         return $this;
     }
@@ -163,65 +148,9 @@ trait WhereTrait
     /**
      * Push a value on to the WHERE stack
      *
-     * @param string $whereClause
+     * @param WhereInterface $whereClause
      *
      * @return $this
      */
-    abstract protected function wherePush($whereClause);
-
-    /**
-     *
-     * @param StatementInterface $statement
-     * @param int                $depth
-     *
-     * @return string
-     */
-    abstract public function indentStatement(StatementInterface $statement,
-                                             $depth);
-
-    /**
-     * Provide the indentation string to prefix text with.
-     *
-     * @param integer $depth
-     *
-     * @return string
-     */
-    abstract protected function indent($depth = 1);
-
-    /**
-     * Looks to the specified statement and adds any missing bindings to this
-     * stack.
-     *
-     * If a binding already exists, it is skipped.  This maintains the value
-     * of the parent query.
-     *
-     * @param StatementInterface $statement
-     *
-     * @return $this
-     */
-    abstract protected function mergeBindings(StatementInterface $statement);
-
-    /**
-     * Text that has question marks and values to associate to them should be
-     * run through here prior to being added to an SQL stack.  This assigns a
-     * named binding and records the value to be passed to PDO when executing
-     * the statement.
-     *
-     * @param string $in     The sub portion of the SQL that may have ? place
-     *                       holders in it.
-     * @param array  $values List of values that must match the same number of
-     *                       place holders.  If null, just returns the $in value
-     *
-     * @return string Provide the same clause back, with every ? replaced with
-     *                a named binding as it has been assigned in this object
-     */
-    abstract protected function bindAssign($in, array $values = null);
-
-
-    /**
-     * Provide the quoting utility to use on Table and Field names
-     *
-     * @return Quotable
-     */
-    abstract protected function quoter();
+    abstract protected function wherePush(WhereInterface $whereClause);
 }
