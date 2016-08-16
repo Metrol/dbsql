@@ -330,6 +330,86 @@ SQL;
     }
 
     /**
+     * Testing sub selects again, this time with multiple levels embedded
+     * SELECT statements.
+     *
+     */
+    public function testEmbeddedSubSelectInWhere()
+    {
+        $select = DBSql::PostgreSQL()->select();
+        $sub1    = DBSql::PostgreSQL()->select();
+        $sub2    = DBSql::PostgreSQL()->select();
+
+        $sub2->field('recordID')
+            ->from('anothertable')
+            ->where('thisid = ?', 48);
+
+        $sub1->field('description')
+            ->from('relatedData')
+            ->where('id = ?', 86)
+            ->whereInSub('recordID', $sub2);
+
+        $select->field('*')
+               ->from('tableWithData twd')
+               ->where('twd.value = ?', 42)
+               ->whereInSub('twd.description', $sub1)
+               ->where('twd.id < ?', 97);
+
+        $actual   = $select->output();
+        $bindings = $select->getBindings();
+
+        $this->assertCount(4, $bindings);
+        $this->assertContains(86, $bindings);
+        $this->assertContains(42, $bindings);
+        $this->assertContains(48, $bindings);
+        $this->assertContains(97, $bindings);
+
+        $label1 = array_search(86, $bindings);
+        $label2 = array_search(42, $bindings);
+        $label3 = array_search(48, $bindings);
+        $label4 = array_search(97, $bindings);
+
+        $this->assertEquals(86, $bindings[$label1]);
+        $this->assertEquals(42, $bindings[$label2]);
+        $this->assertEquals(48, $bindings[$label3]);
+        $this->assertEquals(97, $bindings[$label4]);
+
+        $expected = <<<SQL
+SELECT
+    *
+FROM
+    "tableWithData" "twd"
+WHERE
+    "twd"."value" = {$label2}
+    AND
+    "twd"."description" IN
+    (
+        SELECT
+            "description"
+        FROM
+            "relatedData"
+        WHERE
+            "id" = {$label1}
+            AND
+            "recordID" IN
+            (
+                SELECT
+                    "recordID"
+                FROM
+                    "anothertable"
+                WHERE
+                    "thisid" = {$label3}
+            )
+    )
+    AND
+    "twd"."id" < {$label4}
+
+SQL;
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
      * Test the ability to pass into a WHERE clause a list of values that can
      * be a match for a field.
      *
