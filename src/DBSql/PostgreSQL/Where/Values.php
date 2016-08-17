@@ -36,6 +36,8 @@ class Values implements WhereInterface
      */
     public function __construct($field, array $values, $valueIn = true)
     {
+        $this->initBindings();
+
         $fieldString = $this->quoter()->quoteField($field);
 
         $placeHolders = '(';
