@@ -1,6 +1,6 @@
 <?php
 /**
- * @author        Michael Collette <mcollette@meetingevolution.net>
+ * @author        Michael Collette <metrol@metrol.net>
  * @version       1.0
  * @package       DBSql
  * @copyright (c) 2016, Michael Collette
