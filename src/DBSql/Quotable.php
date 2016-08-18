@@ -78,7 +78,7 @@ class Quotable
         $this->tableCloseQuote = '"';
 
         $this->symbols = [
-            '<', '<>', '>', '=', '+', '-', '*', '/', '(', ')'
+            '<', '<>', '>', '=', '+', '-', '*', '/', '(', ')', '<=', '>='
         ];
 
         $this->keywords = [
