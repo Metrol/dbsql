@@ -9,7 +9,6 @@
 namespace Metrol\DBSql\PostgreSQL;
 
 use Metrol\DBSql\CaseFieldInterface;
-use Metrol\DBSql\CaseInterface;
 use Metrol\DBSql\BindingsTrait;
 use Metrol\DBSql\IndentTrait;
 use Metrol\DBSql\WhenInterface;
@@ -123,7 +122,7 @@ class CaseField implements CaseFieldInterface
      *
      * @return SelectInterface
      */
-    public function endCase($alias)
+    public function endCase($alias = null)
     {
         $this->alias = $alias;
 

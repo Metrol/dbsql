@@ -107,9 +107,11 @@ class CaseWhere implements CaseWhereInterface
      * Assembles the CASE statement, pushes it onto the Select object WhereTrait
      * stack, then passes back the Select object to continue chaining the query.
      *
+     * @param string $alias Ignored for a Where clause
+     *
      * @return SelectInterface
      */
-    public function endCase()
+    public function endCase($alias = null)
     {
         $quoteSetting = $this->select->quoter()->isEnabled();
 

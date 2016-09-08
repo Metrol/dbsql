@@ -121,7 +121,7 @@ class CaseField implements CaseFieldInterface
      *
      * @return SelectInterface
      */
-    public function endCase($alias)
+    public function endCase($alias = null)
     {
         $this->alias = $alias;
 

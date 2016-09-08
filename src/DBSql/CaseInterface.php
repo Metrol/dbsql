@@ -34,4 +34,15 @@ interface CaseInterface extends StatementInterface
      * @return CaseInterface
      */
     public function elseThen($elseResult, array $bindValues = null);
+
+    /**
+     * Assembles the CASE statement, pushes it onto the Select object.  The
+     * alias is ignored when used in a WHERE clause.
+     *
+     * @param string $alias
+     *
+     * @return SelectInterface
+     */
+    public function endCase($alias = null);
+
 }
