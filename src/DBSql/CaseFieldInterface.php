@@ -22,5 +22,5 @@ interface CaseFieldInterface extends CaseInterface
      *
      * @return SelectInterface
      */
-    public function endCase($alias);
+    public function endCase($alias = null);
 }
