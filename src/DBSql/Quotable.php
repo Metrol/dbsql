@@ -142,7 +142,7 @@ class Quotable
                 continue;
             }
 
-            // No quotes for stand along numbers
+            // No quotes for stand alone numbers
             if ( is_numeric($part) )
             {
                 continue;
@@ -157,6 +157,11 @@ class Quotable
             if ( in_array($part, $this->symbols) )
             {
                 // Never quote math symbols
+                continue;
+            }
+
+            if ( $part === strtolower($part) )
+            {
                 continue;
             }
 
@@ -210,6 +215,11 @@ class Quotable
                 continue;
             }
 
+            if ( $part === strtolower($part) )
+            {
+                continue;
+            }
+
             if ( strpos($part, '.') )
             {
                 $parts[$i] = $this->dotTableQuote($part);
@@ -254,6 +264,11 @@ class Quotable
      */
     protected function tableWrapWord($in)
     {
+        if ( $in == strtolower($in) )
+        {
+            return $in;
+        }
+
         $out = $this->tableOpenQuote;
         $out .= $in;
         $out .= $this->tableCloseQuote;
@@ -275,12 +290,42 @@ class Quotable
 
         $oq = $this->fieldOpenQuote;
         $cq = $this->fieldCloseQuote;
+        $parts = explode('.', $in);
 
-        $out = preg_replace('/\((\w+)/', '('.$oq.'$1'.$cq, $out); // (word
-        $out = preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out); // word(
-        $out = preg_replace('/(\w+)\.(\w+)/', $oq.'$1'.$cq.'.'.$oq.'$2'.$cq, $out); // word.word
-        $out = preg_replace('/\.(\w+)/', '.'.$oq.'$1'.$cq, $out); // .word
-        $out = preg_replace('/(\w+)\./', $oq.'$1'.$cq.'.', $out); // word.
+        if ( isset($parts[0]) )
+        {
+            if ( $parts[0] !== strtolower($parts[0]) )
+            {
+                $out = preg_replace('/(\w+)\./', $oq.'$1'.$cq.'.', $out); // word.
+
+                if ( strpos($parts[0], '(') !== false )
+                {
+                    $out = preg_replace('/\((\w+)/', '('.$oq.'$1'.$cq, $out); // (word
+                    $out = preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out); // word(
+                }
+            }
+        }
+
+        if ( isset($parts[1]) )
+        {
+            if ( $parts[1] !== strtolower($parts[1]) )
+            {
+                $out = preg_replace('/\.(\w+)/', '.'.$oq.'$1'.$cq, $out); // .word
+
+                if ( strpos($parts[1], '(') !== false )
+                {
+                    $out = preg_replace('/\((\w+)/', '('.$oq.'$1'.$cq, $out); // (word
+                    $out = preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out); // word(
+                }
+            }
+        }
+
+        if ( $out !== strtolower($out) )
+        {
+            $out = preg_replace('/(\w+)\.(\w+)/',
+                                $oq . '$1' . $cq . '.' . $oq . '$2' . $cq,
+                                $out); // word.word
+        }
 
         return $out;
     }
@@ -319,6 +364,11 @@ class Quotable
 
         foreach ( $parts as $i => $part )
         {
+            if ( $part === strtolower($part) )
+            {
+                continue;
+            }
+
             if ( strpos($part, '(') )
             {
                 $parts[ $i ] = $this->parenthesesTableQuote($part);

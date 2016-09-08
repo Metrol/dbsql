@@ -7,7 +7,6 @@
  */
 
 use \Metrol\DBSql;
-use \Metrol\DBSql\PostgreSQL;
 
 /**
  * Verify that various uses of the Delete statement work as expected.
@@ -34,7 +33,7 @@ DELETE
 FROM
     "tableTooMuchData"
 WHERE
-    "id" = {$label}
+    id = {$label}
 
 SQL;
         $this->assertEquals($expected, $actual);

@@ -33,10 +33,10 @@ class MySQLUpdateTest extends \PHPUnit_Framework_TestCase
 UPDATE
     `tableNeedingData`
 SET
-    `fname` = :firstname,
-    `lname` = :lastname
+    fname = :firstname,
+    lname = :lastname
 WHERE
-    `id` = 12
+    id = 12
 
 SQL;
         $this->assertEquals($expected, $actual);
@@ -65,10 +65,10 @@ SQL;
 UPDATE
     `tableNeedingData`
 SET
-    `fname` = {$label1},
-    `lname` = {$label2},
-    `title` = {$label3},
-    `company` = {$label4}
+    fname = {$label1},
+    lname = {$label2},
+    title = {$label3},
+    company = {$label4}
 
 SQL;
 
@@ -101,8 +101,8 @@ SQL;
 UPDATE
     `tableNeedingData`
 SET
-    `fname` = :firstname,
-    `lname` = :lastname
+    fname = :firstname,
+    lname = :lastname
 
 SQL;
         $this->assertEquals($expected, $actual);
@@ -142,10 +142,10 @@ SQL;
 UPDATE
     `tableNeedingData`
 SET
-    `fname` = {$label1},
-    `lname` = {$label2}
+    fname = {$label1},
+    lname = {$label2}
 WHERE
-    `id` = {$label3} and `status` = {$label4}
+    id = {$label3} and status = {$label4}
 
 SQL;
 

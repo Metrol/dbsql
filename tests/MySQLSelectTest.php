@@ -41,13 +41,13 @@ SQL;
 
         $expected = <<<SQL
 SELECT
-    `at`.`aPersonName`,
-    `twd`.`description`
+    at.`aPersonName`,
+    twd.description
 FROM
-    `tableWithData` `twd`,
-    `anotherTable` `at`
+    `tableWithData` twd,
+    `anotherTable` at
 WHERE
-    `at`.`Index` = `twd`.`primaryKey`
+    at.`Index` = twd.`primaryKey`
 
 SQL;
 
@@ -72,13 +72,13 @@ SQL;
         $expected = <<<SQL
 SELECT
     CASE
-        WHEN `twd`.`Index` < `twd`.`relation` THEN
+        WHEN twd.`Index` < twd.relation THEN
             'Get er done'
         ELSE
             'Got er did'
-    END AS `foo`
+    END AS foo
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 
 SQL;
 
@@ -119,9 +119,9 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 WHERE
-    `twd`.`value` = {$label}
+    twd.value = {$label}
 
 SQL;
 
@@ -151,9 +151,9 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 WHERE
-    (`twd`.`Value` = {$label1} OR `twd`.`Value` = {$label2})
+    (twd.`Value` = {$label1} OR twd.`Value` = {$label2})
 
 SQL;
 
@@ -191,12 +191,12 @@ SELECT
 FROM
     (
         SELECT
-            `description`
+            description
         FROM
             `relatedData`
         WHERE
-            `id` = {$label}
-    ) `reldtq`
+            id = {$label}
+    ) reldtq
 
 SQL;
 
@@ -247,21 +247,21 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 WHERE
-    `twd`.`value` = {$label2}
+    twd.value = {$label2}
     AND
-    `twd`.`description` IN
+    twd.description IN
     (
         SELECT
-            `description`
+            description
         FROM
             `relatedData`
         WHERE
-            `id` = {$label1}
+            id = {$label1}
     )
     AND
-    `twd`.`id` < {$label3}
+    twd.id < {$label3}
 
 SQL;
 
@@ -307,21 +307,21 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 WHERE
-    `twd`.`value` = {$label2}
+    twd.value = {$label2}
     AND
-    `twd`.`description` NOT IN
+    twd.description NOT IN
     (
         SELECT
-            `description`
+            description
         FROM
             `relatedData`
         WHERE
-            `id` = {$label1}
+            id = {$label1}
     )
     AND
-    `twd`.`id` < {$label3}
+    twd.id < {$label3}
 
 SQL;
 
@@ -367,9 +367,9 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 WHERE
-    `twd`.`name` IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
+    twd.name IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
 
 SQL;
 
@@ -403,9 +403,9 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 WHERE
-    `twd`.`index` IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
+    twd.index IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
 
 SQL;
 
@@ -451,9 +451,9 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 WHERE
-    `twd`.`name` NOT IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
+    twd.name NOT IN ({$label1}, {$label2}, {$label3}, {$label4}, {$label5})
 
 SQL;
 
@@ -485,15 +485,15 @@ SQL;
 
         $expected = <<<SQL
 SELECT
-    `id`,
-    `stuff`,
+    id,
+    stuff,
     `moreStuff`,
     count(*) `Table Count`
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 GROUP BY
-    `id`,
-    `stuff`,
+    id,
+    stuff,
     `moreStuff`
 HAVING
     count(*) > {$label}
@@ -522,7 +522,7 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 LIMIT 22
 
 SQL;
@@ -542,7 +542,7 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 LIMIT 22
 OFFSET 45
 
@@ -570,9 +570,9 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
-    JOIN `otherTable` `ot`
-        ON `ot`.`twdID` = `twd`.`id`
+    `tableWithData` twd
+    JOIN `otherTable` ot
+        ON ot.`twdID` = twd.id
 
 SQL;
 
@@ -596,11 +596,11 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
-    JOIN `moreData` `md`
-        ON `md`.`twdID` = `twd`.`id`
-    JOIN `otherTable` `ot`
-        ON `ot`.`twdID` = {$label}
+    `tableWithData` twd
+    JOIN `moreData` md
+        ON md.`twdID` = twd.id
+    JOIN `otherTable` ot
+        ON ot.`twdID` = {$label}
 
 SQL;
 
@@ -627,11 +627,11 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
-    JOIN `moreData` `md`
-        ON `md`.`twdID` = `twd`.`id`
-    JOIN `otherData` `od`
-        USING (`id`, `name`)
+    `tableWithData` twd
+    JOIN `moreData` md
+        ON md.`twdID` = twd.id
+    JOIN `otherData` od
+        USING (id, name)
 
 SQL;
 
@@ -655,8 +655,8 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
-    NATURAL JOIN `moreData` `md`
+    `tableWithData` twd
+    NATURAL JOIN `moreData` md
 
 SQL;
 
@@ -688,11 +688,11 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
-    JOIN `moreData` `md`
-        ON `md`.`twdID` = `twd`.`id`
-    LEFT OUTER JOIN `otherTable` `ot`
-        ON `ot`.`twdID` = {$label}
+    `tableWithData` twd
+    JOIN `moreData` md
+        ON md.`twdID` = twd.id
+    LEFT OUTER JOIN `otherTable` ot
+        ON ot.`twdID` = {$label}
 
 SQL;
 
@@ -720,11 +720,11 @@ SQL;
 SELECT
     *
 FROM
-    `tableWithData` `twd`
-    JOIN `moreData` `md`
-        ON `md`.`twdID` = `twd`.`id`
-    FULL JOIN `otherData` `od`
-        USING (`id`, `name`)
+    `tableWithData` twd
+    JOIN `moreData` md
+        ON md.`twdID` = twd.id
+    FULL JOIN `otherData` od
+        USING (id, name)
 
 SQL;
 
@@ -748,14 +748,14 @@ SQL;
 
         $expected = <<<SQL
 SELECT
-    `id`,
-    `name`,
-    `update`
+    id,
+    name,
+    update
 FROM
-    `tableWithData` `twd`
+    `tableWithData` twd
 ORDER BY
-    `twd`.`name` ASC,
-    `twd`.`update` DESC
+    twd.name ASC,
+    twd.update DESC
 
 SQL;
 

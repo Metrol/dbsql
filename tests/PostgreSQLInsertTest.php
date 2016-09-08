@@ -7,7 +7,6 @@
  */
 
 use \Metrol\DBSql;
-use \Metrol\DBSql\PostgreSQL;
 
 /**
  * Verify that various uses of the Insert statement work as expected.
@@ -31,8 +30,8 @@ class PostgreSQLInsertTest extends \PHPUnit_Framework_TestCase
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" "tnd"
-    ("fname", "lname")
+    "tableNeedingData" tnd
+    (fname, lname)
 VALUES
     (:firstname, :lastname)
 
@@ -62,8 +61,8 @@ SQL;
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" "tnd"
-    ("fname", "lname", "title", "company")
+    "tableNeedingData" tnd
+    (fname, lname, title, company)
 VALUES
     ({$label1}, {$label2}, {$label3}, {$label4})
 
@@ -97,8 +96,8 @@ SQL;
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" "tnd"
-    ("fname", "lname")
+    "tableNeedingData" tnd
+    (fname, lname)
 VALUES
     (:firstname, :lastname)
 
@@ -136,8 +135,8 @@ SQL;
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" "tnd"
-    ("fname", "lname")
+    "tableNeedingData" tnd
+    (fname, lname)
 VALUES
     ({$label1}, {$label2})
 
@@ -180,7 +179,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData"
-    ("firstName", "lastName", "title", "company")
+    ("firstName", "lastName", title, company)
 VALUES
     ('Fred', 'Flinstone', 'Bronto Crane Operator', 'Slate Rock')
 
@@ -218,7 +217,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData"
-    ("firstName", "lastName", "title", "company")
+    ("firstName", "lastName", title, company)
 VALUES
     (:fname, :lname, :title, :company)
 
@@ -262,7 +261,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData"
-    ("firstName", "lastName", "title", "company")
+    ("firstName", "lastName", title, company)
 VALUES
     ({$label1}, {$label2}, {$label3}, {$label4})
 
@@ -296,12 +295,12 @@ SQL;
 INSERT
 INTO
     "tableNeedingData"
-    ("firstName", "lastName", "title", "company")
+    ("firstName", "lastName", title, company)
     SELECT
         "firstName",
         "lastName",
-        "title",
-        "company"
+        title,
+        company
     FROM
         "tableWithData"
     WHERE
@@ -332,8 +331,8 @@ SQL;
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" "tnd"
-    ("fname", "lname")
+    "tableNeedingData" tnd
+    (fname, lname)
 VALUES
     (:firstname, :lastname)
 RETURNING
@@ -355,8 +354,8 @@ SQL;
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" "tnd"
-    ("fname", "lname")
+    "tableNeedingData" tnd
+    (fname, lname)
 VALUES
     (:firstname, :lastname)
 RETURNING

@@ -165,7 +165,14 @@ class CaseField implements CaseFieldInterface
 
         if ( $this->alias !== null )
         {
-            $sql .= ' AS `'.$this->alias.'`';
+            if ( $this->alias === strtolower($this->alias) )
+            {
+                $sql .= ' AS ' . $this->alias;
+            }
+            else
+            {
+                $sql .= ' AS `' . $this->alias . '`';
+            }
         }
 
         return $sql;
