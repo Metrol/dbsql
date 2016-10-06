@@ -9,7 +9,6 @@
 namespace Metrol\DBSql\PostgreSQL;
 
 use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\StackInterface;
 use Metrol\DBSql\StackTrait;
 use Metrol\DBSql\BindingsTrait;
 use Metrol\DBSql\IndentTrait;
@@ -19,7 +18,7 @@ use Metrol\DBSql\OutputTrait;
  * Creates an SQL statement for PostgreSQL
  *
  */
-class Select implements SelectInterface, StackInterface
+class Select implements SelectInterface
 {
     use StackTrait, BindingsTrait, QuoterTrait, IndentTrait, WhereTrait, OutputTrait;
 

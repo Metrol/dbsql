@@ -9,7 +9,6 @@
 namespace Metrol\DBSql\MySQL;
 
 use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\StackInterface;
 use Metrol\DBSql\StackTrait;
 use Metrol\DBSql\BindingsTrait;
 use Metrol\DBSql\IndentTrait;
@@ -18,7 +17,7 @@ use Metrol\DBSql\IndentTrait;
  * Creates an SQL statement for MySQL
  *
  */
-class Select implements SelectInterface, StackInterface
+class Select implements SelectInterface
 {
     use StackTrait, BindingsTrait, QuoterTrait, IndentTrait, WhereTrait;
 

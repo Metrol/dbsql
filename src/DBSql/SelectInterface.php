@@ -12,7 +12,7 @@ namespace Metrol\DBSql;
  * Define what every Select class needs to support
  *
  */
-interface SelectInterface extends StatementInterface
+interface SelectInterface extends StatementInterface, StackInterface
 {
     /**
      * Add a column/field to what is being requested
