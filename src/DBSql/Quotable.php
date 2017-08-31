@@ -160,11 +160,6 @@ class Quotable
                 continue;
             }
 
-            if ( $part === strtolower($part) )
-            {
-                continue;
-            }
-
             if ( strpos($part, '.') )
             {
                 $parts[$i] = $this->dotFieldQuote($part);
