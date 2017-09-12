@@ -191,12 +191,12 @@ SELECT
 FROM
     (
         SELECT
-            description
+            `description`
         FROM
             `relatedData`
         WHERE
-            id = {$label}
-    ) reldtq
+            `id` = {$label}
+    ) `reldtq`
 
 SQL;
 
@@ -254,11 +254,11 @@ WHERE
     twd.description IN
     (
         SELECT
-            description
+            `description`
         FROM
             `relatedData`
         WHERE
-            id = {$label1}
+            `id` = {$label1}
     )
     AND
     twd.id < {$label3}
@@ -314,11 +314,11 @@ WHERE
     twd.description NOT IN
     (
         SELECT
-            description
+            `description`
         FROM
             `relatedData`
         WHERE
-            id = {$label1}
+            `id` = {$label1}
     )
     AND
     twd.id < {$label3}
@@ -485,15 +485,15 @@ SQL;
 
         $expected = <<<SQL
 SELECT
-    id,
-    stuff,
+    `id`,
+    `stuff`,
     `moreStuff`,
     count(*) `Table Count`
 FROM
     `tableWithData` twd
 GROUP BY
-    id,
-    stuff,
+    `id`,
+    `stuff`,
     `moreStuff`
 HAVING
     count(*) > {$label}
@@ -631,7 +631,7 @@ FROM
     JOIN `moreData` md
         ON md.`twdID` = twd.id
     JOIN `otherData` od
-        USING (id, name)
+        USING (`id`, `name`)
 
 SQL;
 
@@ -724,7 +724,7 @@ FROM
     JOIN `moreData` md
         ON md.`twdID` = twd.id
     FULL JOIN `otherData` od
-        USING (id, name)
+        USING (`id`, `name`)
 
 SQL;
 
@@ -748,9 +748,9 @@ SQL;
 
         $expected = <<<SQL
 SELECT
-    id,
-    name,
-    update
+    `id`,
+    `name`,
+    `update`
 FROM
     `tableWithData` twd
 ORDER BY

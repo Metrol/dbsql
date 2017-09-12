@@ -31,7 +31,7 @@ class PostgreSQLInsertTest extends \PHPUnit_Framework_TestCase
 INSERT
 INTO
     "tableNeedingData" tnd
-    (fname, lname)
+    ("fname", "lname")
 VALUES
     (:firstname, :lastname)
 
@@ -62,7 +62,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData" tnd
-    (fname, lname, title, company)
+    ("fname", "lname", "title", "company")
 VALUES
     ({$label1}, {$label2}, {$label3}, {$label4})
 
@@ -97,7 +97,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData" tnd
-    (fname, lname)
+    ("fname", "lname")
 VALUES
     (:firstname, :lastname)
 
@@ -136,7 +136,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData" tnd
-    (fname, lname)
+    ("fname", "lname")
 VALUES
     ({$label1}, {$label2})
 
@@ -179,7 +179,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData"
-    ("firstName", "lastName", title, company)
+    ("firstName", "lastName", "title", "company")
 VALUES
     ('Fred', 'Flinstone', 'Bronto Crane Operator', 'Slate Rock')
 
@@ -217,7 +217,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData"
-    ("firstName", "lastName", title, company)
+    ("firstName", "lastName", "title", "company")
 VALUES
     (:fname, :lname, :title, :company)
 
@@ -261,7 +261,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData"
-    ("firstName", "lastName", title, company)
+    ("firstName", "lastName", "title", "company")
 VALUES
     ({$label1}, {$label2}, {$label3}, {$label4})
 
@@ -295,12 +295,12 @@ SQL;
 INSERT
 INTO
     "tableNeedingData"
-    ("firstName", "lastName", title, company)
+    ("firstName", "lastName", "title", "company")
     SELECT
         "firstName",
         "lastName",
-        title,
-        company
+        "title",
+        "company"
     FROM
         "tableWithData"
     WHERE
@@ -332,7 +332,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData" tnd
-    (fname, lname)
+    ("fname", "lname")
 VALUES
     (:firstname, :lastname)
 RETURNING
@@ -355,7 +355,7 @@ SQL;
 INSERT
 INTO
     "tableNeedingData" tnd
-    (fname, lname)
+    ("fname", "lname")
 VALUES
     (:firstname, :lastname)
 RETURNING

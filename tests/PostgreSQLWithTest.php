@@ -46,21 +46,21 @@ class PostgreSQLWithTest extends \PHPUnit_Framework_TestCase
         $actual = $with->output();
         $expected = <<<SQL
 WITH
-twd AS 
+"twd" AS 
 (
     SELECT
         *
     FROM
         "tableWithData"
     WHERE
-        data > 12
+        "data" > 12
 ),
-odt AS 
+"odt" AS 
 (
     SELECT
-        id,
-        name,
-        created
+        "id",
+        "name",
+        "created"
     FROM
         "otherDataTable"
 )
@@ -112,13 +112,13 @@ SQL;
         $label    = key($sel1->getBindings());
         $expected = <<<SQL
 SELECT
-    sub_part,
-    part,
-    quantity
+    "sub_part",
+    "part",
+    "quantity"
 FROM
     parts
 WHERE
-    part = {$label}
+    "part" = {$label}
 
 SQL;
 
@@ -143,12 +143,12 @@ SQL;
         $actual   = $suff->output();
         $expected = <<<SQL
 SELECT
-    sub_part,
+    "sub_part",
     SUM(quantity) total_quantity
 FROM
     included_parts
 GROUP BY
-    sub_part
+    "sub_part"
 
 SQL;
 
@@ -158,13 +158,13 @@ SQL;
         $label    = key($union->getBindings());
         $expected = <<<SQL
 SELECT
-    sub_part,
-    part,
-    quantity
+    "sub_part",
+    "part",
+    "quantity"
 FROM
     parts
 WHERE
-    part = {$label}
+    "part" = {$label}
 
 UNION ALL
 
@@ -194,18 +194,18 @@ SQL;
         $label  = key($with->getBindings());
         $expected = <<<SQL
 WITH
-parts_is_parts AS 
+"parts_is_parts" AS 
 (
     SELECT
-        sub_part,
-        part,
-        quantity
+        "sub_part",
+        "part",
+        "quantity"
     FROM
         parts
     WHERE
-        part = {$label}
+        "part" = {$label}
 ),
-which_parts AS 
+"which_parts" AS 
 (
     SELECT
         p.sub_part,
@@ -218,12 +218,12 @@ which_parts AS
         p.part = pr.sub_part
 )
 SELECT
-    sub_part,
+    "sub_part",
     SUM(quantity) total_quantity
 FROM
     included_parts
 GROUP BY
-    sub_part
+    "sub_part"
 
 SQL;
 
@@ -242,16 +242,16 @@ SQL;
         $label  = key($with->getBindings());
 
         $expected = <<<SQL
-WITH RECURSIVE included_parts AS 
+WITH RECURSIVE "included_parts" AS 
 (
     SELECT
-        sub_part,
-        part,
-        quantity
+        "sub_part",
+        "part",
+        "quantity"
     FROM
         parts
     WHERE
-        part = {$label}
+        "part" = {$label}
     
     UNION ALL
     
@@ -266,12 +266,12 @@ WITH RECURSIVE included_parts AS
         p.part = pr.sub_part
 )
 SELECT
-    sub_part,
+    "sub_part",
     SUM(quantity) total_quantity
 FROM
     included_parts
 GROUP BY
-    sub_part
+    "sub_part"
 
 SQL;
 
@@ -290,16 +290,16 @@ SQL;
         $label  = key($with->getBindings());
 
         $expected = <<<SQL
-WITH RECURSIVE included_parts(sub_part, part, quantity) AS 
+WITH RECURSIVE "included_parts"("sub_part", "part", "quantity") AS 
 (
     SELECT
-        sub_part,
-        part,
-        quantity
+        "sub_part",
+        "part",
+        "quantity"
     FROM
         parts
     WHERE
-        part = {$label}
+        "part" = {$label}
     
     UNION ALL
     
@@ -314,12 +314,12 @@ WITH RECURSIVE included_parts(sub_part, part, quantity) AS
         p.part = pr.sub_part
 )
 SELECT
-    sub_part,
+    "sub_part",
     SUM(quantity) total_quantity
 FROM
     included_parts
 GROUP BY
-    sub_part
+    "sub_part"
 
 SQL;
 
@@ -334,16 +334,16 @@ SQL;
         $actual = $with->output();
 
         $expected = <<<SQL
-WITH RECURSIVE included_parts(sub_part, part, quantity) AS 
+WITH RECURSIVE "included_parts"("sub_part", "part", "quantity") AS 
 (
     SELECT
-        sub_part,
-        part,
-        quantity
+        "sub_part",
+        "part",
+        "quantity"
     FROM
         parts
     WHERE
-        part = {$label}
+        "part" = {$label}
     
     UNION ALL
     
@@ -357,7 +357,7 @@ WITH RECURSIVE included_parts(sub_part, part, quantity) AS
     WHERE
         p.part = pr.sub_part
 ),
-moresql AS 
+"moresql" AS 
 (
     SELECT
         p.sub_part,
@@ -370,12 +370,12 @@ moresql AS
         p.part = pr.sub_part
 )
 SELECT
-    sub_part,
+    "sub_part",
     SUM(quantity) total_quantity
 FROM
     included_parts
 GROUP BY
-    sub_part
+    "sub_part"
 
 SQL;
 

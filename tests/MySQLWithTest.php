@@ -47,21 +47,21 @@ class MySQLWithTest extends \PHPUnit_Framework_TestCase
         $actual = $with->output();
         $expected = <<<SQL
 WITH
-twd AS 
+`twd` AS 
 (
     SELECT
         *
     FROM
         `tableWithData`
     WHERE
-        data > 12
+        `data` > 12
 ),
-odt AS 
+`odt` AS 
 (
     SELECT
-        id,
-        name,
-        created
+        `id`,
+        `name`,
+        `created`
     FROM
         `otherDataTable`
 )

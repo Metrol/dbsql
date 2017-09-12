@@ -33,7 +33,7 @@ DELETE
 FROM
     "tableTooMuchData"
 WHERE
-    id = {$label}
+    "id" = {$label}
 
 SQL;
         $this->assertEquals($expected, $actual);
