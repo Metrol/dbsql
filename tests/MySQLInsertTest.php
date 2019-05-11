@@ -7,13 +7,13 @@
  */
 
 use \Metrol\DBSql;
-use \Metrol\DBSql\MySQL;
+
 
 /**
  * Verify that various uses of the Insert statement work as expected.
  *
  */
-class MySQLInsertTest extends \PHPUnit_Framework_TestCase
+class MySQLInsertTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Assemble asimple Insert statment without bindings
@@ -30,8 +30,8 @@ class MySQLInsertTest extends \PHPUnit_Framework_TestCase
         $actual = $insert->output();
         $expected = <<<SQL
 INSERT
-INTO
-    `tableNeedingData` tnd
+INTO `tableNeedingData` tnd
+    
     (`fname`, `lname`)
 VALUES
     (:firstname, :lastname)
