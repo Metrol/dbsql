@@ -203,7 +203,7 @@ class Update implements UpdateInterface
             return $sql;
         }
 
-        $assign = array();
+        $assign = [];
 
         foreach ( $this->fieldStack as $fieldName => $value )
         {
