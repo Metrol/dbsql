@@ -30,8 +30,8 @@ class MySQLInsertTest extends PHPUnit_Framework_TestCase
         $actual = $insert->output();
         $expected = <<<SQL
 INSERT
-INTO `tableNeedingData` tnd
-    
+INTO
+    `tableNeedingData` tnd
     (`fname`, `lname`)
 VALUES
     (:firstname, :lastname)
