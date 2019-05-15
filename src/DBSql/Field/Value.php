@@ -3,10 +3,10 @@
  * @author        Michael Collette <mcollette@meetingevolution.net>
  * @version       1.0
  * @package       Metrol/DBSql
- * @copyright (c) 2016, Michael Collette
+ * @copyright (c) 2019, Michael Collette
  */
 
-namespace Metrol\DBSql;
+namespace Metrol\DBSql\Field;
 
 /**
  * Provide specific field information for values to be used for INSERTs and
@@ -14,7 +14,7 @@ namespace Metrol\DBSql;
  *
  * @package Metrol\DBSql
  */
-class FieldValue
+class Value
 {
     /**
      * The name of the field
