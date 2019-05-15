@@ -78,14 +78,14 @@ trait StackTrait
      */
     protected function initStacks()
     {
-        $this->fieldStack  = array();
-        $this->valueStack  = array();
-        $this->fromStack   = array();
-        $this->joinStack   = array();
-        $this->whereStack  = array();
-        $this->havingStack = array();
-        $this->orderStack  = array();
-        $this->groupStack  = array();
+        $this->fieldStack  = [];
+        $this->valueStack  = [];
+        $this->fromStack   = [];
+        $this->joinStack   = [];
+        $this->whereStack  = [];
+        $this->havingStack = [];
+        $this->orderStack  = [];
+        $this->groupStack  = [];
     }
 
     /**
@@ -95,7 +95,7 @@ trait StackTrait
      */
     public function fieldReset()
     {
-        $this->fieldStack = array();
+        $this->fieldStack = [];
 
         return $this;
     }
@@ -107,7 +107,7 @@ trait StackTrait
      */
     public function valueReset()
     {
-        $this->valueStack = array();
+        $this->valueStack = [];
 
         return $this;
     }
@@ -119,7 +119,7 @@ trait StackTrait
      */
     public function fromReset()
     {
-        $this->fromStack = array();
+        $this->fromStack = [];
 
         return $this;
     }
@@ -131,7 +131,7 @@ trait StackTrait
      */
     public function joinReset()
     {
-        $this->joinStack = array();
+        $this->joinStack = [];
 
         return $this;
     }
@@ -157,7 +157,7 @@ trait StackTrait
      */
     public function whereReset()
     {
-        $this->whereStack = array();
+        $this->whereStack = [];
 
         return $this;
     }
@@ -169,7 +169,7 @@ trait StackTrait
      */
     public function havingReset()
     {
-        $this->havingStack = array();
+        $this->havingStack = [];
 
         return $this;
     }
@@ -181,7 +181,7 @@ trait StackTrait
      */
     public function orderReset()
     {
-        $this->orderStack = array();
+        $this->orderStack = [];
 
         return $this;
     }
@@ -193,7 +193,7 @@ trait StackTrait
      */
     public function groupReset()
     {
-        $this->groupStack = array();
+        $this->groupStack = [];
 
         return $this;
     }
