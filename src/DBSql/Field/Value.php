@@ -28,7 +28,7 @@ class Value
      *
      * @var string
      */
-    private $sqlStr = null;
+    private $valueMarker = null;
 
     /**
      * The bindings to attach to the SQL for storing this value
@@ -40,7 +40,7 @@ class Value
     /**
      * Instantiate the field value
      *
-     * @param string $fieldName
+     * @param string $fieldName The name of the field
      */
     public function __construct(string $fieldName)
     {
@@ -52,47 +52,36 @@ class Value
      *
      * @return string
      */
-    public function getName(): string
+    public function getFieldName(): string
     {
         return $this->fieldName;
     }
 
     /**
-     * Set the string place holder that will go into the SQL
+     * Set the place holder that will go into the SQL instead of the actual
+     * value.  This may be a binding key, or some combination of keys along
+     * with keywords.
      *
-     * @param string $sql
+     * @param string $marker
      *
      * @return $this
      */
-    public function setSqlString(string $sql): self
+    public function setValueMarker(string $marker): self
     {
-        $this->sqlStr = $sql;
+        $this->valueMarker = $marker;
 
         return $this;
     }
 
     /**
-     * Provide the string to put into the SQL statement
+     * Provide the string to put into the SQL statement in place of the actual
+     * value.
      *
      * @return string|null
      */
-    public function getSqlString(): string
+    public function getValueMarker(): string
     {
-        return $this->sqlStr;
-    }
-
-    /**
-     * Set the binding array for the field with values
-     *
-     * @param array $binding
-     *
-     * @return $this
-     */
-    public function setBinding(array $binding): self
-    {
-        $this->binding = $binding;
-
-        return $this;
+        return $this->valueMarker;
     }
 
     /**
