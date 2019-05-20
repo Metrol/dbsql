@@ -85,7 +85,22 @@ class Value
     }
 
     /**
-     * Set a single binding value
+     * Set the binding array.  Will overwrite any existing values that have
+     * been added.
+     *
+     * @param array $bindingArray
+     *
+     * @return $this
+     */
+    public function setBoundValues(array $bindingArray): self
+    {
+        $this->binding = $bindingArray;
+
+        return $this;
+    }
+
+    /**
+     * Add a single binding value to the stack
      *
      * @param string $key
      * @param mixed  $value
