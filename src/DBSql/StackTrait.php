@@ -17,60 +17,67 @@ namespace Metrol\DBSql;
 trait StackTrait
 {
     /**
+     * A set of Field Value objects
+     *
+     * @var Field\Set
+     */
+    protected $fieldValueSet = null;
+
+    /**
      * List of the fields to be used in the SQL
      *
      * @var array
      */
-    protected $fieldStack;
+    protected $fieldStack = [];
 
     /**
      * List of values to fill into the VALUES area of an INSERT
      *
      * @var array
      */
-    protected $valueStack;
+    protected $valueStack = [];
 
     /**
      * Tables and other data sources
      *
      * @var array
      */
-    protected $fromStack;
+    protected $fromStack = [];
 
     /**
      * Join statements
      *
      * @var array
      */
-    protected $joinStack;
+    protected $joinStack = [];
 
     /**
      * Clauses that will make up the WHERE section of a statement
      *
      * @var WhereInterface[]
      */
-    protected $whereStack;
+    protected $whereStack = [];
 
     /**
      * Clauses that will make up the HAVING section of a statement
      *
      * @var array
      */
-    protected $havingStack;
+    protected $havingStack = [];
 
     /**
      * List of fields that are used to sort the result set
      *
      * @var array
      */
-    protected $orderStack;
+    protected $orderStack = [];
 
     /**
      * List of fields that are used to group the result set
      *
      * @var array
      */
-    protected $groupStack;
+    protected $groupStack = [];
 
     /**
      * Initialize all the SQL stacks to their default state.
@@ -78,6 +85,7 @@ trait StackTrait
      */
     protected function initStacks()
     {
+        $this->fieldValueSet = new Field\Set;
         $this->fieldStack  = [];
         $this->valueStack  = [];
         $this->fromStack   = [];
