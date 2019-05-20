@@ -56,9 +56,8 @@ class Insert implements InsertInterface
         $this->initIndent();
         $this->initStacks();
 
-        $this->fieldStack      = array();
         $this->tableInto       = '';
-        $this->returningFields = array();
+        $this->returningFields = [];
         $this->select          = null;
     }
 
