@@ -32,6 +32,40 @@ class Set
     }
 
     /**
+     * Returns true if the set of values is empty
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        $rtn = true;
+
+        if ( count($this->values) > 0 )
+        {
+            $rtn = false;
+        }
+
+        return $rtn;
+    }
+
+    /**
+     * Returns true if there are values in the set
+     *
+     * @return bool
+     */
+    public function isNotEmpty(): bool
+    {
+        $rtn = true;
+
+        if ( count($this->values) == 0 )
+        {
+            $rtn = false;
+        }
+
+        return $rtn;
+    }
+
+    /**
      * Add a field value to the stack
      *
      * @param Value $fieldValue
@@ -68,7 +102,7 @@ class Set
 
         foreach ( $this->values as $val )
         {
-            if ( $val->getName() == $fieldName )
+            if ( $val->getFieldName() == $fieldName )
             {
                 $value = $val;
                 break;
@@ -89,7 +123,7 @@ class Set
 
         foreach ( $this->values as $val )
         {
-            $fieldNames[] = $val->getName();
+            $fieldNames[] = $val->getFieldName();
         }
 
         return $fieldNames;
@@ -100,13 +134,13 @@ class Set
      *
      * @return string[]
      */
-    public function getSqlStrings(): array
+    public function getValueMarkers(): array
     {
         $sqlStrings = [];
 
         foreach ( $this->values as $val )
         {
-            $sqlStrings[] = $val->getSqlString();
+            $sqlStrings[] = $val->getValueMarker();
         }
 
         return $sqlStrings;
