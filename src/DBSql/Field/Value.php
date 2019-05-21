@@ -21,14 +21,14 @@ class Value
      *
      * @var string
      */
-    private $fieldName = null;
+    private $fieldName;
 
     /**
      * The place holder that is used in the SQL string
      *
      * @var string
      */
-    private $valueMarker = null;
+    private $valueMarker = '';
 
     /**
      * The bindings to attach to the SQL for storing this value
@@ -77,7 +77,7 @@ class Value
      * Provide the string to put into the SQL statement in place of the actual
      * value.
      *
-     * @return string|null
+     * @return string
      */
     public function getValueMarker(): string
     {
@@ -102,7 +102,7 @@ class Value
     /**
      * Add a single binding value to the stack
      *
-     * @param string $key
+     * @param string $key   Accept any string, or a ? for automatic binding
      * @param mixed  $value
      *
      * @return $this
@@ -132,5 +132,15 @@ class Value
     public function getBindCount(): int
     {
         return count($this->binding);
+    }
+
+    /**
+     * Provide a unique binding key
+     *
+     * @return string
+     */
+    static public function getBindKey(): string
+    {
+        return uniqid(':_') . '_';
     }
 }
