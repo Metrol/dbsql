@@ -136,14 +136,19 @@ class Set
      */
     public function getValueMarkers(): array
     {
-        $sqlStrings = [];
+        $valueMarkers = [];
 
         foreach ( $this->values as $val )
         {
-            $sqlStrings[] = $val->getValueMarker();
+             $marker = $val->getValueMarker();
+
+             if ( !empty($marker) )
+             {
+                 $valueMarkers[] = $marker;
+             }
         }
 
-        return $sqlStrings;
+        return $valueMarkers;
     }
 
     /**
