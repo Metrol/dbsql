@@ -152,6 +152,32 @@ class Set
     }
 
     /**
+     * Provide an array keyed on the field name, with the value being it's
+     * value marker for the SQL.
+     *
+     * @return string[]
+     */
+    public function getFieldNamesAndMarkers(): array
+    {
+        $fieldMarkers = [];
+
+        foreach ( $this->values as $val )
+        {
+            $fn = $val->getFieldName();
+            $mk = $val->getValueMarker();
+
+            if ( empty($fn) or empty($mk) )
+            {
+                continue;
+            }
+
+            $fieldMarkers[$fn] = $mk;
+        }
+
+        return $fieldMarkers;
+    }
+
+    /**
      * Collect all the bound values together into a single array
      *
      * @return array

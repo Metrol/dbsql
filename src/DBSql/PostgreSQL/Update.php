@@ -57,7 +57,7 @@ class Update implements UpdateInterface
      */
     public function __toString()
     {
-        return $this->output().PHP_EOL;
+        return $this->output() . PHP_EOL;
     }
 
     /**
@@ -95,9 +95,12 @@ class Update implements UpdateInterface
      */
     protected function buildSQL()
     {
+        $this->buildBindings();
+
         $sql = 'UPDATE';
 
         $sql .= $this->buildTable();
+
         $sql .= $this->buildFieldValues();
         $sql .= $this->buildWhere();
         $sql .= $this->buildReturning();
@@ -106,18 +109,28 @@ class Update implements UpdateInterface
     }
 
     /**
+     * Assign the bindings from the field value set to what will go along with
+     * this update query.
+     *
+     */
+    protected function buildBindings()
+    {
+        $this->setBindings( $this->fieldValueSet->getBoundValues() );
+    }
+
+    /**
      * Build the table that will be getting updated
      *
      * @return string
      */
-    protected function buildTable()
+    protected function buildTable(): string
     {
         if ( empty($this->table) )
         {
             return PHP_EOL;
         }
 
-        $sql = PHP_EOL.$this->indent().$this->table.PHP_EOL;
+        $sql = PHP_EOL . $this->indent() . $this->table . PHP_EOL;
 
         return $sql;
     }
@@ -127,24 +140,26 @@ class Update implements UpdateInterface
      *
      * @return string
      */
-    protected function buildFieldValues()
+    protected function buildFieldValues(): string
     {
         $sql = '';
 
-        if ( empty($this->fieldStack) )
+        if ( $this->fieldValueSet->isEmpty() )
         {
             return $sql;
         }
 
+        $fieldMarkers = $this->fieldValueSet->getFieldNamesAndMarkers();
         $assign = [];
 
-        foreach ( $this->fieldStack as $fieldName => $value )
+        foreach ( $fieldMarkers as $fieldName => $marker )
         {
-            $assign[] = $this->indent().$fieldName.' = '.$value;
+            $fn = $this->quoter()->quoteField($fieldName);
+            $assign[] = $this->indent() . $fn . ' = ' . $marker;
         }
 
         $sql .= 'SET'.PHP_EOL;
-        $sql .= implode(','.PHP_EOL, $assign).PHP_EOL;
+        $sql .= implode(',' . PHP_EOL, $assign) . PHP_EOL;
 
         return $sql;
     }
