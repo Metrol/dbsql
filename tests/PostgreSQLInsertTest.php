@@ -6,7 +6,8 @@
  * @copyright (c) 2016, Michael Collette
  */
 
-use \Metrol\DBSql;
+use Metrol\DBSql;
+use Metrol\DBSql\Field\Value;
 
 /**
  * Verify that various uses of the Insert statement work as expected.
@@ -18,85 +19,26 @@ class PostgreSQLInsertTest extends \PHPUnit_Framework_TestCase
      * Assemble asimple Insert statment without bindings
      *
      */
-    public function testInsertFieldValueNoBindings()
+    public function testInsertFieldValue()
     {
         $insert = DBSql::PostgreSQL()->insert();
+        $fName = (new Value('fname'))
+            ->setValueMarker(':firstname')
+            ->addBinding(':firstname', 'Fred');
+        $lName = (new Value('lname'))
+            ->setValueMarker(':lastname')
+            ->addBinding(':lastname', 'Flinstone');
 
-        $insert->table('tableNeedingData tnd')
-            ->fieldValue('fname', ':firstname')
-            ->fieldValue('lname', ':lastname');
+
+        $insert->table('tableNeedingData')
+            ->addFieldValue($fName)
+            ->addFieldValue($lName);
 
         $actual = $insert->output();
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" tnd
-    ("fname", "lname")
-VALUES
-    (:firstname, :lastname)
-
-SQL;
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Assemble an Insert statment with automatic bindings
-     *
-     */
-    public function testInsertFieldValueAutomaticBindings()
-    {
-        $insert = DBSql::PostgreSQL()->insert();
-
-        $insert->table('tableNeedingData tnd')
-            ->fieldValue('fname', '?', 'Fred')                 // ? sets up an
-            ->fieldValue('lname', '?', 'Flinstone')            // auto binding.
-            ->fieldValue('title', '?', 'Bronto Crane Operator')
-            ->fieldValue('company', '?', 'Slate Rock');
-
-        $actual   = $insert->output();
-        $bindings = $insert->getBindings();
-
-        list($label1, $label2, $label3, $label4) = array_keys($bindings);
-
-        $expected = <<<SQL
-INSERT
-INTO
-    "tableNeedingData" tnd
-    ("fname", "lname", "title", "company")
-VALUES
-    ({$label1}, {$label2}, {$label3}, {$label4})
-
-SQL;
-
-        $this->assertEquals($expected, $actual);
-        $this->assertCount(4, $bindings);
-        $this->assertEquals('Fred', $bindings[$label1]);
-        $this->assertEquals('Flinstone', $bindings[$label2]);
-        $this->assertEquals('Bronto Crane Operator', $bindings[$label3]);
-        $this->assertEquals('Slate Rock', $bindings[$label4]);
-    }
-
-    /**
-     * Assemble Insert statment with named bindings
-     *
-     */
-    public function testInsertFieldValueWithBindings()
-    {
-        $insert = DBSql::PostgreSQL()->insert();
-
-        $insert->table('tableNeedingData tnd');
-        $insert->fieldValue('fname', ':firstname', 'Fred');
-        $insert->fieldValue('lname', ':lastname',  'Flinstone');
-
-        $bindings = $insert->getBindings();
-        $label1 = ':firstname';
-        $label2 = ':lastname';
-
-        $actual = $insert->output();
-        $expected = <<<SQL
-INSERT
-INTO
-    "tableNeedingData" tnd
+    "tableNeedingData"
     ("fname", "lname")
 VALUES
     (:firstname, :lastname)
@@ -104,170 +46,41 @@ VALUES
 SQL;
         $this->assertEquals($expected, $actual);
 
+        $bindings = $insert->getBindings();
+
         $this->assertCount(2, $bindings);
-        $this->assertContains('Fred', $bindings);
-        $this->assertContains('Flinstone', $bindings);
-        $this->assertEquals('Fred', $bindings[$label1]);
-        $this->assertEquals('Flinstone', $bindings[$label2]);
+        $this->assertEquals('Fred', $bindings[':firstname']);
+        $this->assertEquals('Flinstone', $bindings[':lastname']);
     }
 
     /**
-     * Test assigning an array of fields and values with automatic binding
+     * Test an insert into a complex field type
      *
      */
-    public function testInsertWithFieldValueArrayAutomaticBinding()
+    public function testInsertIntoComplexFieldType()
     {
         $insert = DBSql::PostgreSQL()->insert();
-        $insert->table('tableNeedingData tnd');
+        $xKey = Value::getBindKey();
+        $yKey = Value::getBindKey();
 
-        $data = [
-            'fname' => "'Fred'",
-            'lname' => "'Flinstone'"
-        ];
+        $posField = (new Value('position'))
+            ->setValueMarker('point('.$xKey.', '.$yKey.')')
+            ->addBinding($xKey, [123, 456]);
 
-        $insert->fieldValues($data);
+        $insert->table('fancyTable')
+            ->addFieldValue($posField);
 
-        $bindings = $insert->getBindings();
-
-        list($label1, $label2) = array_keys($bindings);
-
-        $actual = $insert->output();
-        $expected = <<<SQL
+        $sql = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" tnd
-    ("fname", "lname")
+    "fancyTable"
+    ("position")
 VALUES
-    ({$label1}, {$label2})
+    (point({$xKey}, {$yKey}))
 
 SQL;
 
-        $this->assertEquals($expected, $actual);
-        $this->assertCount(2, $bindings);
-        $this->assertContains("'Fred'", $bindings);
-        $this->assertContains("'Flinstone'", $bindings);
-        $this->assertEquals("'Fred'", $bindings[$label1]);
-        $this->assertEquals("'Flinstone'", $bindings[$label2]);
-    }
-
-    /**
-     * Insert allows for fields and values to be pushed into the statement
-     * at different times.
-     *
-     * Testing this ability that does not use any automatic data bindings.
-     * Instead, you could assign labels to setBindings with the values.
-     * Good example of this in the next test.
-     *
-     */
-    public function testInsertPushingFieldsAndValuesSeparately()
-    {
-        $insert = DBSql::PostgreSQL()->insert();
-
-        $fields = ['firstName',
-                   'lastName',
-                   'title',
-                   'company'];
-        $values = ["'Fred'",
-                   "'Flinstone'",
-                   "'Bronto Crane Operator'",
-                   "'Slate Rock'"];
-
-        $insert->fields($fields)->values($values)->table('tableNeedingData');
-
-        $actual   = $insert->output();
-        $expected = <<<SQL
-INSERT
-INTO
-    "tableNeedingData"
-    ("firstName", "lastName", "title", "company")
-VALUES
-    ('Fred', 'Flinstone', 'Bronto Crane Operator', 'Slate Rock')
-
-SQL;
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * This is the exact same as the above test, but shows how you can manually
-     * bind names and values.  This would be a great technique for writing out
-     * many records.
-     *
-     */
-    public function testInsertPushingFieldsAndValuesManualBinding()
-    {
-        $insert = DBSql::PostgreSQL()->insert();
-
-        $fields = ['firstName', 'lastName', 'title', 'company'];
-        $values = [
-            ':fname'   => 'Fred',
-            ':lname'   => 'Flinstone',
-            ':title'   => 'Bronto Crane Operator',
-            ':company' => 'Slate Rock'];
-        $labels = array_keys($values);
-
-        $insert->fields($fields)
-            ->values($labels)
-            ->setBindings($values)
-            ->table('tableNeedingData');
-
-        $actual   = $insert->output();
-        $bindings = $insert->getBindings();
-        $expected = <<<SQL
-INSERT
-INTO
-    "tableNeedingData"
-    ("firstName", "lastName", "title", "company")
-VALUES
-    (:fname, :lname, :title, :company)
-
-SQL;
-
-        $this->assertEquals($expected, $actual);
-        $this->assertCount(4, $bindings);
-        $this->assertEquals('Fred', $bindings[':fname']);
-        $this->assertEquals('Flinstone', $bindings[':lname']);
-        $this->assertEquals('Bronto Crane Operator', $bindings[':title']);
-        $this->assertEquals('Slate Rock', $bindings[':company']);
-    }
-
-    /**
-     * This test assembles an array of FieldName/Value pairs that automatically
-     * quote the fields and bind the values.
-     *
-     */
-    public function testFieldValuePairArrayWithAutomaticBinding()
-    {
-        $fieldValues = ['firstName' => 'Fred',
-                        'lastName'  => 'Flinstone',
-                        'title'     => 'Bronto Crane Operator',
-                        'company'   => 'Slate Rock'];
-
-        $insert = DBSql::PostgreSQL()->insert();
-
-        $insert->table('tableNeedingData')->fieldValues($fieldValues);
-
-        $actual   = $insert->output();
-        $bindings = $insert->getBindings();
-
-        // I should mention that you should never do something like this in
-        // production.  Only in a case when you are 132% certain no other code
-        // will ever mess with bindings, like in a unit test, can you kind of
-        // trust the order of labels.  Use named bindings if you need to work
-        // with specific labels.
-        list($label1, $label2, $label3, $label4) = array_keys($bindings);
-
-        $expected = <<<SQL
-INSERT
-INTO
-    "tableNeedingData"
-    ("firstName", "lastName", "title", "company")
-VALUES
-    ({$label1}, {$label2}, {$label3}, {$label4})
-
-SQL;
-
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals($sql, $insert->output());
     }
 
     /**
@@ -281,12 +94,20 @@ SQL;
             ->fields(['firstName', 'lastName', 'title', 'company'])
             ->where('primaryKeyValue = ?', [12]);
 
+        $firstName = new Value('firstName');
+        $lastName  = new Value('lastName');
+        $title     = new Value('title');
+        $company   = new Value('company');
+
         $insert = DBSql::PostgreSQL()->insert()
             ->table('tableNeedingData')
-            ->fields(['firstName', 'lastName', 'title', 'company'])
+            ->addFieldValue($firstName)
+            ->addFieldValue($lastName)
+            ->addFieldValue($title)
+            ->addFieldValue($company)
             ->valueSelect($select);
 
-        $actual = $insert->output();
+        $actual   = $insert->output();
         $bindings = $insert->getBindings();
 
         $label = key($bindings);
@@ -321,17 +142,23 @@ SQL;
     public function testReturningFieldInsert()
     {
         $insert = DBSql::PostgreSQL()->insert();
+        $fName = (new Value('fname'))
+            ->setValueMarker(':firstname')
+            ->addBinding(':firstname', 'Fred');
+        $lName = (new Value('lname'))
+            ->setValueMarker(':lastname')
+            ->addBinding(':lastname', 'Flinstone');
 
-        $insert->table('tableNeedingData tnd')
-            ->fieldValue('fname', ':firstname')
-            ->fieldValue('lname', ':lastname')
+        $insert->table('tableNeedingData')
+            ->addFieldValue($fName)
+            ->addFieldValue($lName)
             ->returning('primaryKeyValue');
 
         $actual = $insert->output();
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" tnd
+    "tableNeedingData"
     ("fname", "lname")
 VALUES
     (:firstname, :lastname)
@@ -344,17 +171,23 @@ SQL;
 
         // Now check for multiple values being passed into the returning method
         $insert = DBSql::PostgreSQL()->insert();
+        $fName = (new Value('fname'))
+            ->setValueMarker(':firstname')
+            ->addBinding(':firstname', 'Fred');
+        $lName = (new Value('lname'))
+            ->setValueMarker(':lastname')
+            ->addBinding(':lastname', 'Flinstone');
 
-        $insert->table('tableNeedingData tnd')
-               ->fieldValue('fname', ':firstname')
-               ->fieldValue('lname', ':lastname')
+        $insert->table('tableNeedingData')
+               ->addFieldValue($fName)
+               ->addFieldValue($lName)
                ->returning(['primaryKeyValue', 'blahBlah']);
 
         $actual = $insert->output();
         $expected = <<<SQL
 INSERT
 INTO
-    "tableNeedingData" tnd
+    "tableNeedingData"
     ("fname", "lname")
 VALUES
     (:firstname, :lastname)
@@ -373,12 +206,19 @@ SQL;
     public function testNullValueAssignment()
     {
         $insert = DBSql::PostgreSQL()->insert();
+        $bindKey = Value::getBindKey();
+
+        $okayField = (new Value('okayToBeNull'))
+            ->setValueMarker($bindKey)
+            ->addBinding($bindKey, null);
 
         $insert->table('tableNeedingData')
-            ->fieldValue('okayToBeNull', '?', null);
+            ->addFieldValue($okayField);
 
-        list($label) = array_keys( $insert->getBindings() );
-        $value = $insert->getBindings()[$label];
+
+        $actual  = $insert->output();
+        $binding = $insert->getBindings();
+        $value   = $binding[$bindKey];
 
         $expected =<<<SQL
 INSERT
@@ -386,11 +226,11 @@ INTO
     "tableNeedingData"
     ("okayToBeNull")
 VALUES
-    ({$label})
+    ({$bindKey})
 
 SQL;
 
-        $this->assertEquals($expected, $insert->output());
+        $this->assertEquals($expected, $actual);
         $this->assertNull($value);
     }
 }
