@@ -24,38 +24,13 @@ interface UpdateInterface extends StatementInterface
     public function table($tableName);
 
     /**
-     * Add a field and an optionally bound value to the stack.
+     * Adds a field value to the stack to update
      *
-     * To automatically bind a value, the 3rd argument must be provided a value
-     * and the 2nd argument needs to be...
-     * - Question mark '?'
-     * - Empty string ''
-     * - null
-     *
-     * A named binding can be accepted when the 3rd argument has a value and
-     * the 2nd argument is a string that starts with a colon that contains no
-     * empty spaces.
-     *
-     * A non-bound value is not quoted or escaped in any way.  Use with all
-     * due caution.
-     *
-     * @param string $fieldName
-     * @param mixed  $value
-     * @param mixed  $boundValue
+     * @param Field\Value $fieldValue
      *
      * @return $this
      */
-    public function fieldValue($fieldName, $value, $boundValue = null);
-
-    /**
-     * Add a set of fields with values to be assigned values to the UPDATE
-     * Values automatically create bindings.
-     *
-     * @param array $fieldValues
-     *
-     * @return $this
-     */
-    public function fieldValues(array $fieldValues);
+    public function addFieldValue(Field\Value $fieldValue);
 
     /**
      * Add a WHERE clause to the stack of criteria in the UPDATE statement.
