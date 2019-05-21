@@ -97,6 +97,20 @@ trait StackTrait
     }
 
     /**
+     * Add a new Field Value to the set
+     *
+     * @param Field\Value $fieldValue
+     *
+     * @return $this
+     */
+    public function addFieldValue(Field\Value $fieldValue)
+    {
+        $this->fieldValueSet->addFieldValue($fieldValue);
+
+        return $this;
+    }
+
+    /**
      * Empty the fields from the SELECT statement
      *
      * @return $this
