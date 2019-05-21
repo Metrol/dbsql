@@ -86,88 +86,6 @@ class Insert implements InsertInterface
     }
 
     /**
-     * Add a field and an optionally bound value to the stack.
-     *
-     * To automatically bind a value, the 3rd argument must be provided a value
-     * and the 2nd argument needs to be...
-     * - Question mark '?'
-     *
-     * A named binding can be accepted when the 3rd argument has a value and
-     * the 2nd argument is a string that starts with a colon that contains no
-     * empty spaces.
-     *
-     * A non-bound value is not quoted or escaped in any way.  Use with all
-     * due caution.
-     *
-     * @param string $fieldName
-     * @param mixed  $value
-     * @param mixed  $boundValue
-     *
-     * @return $this
-     */
-    public function fieldValue($fieldName, $value, $boundValue = null)
-    {
-        $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
-
-        if ( $value === '?' )
-        {
-            $label = $this->getBindLabel();
-            $this->setBinding($label, $boundValue);
-            $this->valueStack[] = $label;
-        }
-        else if ( substr($value, 0, 1) === ':' // Starts with a colon
-            and strpos($value, ' ') === false  // No spaces in the named binding
-        )
-        {
-            $this->setBinding($value, $boundValue);
-            $this->valueStack[] = $value;
-        }
-        else
-        {
-            $this->valueStack[] = $value;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add a set of the field names to show up in the INSERT statement.
-     * - No value binding provided.
-     *
-     * @param string[] $fields
-     *
-     * @return $this
-     */
-    public function fields(array $fields)
-    {
-        foreach ( $fields as $fieldName )
-        {
-            $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add a set of the values to assign to the INSERT statement.
-     * - No value binding provided.
-     * - No automatic quoting.
-     *
-     * @param array $values
-     *
-     * @return $this
-     */
-    public function values(array $values)
-    {
-        foreach ( $values as $value )
-        {
-            $this->valueStack[] = $value;
-        }
-
-        return $this;
-    }
-
-    /**
      * Sets a SELECT statement that will be used as the source of data for the
      * INSERT.
      * - Any values that have been set will be ignored.
@@ -180,27 +98,6 @@ class Insert implements InsertInterface
     public function valueSelect(SelectInterface $select)
     {
         $this->select = $select;
-
-        return $this;
-    }
-
-    /**
-     * Add a set of fields with values to the select request.
-     * Values automatically create bindings.
-     *
-     * @param array $fieldValues  Expect array['fieldName'] = 'value to insert'
-     *
-     * @return $this
-     */
-    public function fieldValues(array $fieldValues)
-    {
-        foreach ( $fieldValues as $fieldName => $value )
-        {
-            $bindLabel = $this->getBindLabel();
-            $this->setBinding($bindLabel, $value);
-            $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
-            $this->valueStack[] = $bindLabel;
-        }
 
         return $this;
     }
@@ -239,6 +136,7 @@ class Insert implements InsertInterface
         $sql .= $this->buildTable();
         $sql .= $this->buildFields();
         $sql .= $this->buildValues();
+        $sql .= $this->buildBindings();
         $sql .= $this->buildValuesFromSelect();
         $sql .= $this->buildReturning();
 
@@ -277,13 +175,20 @@ class Insert implements InsertInterface
 
         // A set of fields isn't really required, even if it's a really good
         // idea to have them.  If nothings there, leave it empty.
-        if ( empty($this->fieldStack) )
+        if ( $this->fieldValueSet->isEmpty() )
         {
             return $sql;
         }
 
+        $fieldNames = [];
+
+        foreach ( $this->fieldValueSet->getFieldNames() as $fn )
+        {
+            $fieldNames[] = $this->quoter()->quoteField($fn);
+        }
+
         $sql .= $this->indent().'(';
-        $sql .= implode(', ', $this->fieldStack);
+        $sql .= implode(', ', $fieldNames);
         $sql .= ')'.PHP_EOL;
 
         return $sql;
@@ -300,17 +205,33 @@ class Insert implements InsertInterface
 
         // Only add values when something is on the stack and there isn't a
         // SELECT statement waiting to go in there instead.
-        if ( empty($this->valueStack) or $this->select !== null )
+        if ( $this->fieldValueSet->isEmpty() )
         {
             return $sql;
         }
 
-        $sql .= 'VALUES'.PHP_EOL;
-        $sql .= $this->indent().'(';
-        $sql .= implode(', ', $this->valueStack);
-        $sql .= ')'.PHP_EOL;
+        $markers = $this->fieldValueSet->getValueMarkers();
+
+        if ( count($markers) == 0 )
+        {
+            return $sql;
+        }
+
+        $sql .= 'VALUES' . PHP_EOL;
+        $sql .= $this->indent() . '(';
+        $sql .= implode(', ', $markers);
+        $sql .= ')' . PHP_EOL;
 
         return $sql;
+    }
+
+    /**
+     * Push the value bindings on to the stack
+     *
+     */
+    protected function buildBindings()
+    {
+        $this->bindings = $this->fieldValueSet->getBoundValues();
     }
 
     /**
@@ -345,7 +266,7 @@ class Insert implements InsertInterface
 
         if ( ! empty($this->returningFields) )
         {
-            $sql .= 'RETURNING'.PHP_EOL;
+            $sql .= 'RETURNING' . PHP_EOL;
             $sql .= $this->indent();
             $sql .= implode(', ', $this->returningFields);
             $sql .= PHP_EOL;
