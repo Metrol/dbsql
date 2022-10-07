@@ -6,15 +6,18 @@
  * @copyright (c) 2016, Michael Collette
  */
 
-use \Metrol\DBSql;
-use \Metrol\DBSql\PostgreSQL;
+namespace Metrol\Tests;
+
+use PHPUnit\Framework\TestCase;
+use Metrol\DBSQL;
+use Metrol\DBSQL\PostgreSQL;
 
 /**
  * Verification that the PostgreSQL SELECT statements and supporting methods
  * produce the expected output SQL and data bindings.
  *
  */
-class PostgreSQLSelectTest extends \PHPUnit_Framework_TestCase
+class PostgreSQLSelectTest extends TestCase
 {
     /**
      * Testing some basic Select work.
@@ -121,7 +124,7 @@ SELECT
 FROM
     "tableWithData" twd
 WHERE
-    twd.value = {$label}
+    twd.value = $label
 
 SQL;
 

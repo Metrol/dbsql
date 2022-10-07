@@ -6,16 +6,19 @@
  * @copyright (c) 2016, Michael Collette
  */
 
-use \Metrol\DBSql;
+namespace Metrol\Tests;
+
+use PHPUnit\Framework\TestCase;
+use Metrol\DBSql;
 
 /**
  * Verify that various uses of the Delete statement work as expected.
  *
  */
-class PostgreSQLDeleteTest extends \PHPUnit_Framework_TestCase
+class PostgreSQLDeleteTest extends TestCase
 {
     /**
-     * Assemble asimple Insert statment without bindings
+     * Assemble a simple Delete statement without bindings
      *
      */
     public function testDelete()

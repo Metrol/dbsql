@@ -6,6 +6,9 @@
  * @copyright (c) 2016, Michael Collette
  */
 
+namespace Metrol\Tests;
+
+use PHPUnit\Framework\TestCase;
 use Metrol\DBSql;
 use Metrol\DBSql\Field\Value;
 
@@ -13,10 +16,10 @@ use Metrol\DBSql\Field\Value;
  * Verify that various uses of the Insert statement work as expected.
  *
  */
-class PostgreSQLInsertTest extends \PHPUnit_Framework_TestCase
+class PostgreSQLInsertTest extends TestCase
 {
     /**
-     * Assemble asimple Insert statment without bindings
+     * Assemble a simple Insert statement without bindings
      *
      */
     public function testInsertFieldValue()

@@ -6,20 +6,23 @@
  * @copyright (c) 2016, Michael Collette
  */
 
-use \Metrol\DBSql;
+namespace Metrol\Tests;
+
+use PHPUnit\Framework\TestCase;
+use Metrol\DBSql;
 
 /**
  * Verification that a complex WITH statement can be built with a variety of
  * components.
  *
  * These tests will also exercise Union, Insert, Update, and Select statements
- * and their ability to bind.  The focus here is on WITH however.
+ * and their ability to bind.  The focus here is on WITH, however.
  *
  */
-class PostgreSQLWithTest extends \PHPUnit_Framework_TestCase
+class PostgreSQLWithTest extends TestCase
 {
     /**
-     * Assemble a simple With statment with a couple of basic Selects and a
+     * Assemble a simple With statement with a couple of basic Selects and a
      * suffix Select.
      *
      */
