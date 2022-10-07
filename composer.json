@@ -11,12 +11,18 @@
     },
 
     "require-dev": {
-        "phpunit/phpunit": "4.8.*"
+        "phpunit/phpunit"    : "^9.5",
+        "symfony/var-dumper" : "5.*"
     },
 
     "autoload": {
         "psr-4": {
             "Metrol\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Metrol\\Tests\\": "tests/"
         }
     }
 }
