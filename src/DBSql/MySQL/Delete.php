@@ -8,13 +8,10 @@
 
 namespace Metrol\DBSql\MySQL;
 
-use Metrol\DBSql\DeleteInterface;
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\StackTrait;
+use Metrol\DBSql\{DeleteInterface, BindingsTrait, IndentTrait, StackTrait};
 
 /**
- * Creates an Delete SQL statement for MySQL
+ * Creates a Delete SQL statement for MySQL
  *
  */
 class Delete implements DeleteInterface
@@ -22,18 +19,10 @@ class Delete implements DeleteInterface
     use BindingsTrait, IndentTrait, StackTrait, QuoterTrait, WhereTrait;
 
     /**
-     * The table the delete is targeted at.
+     * The table delete is targeted at.
      *
-     * @var string
      */
-    protected $table;
-
-    /**
-     * Can be set to request a value to be returned from the update
-     *
-     * @var string
-     */
-    protected $returningField;
+    protected string $table = '';
 
     /**
      * Instantiate and initialize the object
@@ -44,27 +33,22 @@ class Delete implements DeleteInterface
         $this->initBindings();
         $this->initIndent();
         $this->initStacks();
-
-        $this->table          = '';
-        $this->returningField = null;
     }
 
     /**
      * Just a fast way to call the output() method
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->output().PHP_EOL;
+        return $this->output() . PHP_EOL;
     }
 
     /**
      * Produces the output of all the information that was set in the object.
      *
-     * @return string Formatted SQL
      */
-    public function output()
+    public function output(): string
     {
         return $this->buildSQL();
     }
@@ -72,11 +56,8 @@ class Delete implements DeleteInterface
     /**
      * Set the table that is targeted to delete data from
      *
-     * @param string $tableName
-     *
-     * @return $this
      */
-    public function table($tableName)
+    public function table(string $tableName): static
     {
         $this->table = $this->quoter()->quoteTable($tableName);
 
@@ -86,11 +67,10 @@ class Delete implements DeleteInterface
     /**
      * Build the DELETE statement
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
-        $sql = 'DELETE'.PHP_EOL;
+        $sql = 'DELETE' . PHP_EOL;
 
         $sql .= $this->buildTable();
         $sql .= $this->buildWhere();
@@ -101,16 +81,15 @@ class Delete implements DeleteInterface
     /**
      * Build out the table that will have records deleted from
      *
-     * @return string
      */
-    protected function buildTable()
+    protected function buildTable(): string
     {
         if ( empty($this->table) )
         {
             return '';
         }
 
-        $sql = 'FROM'.PHP_EOL;
+        $sql = 'FROM' . PHP_EOL;
         $sql .= $this->indent().$this->table.PHP_EOL;
 
         return $sql;
@@ -119,12 +98,11 @@ class Delete implements DeleteInterface
     /**
      * Build out the WHERE clause
      *
-     * @return string
      */
-    protected function buildWhere()
+    protected function buildWhere(): string
     {
         $sql = '';
-        $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
+        $delimeter = PHP_EOL . $this->indent() . 'AND' . PHP_EOL . $this->indent();
 
         $clauses = [];
 

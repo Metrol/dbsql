@@ -6,14 +6,10 @@
  * @copyright (c) 2016, Michael Collette
  */
 
-
 namespace Metrol\DBSql\MySQL;
 
-use Metrol\DBSql\InsertInterface;
-use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\StackTrait;
+use Metrol\DBSql\{InsertInterface, SelectInterface, BindingsTrait, IndentTrait,
+                  StackTrait};
 
 /**
  * Creates an Insert SQL statement for MySQL
@@ -26,17 +22,15 @@ class Insert implements InsertInterface
     /**
      * The table the insert is targeted at.
      *
-     * @var string
      */
-    protected $tableInto;
+    protected string $tableInto = '';
 
     /**
      * When specified, this SELECT statement will be used as the source of
      * values for the INSERT.
      *
-     * @var Select|null
      */
-    protected $select;
+    protected SelectInterface $select;
 
     /**
      * Instantiate and initialize the object
@@ -49,8 +43,6 @@ class Insert implements InsertInterface
         $this->initStacks();
 
         $this->fieldStack     = array();
-        $this->tableInto      = '';
-        $this->select         = null;
     }
 
     /**
@@ -68,7 +60,7 @@ class Insert implements InsertInterface
      *
      * @return string Formatted SQL
      */
-    public function output()
+    public function output(): string
     {
         return $this->buildSQL();
     }
@@ -80,7 +72,7 @@ class Insert implements InsertInterface
      *
      * @return $this
      */
-    public function table(string $tableName)
+    public function table(string $tableName): static
     {
         $this->tableInto = $this->quoter()->quoteTable($tableName);
 
@@ -103,13 +95,8 @@ class Insert implements InsertInterface
      * A non-bound value is not quoted or escaped in any way.  Use with all
      * due caution.
      *
-     * @param string $fieldName
-     * @param mixed  $value
-     * @param mixed  $boundValue
-     *
-     * @return $this
      */
-    public function fieldValue($fieldName, $value, $boundValue = null)
+    public function fieldValue(string $fieldName, mixed $value, mixed $boundValue = null): static
     {
         $this->fieldStack[] = $this->quoter()->quoteField($fieldName);
 
@@ -122,9 +109,9 @@ class Insert implements InsertInterface
             $this->setBinding($label, $boundValue);
             $this->valueStack[] = $label;
         }
-        else if ( substr($value, 0, 1) === ':' // Starts with a colon
+        else if ( str_starts_with($value, ':') // Starts with a colon
             and $boundValue !== null           // Has a bound value
-            and strpos($value, ' ') === false  // No spaces in the named binding
+            and ! str_contains($value, ' ')    // No spaces in the named binding
         )
         {
             $this->setBinding($value, $boundValue);
@@ -142,11 +129,8 @@ class Insert implements InsertInterface
      * Add a set of the field names to show up in the INSERT statement.
      * - No value binding provided.
      *
-     * @param string[] $fields
-     *
-     * @return $this
      */
-    public function fields(array $fields)
+    public function fields(array $fields): static
     {
         foreach ( $fields as $fieldName )
         {
@@ -161,11 +145,8 @@ class Insert implements InsertInterface
      * - No value binding provided.
      * - No automatic quoting.
      *
-     * @param array $values
-     *
-     * @return $this
      */
-    public function values(array $values)
+    public function values(array $values): static
     {
         foreach ( $values as $value )
         {
@@ -181,11 +162,8 @@ class Insert implements InsertInterface
      * - Any values that have been set will be ignored.
      * - Any bindings from the Select statement will be merged.
      *
-     * @param SelectInterface $select
-     *
-     * @return $this
      */
-    public function valueSelect(SelectInterface $select)
+    public function valueSelect(SelectInterface $select): static
     {
         $this->select = $select;
 
@@ -196,11 +174,10 @@ class Insert implements InsertInterface
      * Add a set of fields with values to the select request.
      * Values automatically create bindings.
      *
-     * @param array $fieldValues  Expect array['fieldName'] = 'value to insert'
+     * Expects array['fieldName'] = 'value to insert'
      *
-     * @return $this
      */
-    public function fieldValues(array $fieldValues)
+    public function fieldValues(array $fieldValues): static
     {
         foreach ( $fieldValues as $fieldName => $value )
         {
@@ -217,11 +194,8 @@ class Insert implements InsertInterface
      * Here to support the insert interface, but MySQL has no actual support
      * for the RETURNING keyword.
      *
-     * @param string|string[]
-     *
-     * @return $this
      */
-    public function returning($fieldName)
+    public function returning(string|array $fieldName): static
     {
         return $this;
     }
@@ -229,11 +203,10 @@ class Insert implements InsertInterface
     /**
      * Build the INSERT statement
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
-        $sql = 'INSERT'.PHP_EOL;
+        $sql = 'INSERT' . PHP_EOL;
 
         $sql .= $this->buildTable();
         $sql .= $this->buildFields();
@@ -246,9 +219,8 @@ class Insert implements InsertInterface
     /**
      * Build the table that will have data inserted into
      *
-     * @return string
      */
-    protected function buildTable()
+    protected function buildTable(): string
     {
         $sql = '';
 
@@ -257,9 +229,9 @@ class Insert implements InsertInterface
             return $sql;
         }
 
-        $sql .= 'INTO'.PHP_EOL;
+        $sql .= 'INTO' . PHP_EOL;
         $sql .= $this->indent();
-        $sql .= $this->tableInto.PHP_EOL;
+        $sql .= $this->tableInto . PHP_EOL;
 
         return $sql;
     }
@@ -267,22 +239,21 @@ class Insert implements InsertInterface
     /**
      * Build the field stack
      *
-     * @return string
      */
-    protected function buildFields()
+    protected function buildFields(): string
     {
         $sql = '';
 
-        // A set of fields isn't really required, even if it's a really good
-        // idea to have them.  If nothings there, leave it empty.
+        // A set of fields isn't really required, even if it's a good
+        // idea to have them.  If nothing is there, leave it empty.
         if ( empty($this->fieldStack) )
         {
             return $sql;
         }
 
-        $sql .= $this->indent().'(';
+        $sql .= $this->indent() . '(';
         $sql .= implode(', ', $this->fieldStack);
-        $sql .= ')'.PHP_EOL;
+        $sql .= ')' . PHP_EOL;
 
         return $sql;
     }
@@ -290,23 +261,22 @@ class Insert implements InsertInterface
     /**
      * Build out the values to be inserted
      *
-     * @return string
      */
-    protected function buildValues()
+    protected function buildValues(): string
     {
         $sql = '';
 
         // Only add values when something is on the stack and there isn't a
         // SELECT statement waiting to go in there instead.
-        if ( empty($this->valueStack) or $this->select !== null )
+        if ( empty($this->valueStack) or isset($this->select) )
         {
             return $sql;
         }
 
-        $sql .= 'VALUES'.PHP_EOL;
-        $sql .= $this->indent().'(';
+        $sql .= 'VALUES' . PHP_EOL;
+        $sql .= $this->indent() . '(';
         $sql .= implode(', ', $this->valueStack);
-        $sql .= ')'.PHP_EOL;
+        $sql .= ')' . PHP_EOL;
 
         return $sql;
     }
@@ -315,14 +285,13 @@ class Insert implements InsertInterface
      * If the values are coming from a sub-select, this builds this for the
      * larger query.
      *
-     * @return string
      */
-    protected function buildValuesFromSelect()
+    protected function buildValuesFromSelect(): string
     {
         $sql = '';
 
         // Check for a SELECT statement and append if available
-        if ( is_object($this->select) )
+        if ( isset($this->select) )
         {
             $sql .= $this->indentStatement($this->select, 1);
 

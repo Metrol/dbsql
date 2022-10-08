@@ -8,10 +8,8 @@
 
 namespace Metrol\DBSql\MySQL\Where;
 
-use Metrol\DBSql\WhereInterface;
-use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\{SelectInterface, WhereInterface, IndentTrait};
 use Metrol\DBSql\MySQL\QuoterTrait;
-use Metrol\DBSql\SelectInterface;
 
 /**
  * A where clause that looks for a field to have a value in the results of a
@@ -25,56 +23,42 @@ class Select implements WhereInterface
     /**
      * A sub select to look for a field value IN or NOT IN
      *
-     * @var SelectInterface
      */
-    private $subSelect;
+    private SelectInterface $subSelect;
 
     /**
      * When using a value list or sub select, this is the flag to determine if
      * the value is IN or NOT IN the set.
      *
-     * @var boolean
      */
-    private $valueIn;
+    private bool $valueIn;
 
     /**
      * Field to test in a check if IN or NOT IN a set
      *
-     * @var string
      */
-    private $field;
+    private string $field;
 
     /**
      * Instantiate the Select object
      *
-     * @param string          $field
-     * @param SelectInterface $subSelect
-     * @param boolean         $valueIn
      */
-    public function __construct($field, SelectInterface $subSelect,
-                                $valueIn = true)
+    public function __construct(string          $field,
+                                SelectInterface $subSelect,
+                                bool            $valueIn = true)
     {
         $this->initIndent();
 
         $this->field     = $this->quoter()->quoteField($field);
         $this->subSelect = $subSelect;
-
-        if ( $valueIn )
-        {
-            $this->valueIn = true;
-        }
-        else
-        {
-            $this->valueIn = false;
-        }
+        $this->valueIn   = $valueIn;
     }
 
     /**
      * Produce the where clause in question
      *
-     * @return string
      */
-    public function output()
+    public function output(): string
     {
         $whereClause = $this->field;
 
@@ -97,9 +81,8 @@ class Select implements WhereInterface
     /**
      * Provide the bindings as they are in the sub select
      *
-     * @retrun array
      */
-    public function getBindings()
+    public function getBindings(): array
     {
         return $this->subSelect->getBindings();
     }

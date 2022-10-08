@@ -8,10 +8,7 @@
 
 namespace Metrol\DBSql\MySQL;
 
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\UnionInterface;
-use Metrol\DBSql\SelectInterface;
+use Metrol\DBSql\{BindingsTrait, IndentTrait, UnionInterface, SelectInterface};
 
 /**
  * Creates a collection of SELECT statements combined with UNION's
@@ -31,9 +28,8 @@ class Union implements UnionInterface
     /**
      * The collection of Select Statements and Union types
      *
-     * @var array
      */
-    protected $unionStack;
+    protected array $unionStack = [];
 
     /**
      * Instantiate and initialize the object
@@ -43,16 +39,13 @@ class Union implements UnionInterface
     {
         $this->initBindings();
         $this->initIndent();
-
-        $this->unionStack = array();
     }
 
     /**
      * Just a fast way to call the output() method
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->output().PHP_EOL;
     }
@@ -60,9 +53,8 @@ class Union implements UnionInterface
     /**
      * Produces the output of all the information that was set in the object.
      *
-     * @return string Formatted SQL
      */
-    public function output()
+    public function output(): string
     {
         return $this->buildSQL();
     }
@@ -70,29 +62,24 @@ class Union implements UnionInterface
     /**
      * Adds a select statement to the stack
      *
-     * @param Select      $select
-     * @param string|null $unionType Ignored for the first Select, then applied to
-     *                          other statements as they are added.
-     *
-     * @return $this
      */
-    public function setSelect(SelectInterface $select, string $unionType = null)
+    public function setSelect(SelectInterface $select, string $unionType = null): static
     {
         $ut = '';
 
-        if ( !empty($this->unionStack) )
+        if ( ! empty($this->unionStack) )
         {
             if ( strtoupper($unionType) == self::UNION_ALL )
             {
-                $ut = 'UNION '.self::UNION_ALL;
+                $ut = 'UNION '. self::UNION_ALL;
             }
             else if ( strtoupper($unionType) == self::UNION_DISTINCT )
             {
-                $ut = 'UNION '.self::UNION_DISTINCT;
+                $ut = 'UNION '. self::UNION_DISTINCT;
             }
             else if ( $unionType === null )
             {
-                $ut = 'UNION '.self::DEFAULT_UNION;
+                $ut = 'UNION '. self::DEFAULT_UNION;
             }
             else
             {
@@ -108,9 +95,8 @@ class Union implements UnionInterface
     /**
      * Build out the SQL and gather all the bindings to be ready to push to PDO
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         // Takes two to tango in this rodeo
         if ( count($this->unionStack) < 2 )
@@ -129,7 +115,7 @@ class Union implements UnionInterface
             $type   = $selectUnion[0];
             $select = $selectUnion[1];
 
-            if ( !empty($type) )
+            if ( ! empty($type) )
             {
                 $sql .= $type.PHP_EOL.PHP_EOL;
             }

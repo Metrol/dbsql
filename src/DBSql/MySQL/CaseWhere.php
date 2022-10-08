@@ -8,13 +8,8 @@
 
 namespace Metrol\DBSql\MySQL;
 
-use Metrol\DBSql\CaseInterface;
-use Metrol\DBSql\CaseWhereInterface;
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\OutputTrait;
-use Metrol\DBSql\WhenInterface;
-use Metrol\DBSql\SelectInterface;
+use Metrol\DBSql\{CaseInterface, CaseWhereInterface, BindingsTrait,
+                  IndentTrait, OutputTrait, WhenInterface, SelectInterface};
 
 /**
  * Handles opening and closing CASE statements for the WhereTrait clause of a query
@@ -27,43 +22,35 @@ class CaseWhere implements CaseWhereInterface
     /**
      * Holds all the WHENs that belong to this object
      *
-     * @var When[]
      */
-    protected $whenStack;
+    protected array $whenStack = [];
 
     /**
      * The Select object that called this one into being.  Saved here to pass
      * back after the case is closed.
      *
-     * @var Select
      */
-    protected $select;
+    protected Select $select;
 
     /**
      * Alias used to identify the result of the CASE
      *
-     * @var string
      */
-    protected $alias;
+    protected string $alias;
 
     /**
      * What the result will be if none of the When clauses have a match
      *
-     * @var string
      */
-    protected $elseResult;
+    protected string $elseResult;
 
     /**
      * Instantiate and initialize the object
      *
-     * @param Select $select
      */
     public function __construct(Select $select)
     {
-        $this->select     = $select;
-        $this->whenStack  = array();
-        $this->alias      = null;
-        $this->elseResult = null;
+        $this->select = $select;
 
         $this->initBindings();
         $this->initIndent();
@@ -73,12 +60,8 @@ class CaseWhere implements CaseWhereInterface
      * Adds a WHEN statement to the stack and provides the WHEN object
      * to provide the stack.
      *
-     * @param string $criteria
-     * @param array  $bindValues
-     *
-     * @return WhenInterface
      */
-    public function when(string $criteria, array $bindValues = null)
+    public function when(string $criteria, array $bindValues = null): WhenInterface
     {
         $when = new When($this);
         $when->setCriteria($criteria, $bindValues);
@@ -91,12 +74,8 @@ class CaseWhere implements CaseWhereInterface
     /**
      * The final fall through if none of the WHEN cases match.
      *
-     * @param string $elseResult
-     * @param array  $bindValues
-     *
-     * @return CaseInterface
      */
-    public function elseThen($elseResult, array $bindValues = null)
+    public function elseThen(string $elseResult, array $bindValues = null): CaseInterface
     {
         $this->elseResult = $this->bindAssign($elseResult, $bindValues);
         $this->elseResult = $this->quoter()->quoteField($this->elseResult);
@@ -108,11 +87,8 @@ class CaseWhere implements CaseWhereInterface
      * Assembles the CASE statement, pushes it onto the Select object WhereTrait
      * stack, then passes back the Select object to continue chaining the query.
      *
-     * @param string $alias Ignored for a Where clause
-     *
-     * @return SelectInterface
      */
-    public function endCase($alias = null)
+    public function endCase(string $alias = null): SelectInterface
     {
         $quoteSetting = $this->select->quoter()->isEnabled();
 
@@ -130,9 +106,9 @@ class CaseWhere implements CaseWhereInterface
      *
      * @retrun string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
-        $sql = 'CASE'.PHP_EOL;
+        $sql = 'CASE' . PHP_EOL;
 
         foreach ( $this->whenStack as $when )
         {
@@ -140,7 +116,7 @@ class CaseWhere implements CaseWhereInterface
             $this->setBindings($when->getBindings());
         }
 
-        if ( $this->elseResult !== null )
+        if ( isset($this->elseResult) )
         {
             $sql .= $this->indent(2);
             $sql .= 'ELSE'.PHP_EOL;

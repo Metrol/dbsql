@@ -106,7 +106,7 @@ class CaseWhere implements CaseWhereInterface
      */
     protected function buildSQL(): string
     {
-        $sql = 'CASE'.PHP_EOL;
+        $sql = 'CASE' . PHP_EOL;
 
         foreach ( $this->whenStack as $when )
         {
@@ -117,7 +117,7 @@ class CaseWhere implements CaseWhereInterface
         if ( isset($this->elseResult) )
         {
             $sql .= $this->indent(2);
-            $sql .= 'ELSE'.PHP_EOL;
+            $sql .= 'ELSE' . PHP_EOL;
             $sql .= $this->indent(3);
             $sql .= $this->elseResult;
             $sql .= PHP_EOL;

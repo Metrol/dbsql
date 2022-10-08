@@ -25,35 +25,30 @@ class Where implements WhereInterface
     /**
      * The parent statement this where clause belongs to
      *
-     * @var StatementInterface
      */
-    protected $statement;
+    protected StatementInterface $statement;
 
     /**
      * The actual where clause being used
      *
-     * @var WhereInterface
      */
-    private $clause;
+    private WhereInterface $clause;
 
     /**
      * Instantiate the Where object
      *
-     * @param StatementInterface $statement
      */
     public function __construct(StatementInterface $statement)
     {
         $this->statement = $statement;
-        $this->clause    = null;
 
         $this->initBindings();
     }
 
     /**
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->output();
     }
@@ -61,11 +56,10 @@ class Where implements WhereInterface
     /**
      * Produce the clause to appear in the WHERE area of an SQL statement.
      *
-     * @return string
      */
-    public function output()
+    public function output(): string
     {
-        if ( $this->clause === null )
+        if ( ! isset($this->clause) )
         {
             return '';
         }
@@ -79,12 +73,10 @@ class Where implements WhereInterface
     /**
      * Set the criteria based on a string
      *
-     * @param string $criteria
-     * @param mixed|array $bindValues
      */
-    public function setCriteria($criteria, $bindValues = null)
+    public function setCriteria(string $criteria, mixed $bindValues = null): void
     {
-        if ( $this->clause !== null )
+        if ( isset($this->clause) )
         {
             return;
         }
@@ -96,13 +88,10 @@ class Where implements WhereInterface
      * Set a criteria based on a field having/not having a value in the provided
      * data set.
      *
-     * @param string  $fieldName
-     * @param array   $values
-     * @param boolean $valueIn
      */
-    public function setInList($fieldName, array $values, $valueIn = true)
+    public function setInList(string $fieldName, array $values, bool $valueIn = true)
     {
-        if ( $this->clause !== null )
+        if ( isset($this->clause) )
         {
             return;
         }
@@ -114,14 +103,12 @@ class Where implements WhereInterface
      * Set a criteria based on a field having/not having a value in the provided
      * Select result
      *
-     * @param string          $fieldName
-     * @param SelectInterface $subSelect
-     * @param boolean         $valueIn
      */
-    public function setInSelect($fieldName, SelectInterface $subSelect,
-                                $valueIn = true)
+    public function setInSelect(string          $fieldName,
+                                SelectInterface $subSelect,
+                                bool            $valueIn = true)
     {
-        if ( $this->clause !== null )
+        if ( isset($this->clause) )
         {
             return;
         }
@@ -134,7 +121,7 @@ class Where implements WhereInterface
      * them to the parent statement.
      *
      */
-    private function assignClauseBindings()
+    private function assignClauseBindings(): void
     {
         foreach ( $this->clause->getBindings() as $key => $value )
         {

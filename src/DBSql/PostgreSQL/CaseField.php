@@ -8,11 +8,8 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\CaseFieldInterface;
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\WhenInterface;
-use Metrol\DBSql\SelectInterface;
+use Metrol\DBSql\{CaseFieldInterface, BindingsTrait, IndentTrait,
+                  WhenInterface, SelectInterface};
 
 /**
  * Handles opening and closing CASE statements for the Select object
@@ -105,7 +102,10 @@ class CaseField implements CaseFieldInterface
      */
     public function endCase(string $alias = null): SelectInterface
     {
-        $this->alias = $alias;
+        if ( ! is_null($alias) )
+        {
+            $this->alias = $alias;
+        }
 
         $quoteSetting = $this->select->quoter()->isEnabled();
 

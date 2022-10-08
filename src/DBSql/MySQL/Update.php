@@ -8,10 +8,7 @@
 
 namespace Metrol\DBSql\MySQL;
 
-use Metrol\DBSql\UpdateInterface;
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\StackTrait;
+use Metrol\DBSql\{UpdateInterface, BindingsTrait, IndentTrait, StackTrait};
 
 /**
  * Creates an Update SQL statement for MySQL
@@ -24,9 +21,8 @@ class Update implements UpdateInterface
     /**
      * The table the update is targeted at.
      *
-     * @var string
      */
-    protected $table;
+    protected string $table = '';
 
     /**
      * Instantiate and initialize the object
@@ -37,16 +33,13 @@ class Update implements UpdateInterface
         $this->initBindings();
         $this->initIndent();
         $this->initStacks();
-
-        $this->table          = '';
     }
 
     /**
      * Just a fast way to call the output() method
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->output().PHP_EOL;
     }
@@ -54,9 +47,8 @@ class Update implements UpdateInterface
     /**
      * Produces the output of all the information that was set in the object.
      *
-     * @return string Formatted SQL
      */
-    public function output()
+    public function output(): string
     {
         return $this->buildSQL();
     }
@@ -64,11 +56,8 @@ class Update implements UpdateInterface
     /**
      * Set the table that is targeted for the data.
      *
-     * @param string $tableName
-     *
-     * @return $this
      */
-    public function table(string $tableName)
+    public function table(string $tableName): static
     {
         $this->table = $this->quoter()->quoteTable($tableName);
 
@@ -91,13 +80,8 @@ class Update implements UpdateInterface
      * A non-bound value is not quoted or escaped in any way.  Use with all
      * due caution.
      *
-     * @param string $fieldName
-     * @param mixed  $value
-     * @param mixed  $boundValue
-     *
-     * @return $this
      */
-    public function fieldValue($fieldName, $value, $boundValue = null)
+    public function fieldValue(string $fieldName, mixed $value, mixed $boundValue = null): static
     {
         $fieldName = $this->quoter()->quoteField($fieldName);
 
@@ -110,9 +94,9 @@ class Update implements UpdateInterface
             $this->setBinding($bindLabel, $boundValue);
             $this->fieldStack[$fieldName] = $bindLabel;
         }
-        else if ( substr($value, 0, 1) === ':' // Starts with a colon
+        else if ( str_starts_with($value, ':') // Starts with a colon
             and $boundValue !== null           // Has a bound value
-            and strpos($value, ' ') === false  // No spaces in the named binding
+            and ! str_contains($value, ' ')    // No spaces in the named binding
         )
         {
             $this->setBinding($value, $boundValue);
@@ -130,11 +114,10 @@ class Update implements UpdateInterface
      * Add a set of fields with values to the select request.
      * Values automatically create bindings.
      *
-     * @param array $fieldValues  Expect array['fieldName'] = 'value to update'
+     * Expects array['fieldName'] = 'value to update'
      *
-     * @return $this
      */
-    public function fieldValues(array $fieldValues)
+    public function fieldValues(array $fieldValues): static
     {
         foreach ( $fieldValues as $fieldName => $value )
         {
@@ -150,9 +133,8 @@ class Update implements UpdateInterface
     /**
      * Build the UPDATE statement
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         $sql = 'UPDATE';
 
@@ -166,26 +148,22 @@ class Update implements UpdateInterface
     /**
      * Build the table that will be getting updated
      *
-     * @return string
      */
-    protected function buildTable()
+    protected function buildTable(): string
     {
         if ( empty($this->table) )
         {
             return PHP_EOL;
         }
 
-        $sql = PHP_EOL.$this->indent().$this->table.PHP_EOL;
-
-        return $sql;
+        return PHP_EOL . $this->indent() . $this->table . PHP_EOL;
     }
 
     /**
-     * Build the field value assignements area of the statement
+     * Build the field value assignments area of the statement
      *
-     * @return string
      */
-    protected function buildFieldValues()
+    protected function buildFieldValues(): string
     {
         $sql = '';
 
@@ -210,9 +188,8 @@ class Update implements UpdateInterface
     /**
      * Build out the WHERE clause
      *
-     * @return string
      */
-    protected function buildWhere()
+    protected function buildWhere(): string
     {
         $sql = '';
         $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();

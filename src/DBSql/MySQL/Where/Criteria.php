@@ -8,8 +8,7 @@
 
 namespace Metrol\DBSql\MySQL\Where;
 
-use Metrol\DBSql\WhereInterface;
-use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\{WhereInterface, BindingsTrait};
 use Metrol\DBSql\MySQL\QuoterTrait;
 
 /**
@@ -23,21 +22,18 @@ class Criteria implements WhereInterface
     /**
      * The criteria string for this clause
      *
-     * @var string
      */
-    private $criteria;
+    private string $criteria;
 
     /**
      * Instantiate the Criteria object
      *
-     * @param string      $criteria
-     * @param mixed|array $bindValues
      */
-    public function __construct($criteria, $bindValues = null)
+    public function __construct(string $criteria, mixed $bindValues = null)
     {
         $this->initBindings();
 
-        if ( !is_array($bindValues) )
+        if ( ! is_array($bindValues) )
         {
             $bindValues = [$bindValues];
         }
@@ -49,9 +45,8 @@ class Criteria implements WhereInterface
     /**
      * Output the criteria clause
      *
-     * @return string
      */
-    public function output()
+    public function output(): string
     {
         return $this->criteria;
     }
