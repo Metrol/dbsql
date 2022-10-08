@@ -54,10 +54,6 @@ trait IndentTrait
     /**
      * Used to indent a multiline string
      *
-     * @param string  $text  String to indent each line by
-     * @param integer $depth How far to indent
-     *
-     * @return string Indented text
      */
     protected function indentMultiline(string $text, int $depth): string
     {

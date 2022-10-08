@@ -14,16 +14,6 @@ namespace Metrol\DBSql;
  */
 interface SelectInterface extends StatementInterface, StackInterface
 {
-    const JOIN_FULL  = 'FULL';
-    const JOIN_RIGHT = 'RIGHT';
-    const JOIN_LEFT  = 'LEFT';
-
-    const NULL_FIRST = 'NULLS FIRST';
-    const NULL_LAST  = 'NULLS LAST';
-
-    const DIR_ASC    = 'ASC';
-    const DIR_DESC   = 'DESC';
-
     /**
      * Add a column/field to what is being requested
      *
@@ -62,11 +52,6 @@ interface SelectInterface extends StatementInterface, StackInterface
     /**
      * Adds an INNER JOIN clause to the SELECT statement.
      *
-     * @param string $tableName
-     * @param string $onCriteria ON criteria for the JOIN.
-     * @param ?array $bindValues List of values to bind into the criteria
-     *
-     * @return $this
      */
     public function join(string $tableName, string $onCriteria, array $bindValues = null): static;
 
@@ -74,22 +59,12 @@ interface SelectInterface extends StatementInterface, StackInterface
      * Adds an INNER JOIN clause to the SELECT statement with USING as the join
      * criteria.  No data binding is provided here.
      *
-     * @param string $tableName
-     * @param string $criteria Field names for the USING clause
-     *
-     * @return $this
      */
     public function joinUsing(string $tableName, string $criteria): static;
 
     /**
      * Adds a LEFT/RIGHT/FULL OUTER JOIN clause to the SELECT statement.
      *
-     * @param string $joinType   LEFT|RIGHT|FULL
-     * @param string $tableName
-     * @param string $onCriteria ON criteria for the JOIN.
-     * @param ?array $bindValues List of values to bind into the criteria
-     *
-     * @return $this
      */
     public function joinOuter(string $joinType, string $tableName, string $onCriteria,
                               array $bindValues = null): static;
@@ -98,11 +73,6 @@ interface SelectInterface extends StatementInterface, StackInterface
      * Adds an OUTER JOIN clause to the SELECT statement with USING as the
      * join criteria.  No data binding is provided here.
      *
-     * @param string $joinType LEFT|RIGHT|FULL
-     * @param string $tableName
-     * @param string $criteria Field names for the USING clause
-     *
-     * @return $this
      */
     public function joinOuterUsing(string $joinType, string $tableName, string $criteria): static;
 
@@ -145,11 +115,6 @@ interface SelectInterface extends StatementInterface, StackInterface
     /**
      * Add fields to order the result set by
      *
-     * @param string      $fieldName
-     * @param string|null $direction ASC by default
-     * @param string|null $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
-     *
-     * @return $this
      */
     public function order(string $fieldName, string $direction = null, string $nullOrder = null): static;
 

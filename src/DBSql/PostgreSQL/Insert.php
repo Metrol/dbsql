@@ -9,12 +9,8 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\InsertInterface;
-use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\StackTrait;
-use Metrol\DBSql\OutputTrait;
+use Metrol\DBSql\{InsertInterface, SelectInterface, BindingsTrait, IndentTrait,
+                  StackTrait, OutputTrait};
 
 /**
  * Creates an Insert SQL statement for PostgreSQL
@@ -114,7 +110,7 @@ class Insert implements InsertInterface
      */
     protected function buildSQL(): string
     {
-        $sql = 'INSERT'.PHP_EOL;
+        $sql = 'INSERT' . PHP_EOL;
 
         $sql .= $this->buildTable();
         $sql .= $this->buildFields();
@@ -130,7 +126,6 @@ class Insert implements InsertInterface
     /**
      * Build the table that will have data inserted into
      *
-     * @return string
      */
     protected function buildTable(): string
     {
@@ -141,9 +136,9 @@ class Insert implements InsertInterface
             return $sql;
         }
 
-        $sql .= 'INTO'.PHP_EOL;
+        $sql .= 'INTO' . PHP_EOL;
         $sql .= $this->indent();
-        $sql .= $this->tableInto.PHP_EOL;
+        $sql .= $this->tableInto . PHP_EOL;
 
         return $sql;
     }
@@ -170,9 +165,9 @@ class Insert implements InsertInterface
             $fieldNames[] = $this->quoter()->quoteField($fn);
         }
 
-        $sql .= $this->indent().'(';
+        $sql .= $this->indent() . '(';
         $sql .= implode(', ', $fieldNames);
-        $sql .= ')'.PHP_EOL;
+        $sql .= ')' . PHP_EOL;
 
         return $sql;
     }

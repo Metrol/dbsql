@@ -8,11 +8,8 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\UnionInterface;
-use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\OutputTrait;
+use Metrol\DBSql\{BindingsTrait, IndentTrait, UnionInterface, SelectInterface,
+                  OutputTrait};
 
 /**
  * Creates a collection of SELECT statements combined with UNION's
@@ -47,22 +44,15 @@ class Union implements UnionInterface
     /**
      * Just a fast way to call the output() method
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->output().PHP_EOL;
+        return $this->output() . PHP_EOL;
     }
 
     /**
      * Adds a select statement to the stack
      *
-     * @param SelectInterface $select
-     * @param string|null     $unionType Ignored for the first Select, then
-     *                                   applied to other statements as they
-     *                                   are added.
-     *
-     * @return $this
      */
     public function setSelect(SelectInterface $select, string $unionType = null): static
     {
@@ -72,15 +62,15 @@ class Union implements UnionInterface
         {
             if ( strtoupper($unionType) == self::UNION_ALL )
             {
-                $ut = 'UNION '.self::UNION_ALL;
+                $ut = 'UNION ' . self::UNION_ALL;
             }
             else if ( strtoupper($unionType) == self::UNION_DISTINCT )
             {
-                $ut = 'UNION '.self::UNION_DISTINCT;
+                $ut = 'UNION ' . self::UNION_DISTINCT;
             }
-            else if ( $unionType === null )
+            else if ( is_null($unionType) )
             {
-                $ut = 'UNION '.self::DEFAULT_UNION;
+                $ut = 'UNION ' . self::DEFAULT_UNION;
             }
             else
             {
@@ -96,7 +86,6 @@ class Union implements UnionInterface
     /**
      * Build out the SQL and gather all the bindings to be ready to push to PDO
      *
-     * @return string
      */
     protected function buildSQL(): string
     {
@@ -117,9 +106,9 @@ class Union implements UnionInterface
             $type   = $selectUnion[0];
             $select = $selectUnion[1];
 
-            if ( !empty($type) )
+            if ( ! empty($type) )
             {
-                $sql .= PHP_EOL.$type.PHP_EOL.PHP_EOL;
+                $sql .= PHP_EOL . $type . PHP_EOL . PHP_EOL;
             }
 
             $sql .= $select->output();

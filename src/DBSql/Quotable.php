@@ -248,9 +248,6 @@ class Quotable
      * Quotes around dot "." notation to deal with schema or alias information
      * properly
      *
-     * @param string $in
-     *
-     * @return string
      */
     protected function dotFieldQuote(string $in): string
     {

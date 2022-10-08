@@ -8,12 +8,11 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\SelectInterface;
-use Metrol\DBSql\WhereInterface;
+use Metrol\DBSql\{SelectInterface, WhereInterface};
 
 /**
  * Provides handling a WHERE clause for statements that can use it.  This
- * assumes that statement has a QuoterTrait and has include the StackTrait.
+ * assumes that statement has a QuoterTrait and has included the StackTrait.
  *
  */
 trait WhereTrait
@@ -25,7 +24,7 @@ trait WhereTrait
      */
     public function where(string $criteria, mixed $bindValues = null): static
     {
-        if ( !is_array($bindValues) )
+        if ( ! is_array($bindValues) )
         {
             $bindValues = [$bindValues];
         }
@@ -47,7 +46,7 @@ trait WhereTrait
     {
         $whereClause = new Where($this);
 
-        $whereClause->setInList($fieldName, $values, true);
+        $whereClause->setInList($fieldName, $values);
 
         $this->wherePush($whereClause);
 
@@ -80,7 +79,7 @@ trait WhereTrait
     {
         $whereClause = new Where($this);
 
-        $whereClause->setInSelect($fieldName, $subSelect, true);
+        $whereClause->setInSelect($fieldName, $subSelect);
 
         $this->wherePush($whereClause);
 

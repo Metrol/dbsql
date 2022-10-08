@@ -8,12 +8,9 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\OutputTrait;
+use Metrol\DBSql\{BindingsTrait, IndentTrait, OutputTrait, WithInterface,
+                  StatementInterface};
 use Metrol\DBSql\PostgreSQL\With\Recursive;
-use Metrol\DBSql\WithInterface;
-use Metrol\DBSql\StatementInterface;
 
 /**
  * Creates a collection of statements within a WITH Common Table Expression
@@ -163,10 +160,10 @@ class With implements WithInterface
         foreach ( $this->withStack as $alias => $statement )
         {
             $sql .= $this->quoter()->quoteField($alias);
-            $sql .= ' AS '.PHP_EOL;
-            $sql .= '('.PHP_EOL;
+            $sql .= ' AS ' . PHP_EOL;
+            $sql .= '(' . PHP_EOL;
             $sql .= $this->indentStatement($statement, 1);
-            $sql .= '),'.PHP_EOL;
+            $sql .= '),' . PHP_EOL;
 
             $this->mergeBindings($statement);
         }

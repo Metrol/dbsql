@@ -75,7 +75,6 @@ class Select implements SelectInterface
         $this->initStacks();
         $this->initBindings();
         $this->initIndent();
-
     }
 
     /**
@@ -84,7 +83,7 @@ class Select implements SelectInterface
      */
     public function __toString(): string
     {
-        return $this->output().PHP_EOL;
+        return $this->output() . PHP_EOL;
     }
 
     /**
@@ -186,7 +185,7 @@ class Select implements SelectInterface
     public function fromSub(string $alias, SelectInterface $subSelect): static
     {
         // Assemble the string
-        $fromClause  = '('.PHP_EOL;
+        $fromClause  = '(' . PHP_EOL;
         $fromClause .= $this->indentStatement($subSelect, 2);
         $fromClause .= $this->indent().') ';
         $fromClause .= $this->quoter()->quoteField($alias);
@@ -295,7 +294,7 @@ class Select implements SelectInterface
         $onCriteria = $this->quoter()->quoteField($onCriteria);
 
         $join  = 'JOIN ';
-        $join .= $tableName.PHP_EOL;
+        $join .= $tableName . PHP_EOL;
         $join .= $this->indent(2);
         $join .= 'ON ';
         $join .= $onCriteria;
@@ -327,7 +326,7 @@ class Select implements SelectInterface
             $parts[$i] = $this->quoter()->quoteField(trim($part));
         }
 
-        $join .= '('. implode(', ', $parts) .')';
+        $join .= '(' . implode(', ', $parts) . ')';
 
         $this->joinStack[] = $join;
 
@@ -376,8 +375,8 @@ class Select implements SelectInterface
         $onCriteria = $this->bindAssign($onCriteria, $bindValues);
         $onCriteria = $this->quoter()->quoteField($onCriteria);
 
-        $join  = $joinType.' OUTER JOIN ';
-        $join .= $tableName.PHP_EOL;
+        $join  = $joinType . ' OUTER JOIN ';
+        $join .= $tableName . PHP_EOL;
         $join .= $this->indent(2);
         $join .= 'ON ';
         $join .= $onCriteria;
@@ -408,8 +407,8 @@ class Select implements SelectInterface
             return $this;
         }
 
-        $join  = $joinType.' JOIN ';
-        $join .= $tableName.PHP_EOL;
+        $join  = $joinType . ' JOIN ';
+        $join .= $tableName . PHP_EOL;
         $join .= $this->indent(2);
         $join .= 'USING ';
 
@@ -420,7 +419,7 @@ class Select implements SelectInterface
             $parts[$i] = $this->quoter()->quoteField(trim($part));
         }
 
-        $join .= '('. implode(', ', $parts) .')';
+        $join .= '(' . implode(', ', $parts) . ')';
 
         $this->joinStack[] = $join;
 
@@ -430,11 +429,6 @@ class Select implements SelectInterface
     /**
      * Add fields to order the result set by
      *
-     * @param string      $fieldName
-     * @param string|null $direction
-     * @param string|null $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
-     *
-     * @return $this
      */
     public function order(string $fieldName, string $direction = null, string $nullOrder = null): static
     {
@@ -451,7 +445,7 @@ class Select implements SelectInterface
         {
             if ( $nullOrder === self::NULLS_FIRST or $nullOrder === self::NULLS_LAST )
             {
-                $nullOrder = ' '.$nullOrder;
+                $nullOrder = ' ' . $nullOrder;
             }
         }
         else
@@ -465,7 +459,7 @@ class Select implements SelectInterface
         }
 
         $sql  = $this->quoter()->quoteField($fieldName);
-        $sql .= ' '.$direction.$nullOrder;
+        $sql .= ' ' . $direction . $nullOrder;
 
         $this->orderStack[] = $sql;
 
@@ -574,7 +568,7 @@ class Select implements SelectInterface
         {
             $rtn .= ' DISTINCT';
 
-            if ( !empty($this->distinctExpression) > 0 )
+            if ( ! empty($this->distinctExpression) > 0 )
             {
                 $rtn .= ' ON ('.$this->distinctExpression.')';
             }
@@ -588,21 +582,20 @@ class Select implements SelectInterface
     /**
      * Build out the fields that will be returned.
      *
-     * @return string
      */
     protected function buildFields(): string
     {
         $sql   = '';
-        $delim = ','.PHP_EOL.$this->indent();
+        $delim = ',' . PHP_EOL . $this->indent();
 
         if ( ! empty($this->fieldStack) )
         {
             $sql .= $this->indent();
-            $sql .= implode($delim, $this->fieldStack).PHP_EOL;
+            $sql .= implode($delim, $this->fieldStack) . PHP_EOL;
         }
         else
         {
-            $sql .= $this->indent().'*'.PHP_EOL;
+            $sql .= $this->indent() . '*' . PHP_EOL;
         }
 
         return $sql;
@@ -615,13 +608,13 @@ class Select implements SelectInterface
     protected function buildFrom(): string
     {
         $sql = '';
-        $delim = ','.PHP_EOL.$this->indent();
+        $delim = ',' . PHP_EOL . $this->indent();
 
         if ( ! empty($this->fromStack) )
         {
-            $sql .= 'FROM'.PHP_EOL;
+            $sql .= 'FROM' . PHP_EOL;
             $sql .= $this->indent();
-            $sql .= implode($delim, $this->fromStack ).PHP_EOL;
+            $sql .= implode($delim, $this->fromStack) . PHP_EOL;
         }
 
         return $sql;
@@ -634,12 +627,12 @@ class Select implements SelectInterface
     protected function buildJoins(): string
     {
         $sql = '';
-        $delim = PHP_EOL.$this->indent();
+        $delim = PHP_EOL . $this->indent();
 
         if ( ! empty($this->joinStack) )
         {
             $sql .= $this->indent();
-            $sql .= implode($delim, $this->joinStack).PHP_EOL;
+            $sql .= implode($delim, $this->joinStack) . PHP_EOL;
         }
 
         return $sql;
@@ -652,7 +645,7 @@ class Select implements SelectInterface
     protected function buildWhere(): string
     {
         $sql = '';
-        $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
+        $delimeter = PHP_EOL . $this->indent() . 'AND' . PHP_EOL . $this->indent();
 
         $clauses = [];
 
@@ -668,9 +661,9 @@ class Select implements SelectInterface
 
         if ( ! empty($clauses) )
         {
-            $sql .= 'WHERE'.PHP_EOL;
+            $sql .= 'WHERE' . PHP_EOL;
             $sql .= $this->indent();
-            $sql .= implode($delimeter, $clauses).PHP_EOL;
+            $sql .= implode($delimeter, $clauses) . PHP_EOL;
         }
 
         return $sql;
@@ -683,13 +676,13 @@ class Select implements SelectInterface
     protected function buildGroupBy(): string
     {
         $sql = '';
-        $delim = ','.PHP_EOL.$this->indent();
+        $delim = ',' . PHP_EOL . $this->indent();
 
         if ( ! empty($this->groupStack) )
         {
-            $sql .= 'GROUP BY'.PHP_EOL;
+            $sql .= 'GROUP BY' . PHP_EOL;
             $sql .= $this->indent();
-            $sql .= implode($delim, $this->groupStack ).PHP_EOL;
+            $sql .= implode($delim, $this->groupStack) . PHP_EOL;
         }
 
         return $sql;
@@ -702,13 +695,13 @@ class Select implements SelectInterface
     protected function buildHaving(): string
     {
         $sql = '';
-        $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
+        $delimeter = PHP_EOL . $this->indent() . 'AND' . PHP_EOL . $this->indent();
 
         if ( ! empty($this->havingStack) )
         {
-            $sql .= 'HAVING'.PHP_EOL;
+            $sql .= 'HAVING' . PHP_EOL;
             $sql .= $this->indent();
-            $sql .= implode($delimeter, $this->havingStack ).PHP_EOL;
+            $sql .= implode($delimeter, $this->havingStack) . PHP_EOL;
         }
 
         return $sql;
@@ -721,13 +714,13 @@ class Select implements SelectInterface
     protected function buildOrder(): string
     {
         $sql = '';
-        $delim = ','.PHP_EOL.$this->indent();
+        $delim = ',' . PHP_EOL . $this->indent();
 
         if ( ! empty($this->orderStack) )
         {
             $sql .= 'ORDER BY'.PHP_EOL;
             $sql .= $this->indent();
-            $sql .= implode($delim, $this->orderStack ).PHP_EOL;
+            $sql .= implode($delim, $this->orderStack) . PHP_EOL;
         }
 
         return $sql;
@@ -743,7 +736,7 @@ class Select implements SelectInterface
 
         if ( isset($this->limitVal) )
         {
-            $sql .= 'LIMIT '.$this->limitVal.PHP_EOL;
+            $sql .= 'LIMIT ' . $this->limitVal . PHP_EOL;
         }
 
         return $sql;
@@ -759,7 +752,7 @@ class Select implements SelectInterface
 
         if ( isset($this->offsetVal) )
         {
-            $sql .= 'OFFSET '.$this->offsetVal.PHP_EOL;
+            $sql .= 'OFFSET ' . $this->offsetVal . PHP_EOL;
         }
 
         return $sql;

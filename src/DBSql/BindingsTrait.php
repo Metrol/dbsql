@@ -19,7 +19,7 @@ trait BindingsTrait
      * Maintains the list of binding key/value pairs.
      *
      */
-    protected array $bindings;
+    protected array $bindings = [];
 
     /**
      * The character used to mark a place where a binding needs to go
@@ -33,7 +33,7 @@ trait BindingsTrait
      */
     public function initBindings(): static
     {
-        $this->bindings = array();
+        $this->bindings = [];
 
         return $this;
     }
@@ -53,7 +53,7 @@ trait BindingsTrait
      */
     public function setBinding(string $binding, mixed $value): static
     {
-        $this->bindings[ $binding] = $value;
+        $this->bindings[ $binding ] = $value;
 
         return $this;
     }
@@ -86,7 +86,7 @@ trait BindingsTrait
 
         foreach ( $subBinding as $key => $value )
         {
-            if ( !array_key_exists($key, $this->bindings) )
+            if ( ! array_key_exists($key, $this->bindings) )
             {
                 $this->setBinding($key, $value);
             }

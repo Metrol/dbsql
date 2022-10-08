@@ -17,14 +17,12 @@ interface StatementInterface
     /**
      * Produces the output of all the information that was set in the object.
      *
-     * @return string Formatted SQL
      */
     public function output(): string;
 
     /**
      * Initialize the binding values, and clears out any existing ones
      *
-     * @return $this
      */
     public function initBindings(): static;
 
@@ -32,17 +30,12 @@ interface StatementInterface
      * Provide the list of all the bind values suitable for passing to a PDO
      * statement.
      *
-     * @return array
      */
     public function getBindings(): array;
 
     /**
      * Set a value for a named binding that appeared somewhere in the SQL
      *
-     * @param string $binding The name of the binding key that was used
-     * @param mixed  $value   The value to assign to the binding
-     *
-     * @return $this
      */
     public function setBinding(string $binding, mixed $value): static;
 

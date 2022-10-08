@@ -140,7 +140,7 @@ class Update implements UpdateInterface
             $assign[] = $this->indent() . $fn . ' = ' . $marker;
         }
 
-        $sql .= 'SET'.PHP_EOL;
+        $sql .= 'SET' . PHP_EOL;
         $sql .= implode(',' . PHP_EOL, $assign) . PHP_EOL;
 
         return $sql;
@@ -153,7 +153,7 @@ class Update implements UpdateInterface
     protected function buildWhere(): string
     {
         $sql = '';
-        $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
+        $delimeter = PHP_EOL . $this->indent() . 'AND' . PHP_EOL . $this->indent();
 
         $clauses = [];
 
@@ -169,9 +169,9 @@ class Update implements UpdateInterface
 
         if ( ! empty($clauses) )
         {
-            $sql .= 'WHERE'.PHP_EOL;
+            $sql .= 'WHERE' . PHP_EOL;
             $sql .= $this->indent();
-            $sql .= implode($delimeter, $clauses).PHP_EOL;
+            $sql .= implode($delimeter, $clauses) . PHP_EOL;
         }
 
         return $sql;
@@ -187,8 +187,8 @@ class Update implements UpdateInterface
 
         if ( isset($this->returningField) )
         {
-            $sql .= 'RETURNING'.PHP_EOL;
-            $sql .= $this->indent().$this->returningField.PHP_EOL;
+            $sql .= 'RETURNING' . PHP_EOL;
+            $sql .= $this->indent() . $this->returningField . PHP_EOL;
         }
 
         return $sql;

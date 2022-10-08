@@ -43,7 +43,7 @@ class When implements WhenInterface
      */
     public function __construct(CaseInterface $caseObj)
     {
-        $this->caseObj    = $caseObj;
+        $this->caseObj = $caseObj;
 
         $this->initBindings();
         $this->initIndent();
@@ -90,7 +90,7 @@ class When implements WhenInterface
     protected function buildSQL(): string
     {
         $sql = 'WHEN ';
-        $sql .= $this->criteria.' THEN'.PHP_EOL;
+        $sql .= $this->criteria . ' THEN' . PHP_EOL;
         $sql .= $this->indent(3);
         $sql .= $this->thenResult;
         $sql .= PHP_EOL;

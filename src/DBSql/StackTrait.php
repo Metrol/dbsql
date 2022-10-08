@@ -49,7 +49,6 @@ trait StackTrait
     /**
      * Clauses that will make up the WHERE section of a statement
      *
-     * @var WhereInterface[]
      */
     protected array $whereStack = [];
 
