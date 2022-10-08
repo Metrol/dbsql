@@ -19,14 +19,14 @@ interface StatementInterface
      *
      * @return string Formatted SQL
      */
-    public function output();
+    public function output(): string;
 
     /**
      * Initialize the binding values, and clears out any existing ones
      *
      * @return $this
      */
-    public function initBindings();
+    public function initBindings(): static;
 
     /**
      * Provide the list of all the bind values suitable for passing to a PDO
@@ -34,7 +34,7 @@ interface StatementInterface
      *
      * @return array
      */
-    public function getBindings();
+    public function getBindings(): array;
 
     /**
      * Set a value for a named binding that appeared somewhere in the SQL
@@ -44,24 +44,18 @@ interface StatementInterface
      *
      * @return $this
      */
-    public function setBinding($binding, $value);
+    public function setBinding(string $binding, mixed $value): static;
 
     /**
      * Takes in an array of bindings and adds them to the stack
      *
-     * @param array $bindings
-     *
-     * @return $this
      */
-    public function setBindings(array $bindings);
+    public function setBindings(array $bindings): static;
 
     /**
-     * Tell the quoter engine whether or not to try and automatically quote
+     * Tell the quoter engine whether to try and automatically quote
      * field and table names.  When turned off, quoting is manual.
      *
-     * @param bool $flag
-     *
-     * @return $this
      */
-    public function enableQuoting($flag);
+    public function enableQuoting(bool $flag): static;
 }

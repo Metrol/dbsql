@@ -8,6 +8,9 @@
 
 namespace Metrol;
 
+use Metrol\DBSql\{PostgreSQL, MySQL, DriverInterface};
+use UnexpectedValueException;
+
 /**
  * Provides static methods used to bring in database specific SQL generators
  *
@@ -21,57 +24,45 @@ class DBSql
 
     /**
      *
-     * @return DBSql\PostgreSQL
      */
     static public function PostgreSQL()
     {
-        return new DBSql\PostgreSQL;
+        return new PostgreSQL;
     }
 
     /**
      *
-     * @return DBSql\MySQL
      */
     static public function MySQL()
     {
-        return new DBSql\MySQL;
+        return new MySQL;
     }
 
     /**
      * Provides the same functionality as the database specific methods, but
      * allows for the value to be dynamic.
      *
-     * @param $type
-     *
-     * @return DBSql\DriverInterface
-     *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
-    static public function getDriver($type)
+    static public function getDriver(string $type): DriverInterface
     {
         $driver = null;
 
         switch ( strtoupper($type) )
         {
+            case strtoupper(self::POSTGRESQL_PDO):
             case strtoupper(self::POSTGRESQL):
                 $driver = self::PostgreSQL();
                 break;
 
-            case strtoupper(self::POSTGRESQL_PDO):
-                $driver = self::PostgreSQL();
-                break;
-
-            case strtoupper(self::MYSQL):
-                $driver = self::MySQL();
-                break;
-
             case strtoupper(self::MYSQL_PDO):
+            case strtoupper(self::MYSQL):
                 $driver = self::MySQL();
                 break;
 
             default:
                 $msg = 'Unknown database type requested';
-                throw new \UnexpectedValueException($msg);
+                throw new UnexpectedValueException($msg);
         }
 
         return $driver;

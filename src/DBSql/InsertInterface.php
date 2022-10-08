@@ -17,39 +17,27 @@ interface InsertInterface extends StatementInterface
     /**
      * Which database table is these data going into
      *
-     * @param string $tableName
-     *
-     * @return $this
      */
-    public function table($tableName);
+    public function table(string $tableName): static;
 
     /**
      * Sets a SELECT statement that will be used as the source of data for the
      * INSERT.  Any values that have been set will be ignored.  Any bindings
      * from the Select statement will be merged.
      *
-     * @param SelectInterface $select
-     *
-     * @return $this
      */
-    public function valueSelect(SelectInterface $select);
+    public function valueSelect(SelectInterface $select): static;
 
     /**
      * Add a Field Value to the stack
      *
-     * @param Field\Value $fieldValue
-     *
-     * @return $this
      */
-    public function addFieldValue(Field\Value $fieldValue);
+    public function addFieldValue(Field\Value $fieldValue): static;
 
     /**
-     * Add a field to return back from the insert statement.  Accepts either a
+     * Add a field to return from the insert statement.  Accepts either a
      * single field name, or a list of them in the form of an array.
      *
-     * @param string|string[]
-     *
-     * @return $this
      */
-    public function returning($fieldName);
+    public function returning(string|array $fieldName): static;
 }

@@ -18,7 +18,7 @@ class MySQL implements DriverInterface
      *
      * @return MySQL\Select
      */
-    public function select()
+    public function select(): MySQL\Select
     {
         return new MySQL\Select;
     }
@@ -27,7 +27,7 @@ class MySQL implements DriverInterface
      *
      * @return MySQL\With
      */
-    public function with()
+    public function with(): MySQL\With
     {
         return new MySQL\With;
     }
@@ -36,7 +36,7 @@ class MySQL implements DriverInterface
      *
      * @return MySQL\Union
      */
-    public function union()
+    public function union(): MySQL\Union
     {
         return new MySQL\Union;
     }
@@ -45,7 +45,7 @@ class MySQL implements DriverInterface
      *
      * @return MySQL\Insert
      */
-    public function insert()
+    public function insert(): MySQL\Insert
     {
         return new MySQL\Insert;
     }
@@ -54,7 +54,7 @@ class MySQL implements DriverInterface
      *
      * @return MySQL\Update
      */
-    public function update()
+    public function update(): MySQL\Update
     {
         return new MySQL\Update;
     }
@@ -63,7 +63,7 @@ class MySQL implements DriverInterface
      *
      * @return MySQL\Delete
      */
-    public function delete()
+    public function delete(): MySQL\Delete
     {
         return new MySQL\Delete;
     }

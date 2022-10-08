@@ -18,57 +18,49 @@ interface StackInterface
     /**
      * Empty the fields from the SELECT statement
      *
-     * @return $this
      */
-    public function fieldReset();
+    public function fieldReset(): static;
 
     /**
      * Empty the values from the Value stack
      *
-     * @return $this
      */
-    public function valueReset();
+    public function valueReset(): static;
 
     /**
      * Empty the tables stack
      *
-     * @return $this
      */
-    public function fromReset();
+    public function fromReset(): static;
 
 
     /**
      * Empty the joins stack
      *
-     * @return $this
      */
-    public function joinReset();
+    public function joinReset(): static;
 
     /**
      * Empty the where clauses
      *
-     * @return $this
      */
-    public function whereReset();
+    public function whereReset(): static;
 
     /**
      * Empty the having clauses
      *
-     * @return $this
      */
-    public function havingReset();
+    public function havingReset(): static;
 
     /**
      * Empty the ordering
      *
-     * @return $this
      */
-    public function orderReset();
+    public function orderReset(): static;
 
     /**
      * Empty the grouping fields
      *
-     * @return $this
      */
-    public function groupReset();
+    public function groupReset(): static;
 }

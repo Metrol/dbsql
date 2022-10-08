@@ -19,71 +19,63 @@ trait StackTrait
     /**
      * A set of Field Value objects
      *
-     * @var Field\Set
      */
-    protected $fieldValueSet = null;
+    protected Field\Set $fieldValueSet;
 
     /**
      * List of the fields to be used in the SQL
      *
-     * @var array
      */
-    protected $fieldStack = [];
+    protected array $fieldStack = [];
 
     /**
      * List of values to fill into the VALUES area of an INSERT
      *
-     * @var array
      */
-    protected $valueStack = [];
+    protected array $valueStack = [];
 
     /**
      * Tables and other data sources
      *
-     * @var array
      */
-    protected $fromStack = [];
+    protected array $fromStack = [];
 
     /**
      * Join statements
      *
-     * @var array
      */
-    protected $joinStack = [];
+    protected array $joinStack = [];
 
     /**
      * Clauses that will make up the WHERE section of a statement
      *
      * @var WhereInterface[]
      */
-    protected $whereStack = [];
+    protected array $whereStack = [];
 
     /**
      * Clauses that will make up the HAVING section of a statement
      *
-     * @var array
      */
-    protected $havingStack = [];
+    protected array $havingStack = [];
 
     /**
      * List of fields that are used to sort the result set
      *
-     * @var array
      */
-    protected $orderStack = [];
+    protected array $orderStack = [];
 
     /**
      * List of fields that are used to group the result set
      *
-     * @var array
      */
-    protected $groupStack = [];
+    protected array $groupStack = [];
 
     /**
      * Initialize all the SQL stacks to their default state.
      *
      */
-    protected function initStacks()
+    protected function initStacks(): void
     {
         $this->fieldValueSet = new Field\Set;
         $this->fieldStack  = [];
@@ -99,11 +91,8 @@ trait StackTrait
     /**
      * Add a new Field Value to the set
      *
-     * @param Field\Value $fieldValue
-     *
-     * @return $this
      */
-    public function addFieldValue(Field\Value $fieldValue)
+    public function addFieldValue(Field\Value $fieldValue): static
     {
         $this->fieldValueSet->addFieldValue($fieldValue);
 
@@ -113,9 +102,8 @@ trait StackTrait
     /**
      * Empty the fields from the SELECT statement
      *
-     * @return $this
      */
-    public function fieldReset()
+    public function fieldReset(): static
     {
         $this->fieldStack = [];
 
@@ -125,9 +113,8 @@ trait StackTrait
     /**
      * Empty the values from the Value stack
      *
-     * @return $this
      */
-    public function valueReset()
+    public function valueReset(): static
     {
         $this->valueStack = [];
 
@@ -137,9 +124,8 @@ trait StackTrait
     /**
      * Empty the tables stack
      *
-     * @return $this
      */
-    public function fromReset()
+    public function fromReset(): static
     {
         $this->fromStack = [];
 
@@ -149,9 +135,8 @@ trait StackTrait
     /**
      * Empty the joins stack
      *
-     * @return $this
      */
-    public function joinReset()
+    public function joinReset(): static
     {
         $this->joinStack = [];
 
@@ -161,11 +146,8 @@ trait StackTrait
     /**
      * Push a value on to the WHERE stack
      *
-     * @param WhereInterface $whereClause
-     *
-     * @return $this
      */
-    protected function wherePush(WhereInterface $whereClause)
+    protected function wherePush(WhereInterface $whereClause): static
     {
         $this->whereStack[] = $whereClause;
 
@@ -175,9 +157,8 @@ trait StackTrait
     /**
      * Empty the where clauses
      *
-     * @return $this
      */
-    public function whereReset()
+    public function whereReset(): static
     {
         $this->whereStack = [];
 
@@ -187,9 +168,8 @@ trait StackTrait
     /**
      * Empty the having clauses
      *
-     * @return $this
      */
-    public function havingReset()
+    public function havingReset(): static
     {
         $this->havingStack = [];
 
@@ -199,9 +179,8 @@ trait StackTrait
     /**
      * Empty the ordering
      *
-     * @return $this
      */
-    public function orderReset()
+    public function orderReset(): static
     {
         $this->orderStack = [];
 
@@ -211,9 +190,8 @@ trait StackTrait
     /**
      * Empty the grouping fields
      *
-     * @return $this
      */
-    public function groupReset()
+    public function groupReset(): static
     {
         $this->groupStack = [];
 

@@ -26,11 +26,11 @@ interface UnionInterface extends StatementInterface
      * Adds a select statement to the stack
      *
      * @param SelectInterface $select
-     * @param string          $unionType Ignored for the first Select, then
+     * @param string|null     $unionType Ignored for the first Select, then
      *                                   applied to other statements as they
      *                                   are added.
      *
      * @return $this
      */
-    public function setSelect(SelectInterface $select, $unionType = null);
+    public function setSelect(SelectInterface $select, string $unionType = null): static;
 }

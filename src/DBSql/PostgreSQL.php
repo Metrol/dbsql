@@ -16,54 +16,48 @@ class PostgreSQL implements DriverInterface
 {
     /**
      *
-     * @return PostgreSQL\Select
      */
-    public function select()
+    public function select(): PostgreSQL\Select
     {
         return new PostgreSQL\Select;
     }
 
     /**
      *
-     * @return PostgreSQL\With
      */
-    public function with()
+    public function with(): PostgreSQL\With
     {
         return new PostgreSQL\With;
     }
 
     /**
      *
-     * @return PostgreSQL\Union
      */
-    public function union()
+    public function union(): PostgreSQL\Union
     {
         return new PostgreSQL\Union;
     }
 
     /**
      *
-     * @return PostgreSQL\Insert
      */
-    public function insert()
+    public function insert(): PostgreSQL\Insert
     {
         return new PostgreSQL\Insert;
     }
 
     /**
      *
-     * @return PostgreSQL\Update
      */
-    public function update()
+    public function update(): PostgreSQL\Update
     {
         return new PostgreSQL\Update;
     }
 
     /**
      *
-     * @return PostgreSQL\Delete
      */
-    public function delete()
+    public function delete(): PostgreSQL\Delete
     {
         return new PostgreSQL\Delete;
     }

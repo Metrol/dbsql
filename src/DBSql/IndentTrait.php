@@ -17,15 +17,14 @@ trait IndentTrait
     /**
      * String of spaces used to indent the SQL
      *
-     * @var string
      */
-    protected $indent;
+    protected string $indent;
 
     /**
      * Initialize the indent spacer
      *
      */
-    protected function initIndent()
+    protected function initIndent(): void
     {
         $defaultIndent = 4;
 
@@ -35,13 +34,10 @@ trait IndentTrait
     /**
      * Sets the number of spaces to indent the SQL
      *
-     * @param integer $spaces
-     *
-     * @return $this
      */
-    public function setIndent($spaces)
+    public function setIndent(int $spaces): static
     {
-        $this->indent = str_repeat(' ', intval($spaces));
+        $this->indent = str_repeat(' ', $spaces);
 
         return $this;
     }
@@ -49,13 +45,10 @@ trait IndentTrait
     /**
      * Provide the indentation string to prefix text with.
      *
-     * @param integer $depth How many levels of indent deep to return
-     *
-     * @return string
      */
-    protected function indent($depth = 1)
+    protected function indent(int $depth = 1): string
     {
-        return str_repeat($this->indent, intval($depth));
+        return str_repeat($this->indent, $depth);
     }
 
     /**
@@ -66,22 +59,18 @@ trait IndentTrait
      *
      * @return string Indented text
      */
-    protected function indentMultiline($text, $depth)
+    protected function indentMultiline(string $text, int $depth): string
     {
-        return preg_replace('/^/m', str_repeat($this->indent, intval($depth)), $text);
+        return preg_replace('/^/m', str_repeat($this->indent, $depth), $text);
     }
 
     /**
      * Takes in a statement and indents every line by the indent value times
      * the specified depth.
      *
-     * @param StatementInterface $statement
-     * @param integer            $depth     How far to indent
-     *
-     * @return string Indented statement
      */
-    protected function indentStatement(StatementInterface $statement, $depth)
+    protected function indentStatement(StatementInterface $statement, int $depth): string
     {
-        return $this->indentMultiline($statement->output(), intval($depth));
+        return $this->indentMultiline($statement->output(), $depth);
     }
 }

@@ -139,11 +139,11 @@ class Select implements SelectInterface
     /**
      * Add a column/field to what is being requested
      *
-     * @param string $fieldName  Must be quoted correctly for the database
+     * @param string $fieldName Must be quoted correctly for the database
      *
      * @return $this
      */
-    public function field($fieldName)
+    public function field(string $fieldName)
     {
         $fieldString = $this->quoter()->quoteField($fieldName);
 
@@ -193,7 +193,7 @@ class Select implements SelectInterface
      *
      * @return $this
      */
-    public function from($fromName)
+    public function from(string $fromName)
     {
         $tableString = $this->quoter()->quoteTable($fromName);
 
@@ -212,7 +212,7 @@ class Select implements SelectInterface
      *
      * @return $this
      */
-    public function fromSub($alias, SelectInterface $subSelect)
+    public function fromSub(string $alias, SelectInterface $subSelect)
     {
         // Assemble the string
         $fromClause  = '('.PHP_EOL;
@@ -323,7 +323,7 @@ class Select implements SelectInterface
      *
      * @return $this
      */
-    public function join($tableName, $onCriteria, array $bindValues = null)
+    public function join(string $tableName, string $onCriteria, array $bindValues = null)
     {
         $tableName  = $this->quoter()->quoteTable($tableName);
         $onCriteria = $this->bindAssign($onCriteria, $bindValues);
@@ -346,11 +346,11 @@ class Select implements SelectInterface
      * - No data binding is provided here.
      *
      * @param string $tableName
-     * @param string $criteria  Field names for the USING clause
+     * @param string $criteria Field names for the USING clause
      *
      * @return $this
      */
-    public function joinUsing($tableName, $criteria)
+    public function joinUsing(string $tableName, string $criteria)
     {
         $tableName  = $this->quoter()->quoteTable($tableName);
 
@@ -402,8 +402,8 @@ class Select implements SelectInterface
      *
      * @return $this
      */
-    public function joinOuter($joinType, $tableName, $onCriteria,
-                              array $bindValues = null)
+    public function joinOuter(string $joinType, string $tableName, string $onCriteria,
+                              array  $bindValues = null)
     {
         $joinType = strtoupper($joinType);
 
@@ -432,13 +432,13 @@ class Select implements SelectInterface
      * Adds an OUTER JOIN clause to the SELECT statement with USING as the join
      * criteria.  No data binding is provided here.
      *
-     * @param string $joinType   LEFT|RIGHT|FULL
+     * @param string $joinType LEFT|RIGHT|FULL
      * @param string $tableName
-     * @param string $criteria   Field names for the USING clause
+     * @param string $criteria Field names for the USING clause
      *
      * @return $this
      */
-    public function joinOuterUsing($joinType, $tableName, $criteria)
+    public function joinOuterUsing(string $joinType, string $tableName, string $criteria)
     {
         $tableName  = $this->quoter()->quoteTable($tableName);
 
@@ -472,13 +472,13 @@ class Select implements SelectInterface
     /**
      * Add fields to order the result set by
      *
-     * @param string $fieldName
-     * @param string $direction
-     * @param string $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
+     * @param string      $fieldName
+     * @param string|null $direction
+     * @param string|null $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
      *
      * @return $this
      */
-    public function order($fieldName, $direction = null, $nullOrder = null)
+    public function order(string $fieldName, string $direction = null, string $nullOrder = null)
     {
         if ( $direction === null )
         {
@@ -521,7 +521,7 @@ class Select implements SelectInterface
      *
      * @return $this
      */
-    public function groupBy($fieldName)
+    public function groupBy(string $fieldName)
     {
         $groupString = $this->quoter()->quoteField($fieldName);
 
@@ -555,12 +555,12 @@ class Select implements SelectInterface
      * Field names will not be quoted.
      * You must quote where needed yourself.
      *
-     * @param string $criteria   Criteria for an aggregate
+     * @param string $criteria Criteria for an aggregate
      * @param array  $bindValues
      *
      * @return $this
      */
-    public function having($criteria, array $bindValues = null)
+    public function having(string $criteria, array $bindValues = null)
     {
         $havingClause = $this->bindAssign($criteria, $bindValues);
 
@@ -576,7 +576,7 @@ class Select implements SelectInterface
      *
      * @return $this
      */
-    public function limit($rowCount)
+    public function limit(int $rowCount)
     {
         $this->limitVal = intval($rowCount);
 
@@ -591,7 +591,7 @@ class Select implements SelectInterface
      *
      * @return $this
      */
-    public function offset($startRow)
+    public function offset(int $startRow)
     {
         $this->offsetVal = intval($startRow);
 

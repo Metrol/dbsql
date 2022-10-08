@@ -103,7 +103,7 @@ class With implements WithInterface
      *
      * @return $this
      */
-    public function setStatement($alias, StatementInterface $statement)
+    public function setStatement(string $alias, StatementInterface $statement)
     {
         $this->withStack[$alias] = $statement;
 

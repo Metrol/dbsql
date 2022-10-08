@@ -20,5 +20,5 @@ interface CaseWhereInterface extends CaseInterface
      *
      * @return SelectInterface
      */
-    public function endCase();
+    public function endCase(): SelectInterface;
 }

@@ -17,52 +17,45 @@ class Quotable
     /**
      * The character used to open a field quote
      *
-     * @var string
      */
-    protected $fieldOpenQuote;
+    protected string $fieldOpenQuote;
 
     /**
      * The character used to close a field quote
      *
-     * @var string
      */
-    protected $fieldCloseQuote;
+    protected string $fieldCloseQuote;
 
     /**
      * The character used to open a table quote
      *
-     * @var string
      */
-    protected $tableOpenQuote;
+    protected string $tableOpenQuote;
 
     /**
      * The character used to close a table quote
      *
-     * @var string
      */
-    protected $tableCloseQuote;
+    protected string $tableCloseQuote;
 
     /**
      * List of symbols that should never be quoted.
      *
-     * @var array
      */
-    protected $symbols;
+    protected array $symbols;
 
     /**
      * List of keywords that should never be quoted.
      *
-     * @var array
      */
-    protected $keywords;
+    protected array $keywords;
 
     /**
      * When set to false, the methods used for putting quotes around items will
      * only just return what was passed in.
      *
-     * @var bool
      */
-    protected $quoteOn;
+    protected bool $quoteOn;
 
     /**
      * Instantiate the Quotable object
@@ -90,11 +83,8 @@ class Quotable
     /**
      * Enable/disable quoting
      *
-     * @param bool $flag
-     *
-     * @return $this
      */
-    public function enableQuoting($flag)
+    public function enableQuoting(bool $flag): static
     {
         $this->quoteOn = $flag;
 
@@ -104,9 +94,8 @@ class Quotable
     /**
      * Checks to see if quoting is enabled or not
      *
-     * @return boolean
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->quoteOn;
     }
@@ -114,11 +103,8 @@ class Quotable
     /**
      * Quote a field string
      *
-     * @param string $field
-     *
-     * @return string
      */
-    public function quoteField($field)
+    public function quoteField(string $field): string
     {
         // No need to go further if quoting has been turned off
         if ( ! $this->quoteOn )
@@ -127,7 +113,7 @@ class Quotable
         }
 
         // Not going to even try if there are quotes already in this string
-        if ( strpos($field, $this->fieldOpenQuote) !== false )
+        if ( str_contains($field, $this->fieldOpenQuote) )
         {
             return $field;
         }
@@ -142,13 +128,13 @@ class Quotable
                 continue;
             }
 
-            // No quotes for stand alone numbers
+            // No quotes for stand-alone numbers
             if ( is_numeric($part) )
             {
                 continue;
             }
 
-            if ( strpos($part, ':') !== false )
+            if ( str_contains($part, ':') )
             {
                 // Looks like a binding, just move on.
                 continue;
@@ -174,19 +160,14 @@ class Quotable
             }
         }
 
-        $out = implode(' ', $parts);
-
-        return $out;
+        return implode(' ', $parts);
     }
 
     /**
      * Quote a table string
      *
-     * @param string $table
-     *
-     * @return string
      */
-    public function quoteTable($table)
+    public function quoteTable(string $table): string
     {
         // No need to go further if quoting has been turned off
         if ( ! $this->quoteOn )
@@ -195,7 +176,7 @@ class Quotable
         }
 
         // Not going to even try if there are quotes already in this string
-        if ( strpos($table, $this->tableOpenQuote) !== false )
+        if ( str_contains($table, $this->tableOpenQuote) )
         {
             return $table;
         }
@@ -204,7 +185,7 @@ class Quotable
 
         foreach ( $parts as $i => $part )
         {
-            if ( strpos($part, ':') !== false )
+            if ( str_contains($part, ':') )
             {
                 // Looks like a binding, just move on.
                 continue;
@@ -229,19 +210,14 @@ class Quotable
             }
         }
 
-        $out = implode(' ', $parts);
-
-        return $out;
+        return implode(' ', $parts);
     }
 
     /**
      * Takes the input text and wrap field quotes around it.
      *
-     * @param string $in
-     *
-     * @return string
      */
-    protected function fieldWrapWord($in)
+    protected function fieldWrapWord(string $in): string
     {
         $out = $this->fieldOpenQuote;
         $out .= $in;
@@ -253,11 +229,8 @@ class Quotable
     /**
      * Takes the input text and wrap table quotes around it.
      *
-     * @param string $in
-     *
-     * @return string
      */
-    protected function tableWrapWord($in)
+    protected function tableWrapWord(string $in): string
     {
         if ( $in == strtolower($in) )
         {
@@ -279,7 +252,7 @@ class Quotable
      *
      * @return string
      */
-    protected function dotFieldQuote($in)
+    protected function dotFieldQuote(string $in): string
     {
         $out = $in;
 
@@ -293,7 +266,7 @@ class Quotable
             {
                 $out = preg_replace('/(\w+)\./', $oq.'$1'.$cq.'.', $out); // word.
 
-                if ( strpos($parts[0], '(') !== false )
+                if ( str_contains($parts[0], '(') )
                 {
                     $out = preg_replace('/\((\w+)/', '('.$oq.'$1'.$cq, $out); // (word
                     $out = preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out); // word(
@@ -307,7 +280,7 @@ class Quotable
             {
                 $out = preg_replace('/\.(\w+)/', '.'.$oq.'$1'.$cq, $out); // .word
 
-                if ( strpos($parts[1], '(') !== false )
+                if ( str_contains($parts[1], '(') )
                 {
                     $out = preg_replace('/\((\w+)/', '('.$oq.'$1'.$cq, $out); // (word
                     $out = preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out); // word(
@@ -328,11 +301,8 @@ class Quotable
     /**
      * Handles getting quotes around a string that has parentheses involved.
      *
-     * @param string $in
-     *
-     * @return string
      */
-    protected function parenthesesFieldQuote($in)
+    protected function parenthesesFieldQuote(string $in): string
     {
         $out = $in;
 
@@ -340,20 +310,16 @@ class Quotable
         $cq = $this->fieldCloseQuote;
 
         $out = preg_replace('/\((\w+)/', '('.$oq.'$1'.$cq, $out);
-        $out = preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out);
 
-        return $out;
+        return preg_replace('/(\w+)\(/', $oq.'$1'.$cq.'(', $out);
     }
 
     /**
      * Quotes around dot "." notation to deal with schema or alias information
      * properly
      *
-     * @param string $in
-     *
-     * @return string
      */
-    protected function dotTableQuote($in)
+    protected function dotTableQuote(string $in): string
     {
         $parts = explode('.', $in);
 
@@ -374,19 +340,14 @@ class Quotable
             }
         }
 
-        $out = implode('.', $parts);
-
-        return $out;
+        return implode('.', $parts);
     }
 
     /**
      * Handles getting quotes around a string that has parentheses involved.
      *
-     * @param string $in
-     *
-     * @return string
      */
-    protected function parenthesesTableQuote($in)
+    protected function parenthesesTableQuote(string $in): string
     {
         $out = $in;
 

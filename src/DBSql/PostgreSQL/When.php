@@ -78,7 +78,7 @@ class When implements WhenInterface
      * @param string $criteria
      * @param array  $bindValues
      */
-    public function setCriteria($criteria, array $bindValues = null)
+    public function setCriteria(string $criteria, array $bindValues = null)
     {
         $this->criteria = $this->bindAssign($criteria, $bindValues);
         $this->criteria = $this->quoter()->quoteField($this->criteria);
@@ -93,7 +93,7 @@ class When implements WhenInterface
      *
      * @return CaseInterface
      */
-    public function then($thenResult, array $bindValues = null)
+    public function then(string $thenResult, array $bindValues = null)
     {
         $this->thenResult = $this->bindAssign($thenResult, $bindValues);
         $this->thenResult = $this->quoter()->quoteField($this->thenResult);

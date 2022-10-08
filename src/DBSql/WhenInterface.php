@@ -18,19 +18,13 @@ interface WhenInterface extends StatementInterface
      * Adds a WHEN statement to the stack and provides the WHEN object
      * to provide the stack.
      *
-     * @param string $criteria
-     * @param array  $bindValues
      */
-    public function setCriteria($criteria, array $bindValues = null);
+    public function setCriteria(string $criteria, array $bindValues = null): void;
 
     /**
      * Attaches the THEN portion of the WHEN clause and provides back the CASE
      * that called this object.
      *
-     * @param string $thenResult
-     * @param array  $bindValues
-     *
-     * @return CaseInterface
      */
-    public function then($thenResult, array $bindValues = null);
+    public function then(string $thenResult, array $bindValues = null): CaseInterface;
 }

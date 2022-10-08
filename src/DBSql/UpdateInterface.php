@@ -17,51 +17,33 @@ interface UpdateInterface extends StatementInterface
     /**
      * Which database table is being updated
      *
-     * @param string $tableName
-     *
-     * @return $this
      */
-    public function table($tableName);
+    public function table(string $tableName): static;
 
     /**
      * Adds a field value to the stack to update
      *
-     * @param Field\Value $fieldValue
-     *
-     * @return $this
      */
-    public function addFieldValue(Field\Value $fieldValue);
+    public function addFieldValue(Field\Value $fieldValue): static;
 
     /**
      * Add a WHERE clause to the stack of criteria in the UPDATE statement.
      * Each new clause called will be included with an "AND" in between.
      *
-     * @param string      $criteria
-     * @param mixed|array $bindValues
-     *
-     * @return $this
      */
-    public function where($criteria, $bindValues = null);
+    public function where(string $criteria, mixed $bindValues = null): static;
 
     /**
      * Sets up a WHERE entry to see if a field has a value in the array provided
      *
-     * @param string $fieldName
-     * @param array  $values
-     *
-     * @return $this
      */
-    public function whereIn($fieldName, array $values);
+    public function whereIn(string $fieldName, array $values): static;
 
     /**
      * Sets up a WHERE field is in the results of a sub query.  BindingsTrait from
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
      *
-     * @param string          $fieldName
-     * @param SelectInterface $subSelect
-     *
-     * @return $this
      */
-    public function whereInSub($fieldName, SelectInterface $subSelect);
+    public function whereInSub(string $fieldName, SelectInterface $subSelect): static;
 }

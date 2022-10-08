@@ -17,20 +17,13 @@ interface WithInterface extends StatementInterface
     /**
      * Adds a statement to the stack
      *
-     * @param string             $alias
-     * @param StatementInterface $statement
-     *
-     * @return $this
      */
-    public function setStatement($alias, StatementInterface $statement);
+    public function setStatement(string $alias, StatementInterface $statement): static;
 
     /**
      * Sets the suffix of the SQL that is appended after the clauses of the
      * WITH statement.
      *
-     * @param StatementInterface $statement
-     *
-     * @return $this
      */
-    public function setSuffix(StatementInterface $statement);
+    public function setSuffix(StatementInterface $statement): static;
 }

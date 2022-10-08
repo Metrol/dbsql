@@ -18,9 +18,6 @@ interface CaseFieldInterface extends CaseInterface
      * Assembles the CASE statement, pushes it onto the Select object, then
      * passes back the Select object to continue chaining the query.
      *
-     * @param string $alias
-     *
-     * @return SelectInterface
      */
-    public function endCase($alias = null);
+    public function endCase(string $alias = null): SelectInterface;
 }

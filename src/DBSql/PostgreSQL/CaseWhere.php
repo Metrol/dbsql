@@ -77,7 +77,7 @@ class CaseWhere implements CaseWhereInterface
      *
      * @return WhenInterface
      */
-    public function when($criteria, array $bindValues = null)
+    public function when(string $criteria, array $bindValues = null)
     {
         $when = new When($this);
         $when->setCriteria($criteria, $bindValues);

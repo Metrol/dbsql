@@ -18,23 +18,20 @@ trait BindingsTrait
     /**
      * Maintains the list of binding key/value pairs.
      *
-     * @var array
      */
-    protected $bindings;
+    protected array $bindings;
 
     /**
      * The character used to mark a place where a binding needs to go
      *
-     * @var string
      */
-    protected $bindChar = '?';
+    protected string $bindChar = '?';
 
     /**
      * Initialize the binding values, and clears out any existing ones
      *
-     * @return $this
      */
-    public function initBindings()
+    public function initBindings(): static
     {
         $this->bindings = array();
 
@@ -44,9 +41,8 @@ trait BindingsTrait
     /**
      * Provide the bindings as an array suitable for a PDO execute statement
      *
-     * @return array
      */
-    public function getBindings()
+    public function getBindings(): array
     {
         return $this->bindings;
     }
@@ -54,14 +50,10 @@ trait BindingsTrait
     /**
      * Adds a manually named binding to the list
      *
-     * @param string $bindName
-     * @param mixed  $bindValue
-     *
-     * @return $this
      */
-    public function setBinding($bindName, $bindValue)
+    public function setBinding(string $binding, mixed $value): static
     {
-        $this->bindings[$bindName] = $bindValue;
+        $this->bindings[ $binding] = $value;
 
         return $this;
     }
@@ -69,11 +61,8 @@ trait BindingsTrait
     /**
      * Takes in an array of bindings and adds them to the stack
      *
-     * @param array $bindings
-     *
-     * @return $this
      */
-    public function setBindings(array $bindings)
+    public function setBindings(array $bindings): static
     {
         foreach ( $bindings as $key => $value )
         {
@@ -90,11 +79,8 @@ trait BindingsTrait
      * If a binding already exists, it is skipped.  This maintains the value
      * of the parent query.
      *
-     * @param StatementInterface $statement
-     *
-     * @return $this
      */
-    protected function mergeBindings(StatementInterface $statement)
+    protected function mergeBindings(StatementInterface $statement): static
     {
         $subBinding = $statement->getBindings();
 
@@ -112,13 +98,10 @@ trait BindingsTrait
     /**
      * Provide a generated binding label to use.
      *
-     * @return string
      */
-    public function getBindLabel()
+    public function getBindLabel(): string
     {
-        $label = ':_' . uniqid() . '_';
-
-        return $label;
+        return ':_' . uniqid() . '_';
     }
 
     /**
@@ -127,15 +110,15 @@ trait BindingsTrait
      * named binding and records the value to be passed to PDO when executing
      * the statement.
      *
-     * @param string $in     The sub portion of the SQL that may have ? place
-     *                       holders in it.
-     * @param array  $values List of values that must match the same number of
-     *                       place holders.  If null, just returns the $in value
+     * @param string     $in     The sub portion of the SQL that may have ? place
+     *                           holders in it.
+     * @param array|null $values List of values that must match the same number of
+     *                           placeholders.  If null, just returns the $in value
      *
      * @return string Provide the same clause back, with every ? replaced with
      *                a named binding as it has been assigned in this object
      */
-    protected function bindAssign($in, array $values = null)
+    protected function bindAssign(string $in, array $values = null): string
     {
         $out = $in;
 

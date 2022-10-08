@@ -67,7 +67,7 @@ class Update implements UpdateInterface
      *
      * @return $this
      */
-    public function table($tableName)
+    public function table(string $tableName)
     {
         $this->table = $this->quoter()->quoteTable($tableName);
 

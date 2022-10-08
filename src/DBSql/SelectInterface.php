@@ -14,76 +14,72 @@ namespace Metrol\DBSql;
  */
 interface SelectInterface extends StatementInterface, StackInterface
 {
+    const JOIN_FULL  = 'FULL';
+    const JOIN_RIGHT = 'RIGHT';
+    const JOIN_LEFT  = 'LEFT';
+
+    const NULL_FIRST = 'NULLS FIRST';
+    const NULL_LAST  = 'NULLS LAST';
+
+    const DIR_ASC    = 'ASC';
+    const DIR_DESC   = 'DESC';
+
     /**
      * Add a column/field to what is being requested
      *
-     * @param string $fieldName  Must be quoted correctly for the database
-     *
-     * @return $this
      */
-    public function field($fieldName);
+    public function field(string $fieldName): static;
 
     /**
      * Sets the fields going to the select request.
      * Replaces any fields already set.
      *
-     * @param array $fieldNames
-     *
-     * @return $this
      */
-    public function fields(array $fieldNames);
+    public function fields(array $fieldNames): static;
 
     /**
      * Adds a CASE/WHEN/THEN structure to the field stack.
      * When chaining calls, you must call the Case->end() method to get this
      * object back.
      *
-     * @return CaseFieldInterface
      */
-    public function caseField();
+    public function caseField(): CaseFieldInterface;
 
     /**
      * Add a data source to the FROM clause of the query.
      *
-     * @param string $fromName
-     *
-     * @return $this
      */
-    public function from($fromName);
+    public function from(string $fromName): static;
 
     /**
      * Add a sub select as a data source in the FROM clause of the query.
      * Any bindings from the sub select will be merged with the parent SELECT
      * statement.  Conflicts will defer to the parent value.
      *
-     * @param string          $alias
-     * @param SelectInterface $subSelect
-     *
-     * @return $this
      */
-    public function fromSub($alias, SelectInterface $subSelect);
+    public function fromSub(string $alias, SelectInterface $subSelect): static;
 
     /**
      * Adds an INNER JOIN clause to the SELECT statement.
      *
      * @param string $tableName
      * @param string $onCriteria ON criteria for the JOIN.
-     * @param array  $bindValues List of values to bind into the criteria
+     * @param ?array $bindValues List of values to bind into the criteria
      *
      * @return $this
      */
-    public function join($tableName, $onCriteria, array $bindValues = null);
+    public function join(string $tableName, string $onCriteria, array $bindValues = null): static;
 
     /**
-     * Adds an INNER JOIN clause to the SELECT statement with USING as the the join
+     * Adds an INNER JOIN clause to the SELECT statement with USING as the join
      * criteria.  No data binding is provided here.
      *
      * @param string $tableName
-     * @param string $criteria   Field names for the USING clause
+     * @param string $criteria Field names for the USING clause
      *
      * @return $this
      */
-    public function joinUsing($tableName, $criteria);
+    public function joinUsing(string $tableName, string $criteria): static;
 
     /**
      * Adds a LEFT/RIGHT/FULL OUTER JOIN clause to the SELECT statement.
@@ -91,137 +87,101 @@ interface SelectInterface extends StatementInterface, StackInterface
      * @param string $joinType   LEFT|RIGHT|FULL
      * @param string $tableName
      * @param string $onCriteria ON criteria for the JOIN.
-     * @param array  $bindValues List of values to bind into the criteria
+     * @param ?array $bindValues List of values to bind into the criteria
      *
      * @return $this
      */
-    public function joinOuter($joinType, $tableName, $onCriteria,
-                              array $bindValues = null);
+    public function joinOuter(string $joinType, string $tableName, string $onCriteria,
+                              array $bindValues = null): static;
 
     /**
      * Adds an OUTER JOIN clause to the SELECT statement with USING as the
      * join criteria.  No data binding is provided here.
      *
-     * @param string $joinType   LEFT|RIGHT|FULL
+     * @param string $joinType LEFT|RIGHT|FULL
      * @param string $tableName
-     * @param string $criteria   Field names for the USING clause
+     * @param string $criteria Field names for the USING clause
      *
      * @return $this
      */
-    public function joinOuterUsing($joinType, $tableName, $criteria);
+    public function joinOuterUsing(string $joinType, string $tableName, string $criteria): static;
 
     /**
      * Add a WHERE clause to the stack of criteria in the SELECT statement.
      * Each new clause called will be included with an "AND" in between.
      *
-     * @param string      $criteria
-     * @param mixed|array $bindValues
-     *
-     * @return $this
      */
-    public function where($criteria, $bindValues = null);
+    public function where(string $criteria, mixed $bindValues = null): static;
 
     /**
      * Sets up a WHERE entry to see if a field has a value in the array provided
      *
-     * @param string $fieldName
-     * @param array  $values
-     *
-     * @return $this
      */
-    public function whereIn($fieldName, array $values);
+    public function whereIn(string $fieldName, array $values): static;
 
     /**
      * Sets up a WHERE entry to see if a field does not have value in the array
      * provided.
      *
-     * @param string $fieldName
-     * @param array  $values
-     *
-     * @return $this
      */
-    public function whereNotIn($fieldName, array $values);
+    public function whereNotIn(string $fieldName, array $values): static;
 
     /**
      * Sets up a WHERE field is in the results of a sub query.  BindingsTrait from
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
      *
-     * @param string          $fieldName
-     * @param SelectInterface $subSelect
-     *
-     * @return $this
      */
-    public function whereInSub($fieldName, SelectInterface $subSelect);
+    public function whereInSub(string $fieldName, SelectInterface $subSelect): static;
 
     /**
      * Sets up a WHERE field is not in the results of a sub query.  BindingsTrait from
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
      *
-     * @param string          $fieldName
-     * @param SelectInterface $subSelect
-     *
-     * @return $this
      */
-    public function whereNotInSub($fieldName, SelectInterface $subSelect);
+    public function whereNotInSub(string $fieldName, SelectInterface $subSelect): static;
 
     /**
      * Add fields to order the result set by
      *
-     * @param string $fieldName
-     * @param string $direction ASC by default
-     * @param string $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
+     * @param string      $fieldName
+     * @param string|null $direction ASC by default
+     * @param string|null $nullOrder 'NULLS FIRST' | 'NULLS LAST' Defaults to LAST
      *
      * @return $this
      */
-    public function order($fieldName, $direction = null, $nullOrder = null);
+    public function order(string $fieldName, string $direction = null, string $nullOrder = null): static;
 
     /**
      * Add a field to the GROUP BY clause.
      *
-     * @param string $fieldName
-     *
-     * @return $this
      */
-    public function groupBy($fieldName);
+    public function groupBy(string $fieldName): static;
 
     /**
      * Add a set of fields to the GROUP BY clause
      *
-     * @param string[] $fieldNames
-     *
-     * @return $this
      */
-    public function groupByFields(array $fieldNames);
+    public function groupByFields(array $fieldNames): static;
 
     /**
      * Add a HAVING clause to the stack of criteria in the SELECT statement.
      * Each new clause called will be included with an "AND" in between.
      *
-     * @param string $criteria Criteria for an aggregate
-     * @param array  $bindValues
-     *
-     * @return $this
      */
-    public function having($criteria, array $bindValues = null);
+    public function having(string $criteria, array $bindValues = null): static;
 
     /**
      * Sets the limit for how many rows to pull back from the query.
      *
-     * @param integer $rowCount
-     *
-     * @return $this
      */
-    public function limit($rowCount);
+    public function limit(int $rowCount): static;
 
     /**
      * Sets the offset for which row to start with on the result set from the
      * query.
      *
-     * @param integer $startRow
-     *
-     * @return $this
      */
-    public function offset($startRow);
+    public function offset(int $startRow): static;
 }

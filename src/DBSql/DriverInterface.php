@@ -16,37 +16,31 @@ interface DriverInterface
 {
     /**
      *
-     * @return SelectInterface
      */
-    public function select();
+    public function select(): SelectInterface;
 
     /**
      *
-     * @return WithInterface
      */
-    public function with();
+    public function with(): WithInterface;
 
     /**
      *
-     * @return UnionInterface
      */
-    public function union();
+    public function union(): UnionInterface;
 
     /**
      *
-     * @return InsertInterface
      */
-    public function insert();
+    public function insert(): InsertInterface;
 
     /**
      *
-     * @return UpdateInterface
      */
-    public function update();
+    public function update(): UpdateInterface;
 
     /**
      *
-     * @return DeleteInterface
      */
-    public function delete();
+    public function delete(): DeleteInterface;
 }

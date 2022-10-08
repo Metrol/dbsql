@@ -17,14 +17,12 @@ interface FromInterface
     /**
      * Produce the text of the clause
      *
-     * @return string
      */
-    public function output();
+    public function output(): string;
 
     /**
      * Fetch any bindings that may have been used
      *
-     * @return array
      */
-    public function getBindings();
+    public function getBindings(): array;
 }

@@ -28,7 +28,7 @@ trait WhereTrait
      *
      * @return $this
      */
-    public function where($criteria, $bindValues = null)
+    public function where(string $criteria, $bindValues = null)
     {
         if ( !is_array($bindValues) )
         {
@@ -55,7 +55,7 @@ trait WhereTrait
      *
      * @return $this
      */
-    public function whereIn($fieldName, array $values)
+    public function whereIn(string $fieldName, array $values)
     {
         /**
          * @var StatementInterface $this
@@ -78,7 +78,7 @@ trait WhereTrait
      *
      * @return $this
      */
-    public function whereNotIn($fieldName, array $values)
+    public function whereNotIn(string $fieldName, array $values)
     {
         /**
          * @var StatementInterface $this
@@ -102,7 +102,7 @@ trait WhereTrait
      *
      * @return $this
      */
-    public function whereInSub($fieldName, SelectInterface $subSelect)
+    public function whereInSub(string $fieldName, SelectInterface $subSelect)
     {
         /**
          * @var StatementInterface $this
@@ -126,7 +126,7 @@ trait WhereTrait
      *
      * @return $this
      */
-    public function whereNotInSub($fieldName, SelectInterface $subSelect)
+    public function whereNotInSub(string $fieldName, SelectInterface $subSelect)
     {
         /**
          * @var StatementInterface $this
