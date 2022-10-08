@@ -8,10 +8,8 @@
 
 namespace Metrol\DBSql\PostgreSQL\With;
 
-use Metrol\DBSql\PostgreSQL\QuoterTrait;
-use Metrol\DBSql\PostgreSQL\Union;
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
+use Metrol\DBSql\PostgreSQL\{QuoterTrait, Union};
+use Metrol\DBSql\{BindingsTrait, IndentTrait};
 
 /**
  * All the parts of a Recursive clause for a With statement
@@ -24,23 +22,20 @@ class Recursive
     /**
      * The SQL Union Statement to be included in the Recursive clause
      *
-     * @var Union
      */
-    protected $union;
+    protected Union $union;
 
     /**
      * The alias this clause will be referred to as
      *
-     * @var string
      */
-    protected $alias;
+    protected string $alias = '';
 
     /**
      * List of fields to be specified
      *
-     * @var array
      */
-    protected $fields;
+    protected array $fields = [];
 
     /**
      * Instantiate and initialize the object
@@ -50,18 +45,13 @@ class Recursive
     {
         $this->initBindings();
         $this->initIndent();
-
-        $this->union = null;
-        $this->alias     = '';
-        $this->fields    = array();
     }
 
     /**
      * Just a fast way to call the output() method
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->output().PHP_EOL;
     }
@@ -69,9 +59,8 @@ class Recursive
     /**
      * Produces the output of all the information that was set in the object.
      *
-     * @return string Formatted SQL
      */
-    public function output()
+    public function output(): string
     {
         return $this->buildSQL();
     }
@@ -79,12 +68,8 @@ class Recursive
     /**
      * Sets the union for the recursive clause
      *
-     * @param string $alias
-     * @param Union  $union
-     *
-     * @return $this
      */
-    public function setUnion($alias, Union $union)
+    public function setUnion(string $alias, Union $union): static
     {
         $this->union = $union;
         $this->alias = $alias;
@@ -95,11 +80,8 @@ class Recursive
     /**
      * Set the fields that will be referenced back in the recursive clause
      *
-     * @param array $fields
-     *
-     * @return $this
      */
-    public function setFields(array $fields)
+    public function setFields(array $fields): static
     {
         $this->fields = $fields;
 
@@ -110,13 +92,12 @@ class Recursive
      * Used to determine if this object has been populated.  Must have a
      * union statement and alias to return true.
      *
-     * @return boolean
      */
-    public function isReady()
+    public function isReady(): bool
     {
         $rtn = false;
 
-        if ( $this->union !== null and !empty($this->alias) )
+        if ( isset($this->union) and ! empty($this->alias) )
         {
             $rtn = true;
         }
@@ -127,9 +108,8 @@ class Recursive
     /**
      * Build out the SQL and gather all the bindings to be ready to push to PDO
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         if ( !$this->isReady() )
         {

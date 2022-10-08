@@ -8,8 +8,7 @@
 
 namespace Metrol\DBSql\PostgreSQL\Where;
 
-use Metrol\DBSql\WhereInterface;
-use Metrol\DBSql\BindingsTrait;
+use Metrol\DBSql\{WhereInterface, BindingsTrait};
 use Metrol\DBSql\PostgreSQL\QuoterTrait;
 
 /**
@@ -23,18 +22,14 @@ class Values implements WhereInterface
     /**
      * Output string
      *
-     * @var string
      */
-    private $outString;
+    private string $outString;
 
     /**
      * Instantiate the Values object
      *
-     * @param string  $field
-     * @param array   $values
-     * @param boolean $valueIn
      */
-    public function __construct($field, array $values, $valueIn = true)
+    public function __construct(string $field, array $values, bool $valueIn = true)
     {
         $fieldString = $this->quoter()->quoteField($field);
 
@@ -59,9 +54,8 @@ class Values implements WhereInterface
     /**
      * Produce the WHERE clause
      *
-     * @return string
      */
-    public function output()
+    public function output(): string
     {
         return $this->outString;
     }

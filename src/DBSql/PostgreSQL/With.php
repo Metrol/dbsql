@@ -26,24 +26,21 @@ class With implements WithInterface
     /**
      * The collection of statements that are keyed by their alias name.
      *
-     * @var Select[]
      */
-    protected $withStack;
+    protected array $withStack = [];
 
     /**
      * The last portion of the SQL following the rest of the WITH statement
      *
-     * @var string
      */
-    protected $suffix;
+    protected string $suffix = '';
 
     /**
      * Contains the Select statement, the fields, and alias for a recursive
      * With statement.
      *
-     * @var With/Recursive
      */
-    protected $recursive;
+    protected Recursive $recursive;
 
     /**
      * Instantiate and initialize the object
@@ -54,19 +51,16 @@ class With implements WithInterface
         $this->initBindings();
         $this->initIndent();
 
-        $this->withStack     = array();
-        $this->suffix        = '';
-        $this->recursive     = new Recursive;
+        $this->recursive = new Recursive;
     }
 
     /**
      * Just a fast way to call the output() method
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->output().PHP_EOL;
+        return $this->output() . PHP_EOL;
     }
 
     /**
@@ -74,18 +68,14 @@ class With implements WithInterface
      * This needs the alias of the clause, a union statement to appear within it,
      * and optional fields.
      *
-     * @param string $alias
-     * @param Union  $union
-     * @param array  $fields
-     *
-     * @return $this
      */
-    public function setRecursive($alias, Union $union,
-                                 array $fields = null)
+    public function setRecursive(string $alias,
+                                 Union  $union,
+                                 array  $fields = null): static
     {
         $this->recursive->setUnion($alias, $union);
 
-        if ( $fields !== null and !empty($fields) )
+        if ( ! empty($fields) )
         {
             $this->recursive->setFields($fields);
         }
@@ -98,12 +88,8 @@ class With implements WithInterface
     /**
      * Adds a statement to the stack
      *
-     * @param string             $alias
-     * @param StatementInterface $statement
-     *
-     * @return $this
      */
-    public function setStatement(string $alias, StatementInterface $statement)
+    public function setStatement(string $alias, StatementInterface $statement): static
     {
         $this->withStack[$alias] = $statement;
 
@@ -114,11 +100,8 @@ class With implements WithInterface
      * Sets the suffix of the SQL that is appended after the clauses of the
      * WITH statement.
      *
-     * @param StatementInterface $statement
-     *
-     * @return $this
      */
-    public function setSuffix(StatementInterface $statement)
+    public function setSuffix(StatementInterface $statement): static
     {
         $this->suffix = $statement->output();
 
@@ -128,9 +111,8 @@ class With implements WithInterface
     /**
      * Build out the SQL and gather all the bindings to be ready to push to PDO
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         $sql = 'WITH';
 
@@ -144,9 +126,8 @@ class With implements WithInterface
     /**
      * Build the Recursive portion of the SQL
      *
-     * @return string
      */
-    protected function buildRecursive()
+    protected function buildRecursive(): string
     {
         $sql = '';
 
@@ -162,9 +143,8 @@ class With implements WithInterface
     /**
      * Builds the statements and returns the result
      *
-     * @return string
      */
-    protected function buildStatements()
+    protected function buildStatements(): string
     {
         if ( empty($this->withStack) )
         {
@@ -191,17 +171,14 @@ class With implements WithInterface
             $this->mergeBindings($statement);
         }
 
-        $sql = substr($sql, 0, -2);
-
-        return $sql;
+        return substr($sql, 0, -2);
     }
 
     /**
      * Build the suffix portion of the With statement
      *
-     * @return string
      */
-    protected function buildSuffix()
+    protected function buildSuffix(): string
     {
         $sql = '';
 

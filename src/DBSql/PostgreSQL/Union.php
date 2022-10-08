@@ -25,16 +25,14 @@ class Union implements UnionInterface
     /**
      * PostgreSQL uses a DISTINCT union by default.
      *
-     * @const
      */
     const DEFAULT_UNION = self::UNION_DISTINCT;
 
     /**
      * The collection of Select Statements and Union types
      *
-     * @var array
      */
-    protected $unionStack;
+    protected array $unionStack = [];
 
     /**
      * Instantiate and initialize the object
@@ -44,8 +42,6 @@ class Union implements UnionInterface
     {
         $this->initBindings();
         $this->initIndent();
-
-        $this->unionStack = array();
     }
 
     /**
@@ -68,7 +64,7 @@ class Union implements UnionInterface
      *
      * @return $this
      */
-    public function setSelect(SelectInterface $select, string $unionType = null)
+    public function setSelect(SelectInterface $select, string $unionType = null): static
     {
         $ut = '';
 
@@ -102,7 +98,7 @@ class Union implements UnionInterface
      *
      * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         // Takes two to tango in this rodeo
         if ( count($this->unionStack) < 2 )

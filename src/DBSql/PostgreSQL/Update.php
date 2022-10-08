@@ -8,11 +8,8 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\UpdateInterface;
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\StackTrait;
-use Metrol\DBSql\OutputTrait;
+use Metrol\DBSql\{UpdateInterface, BindingsTrait, IndentTrait, StackTrait,
+                  OutputTrait};
 
 /**
  * Creates an Update SQL statement for PostgreSQL
@@ -20,21 +17,21 @@ use Metrol\DBSql\OutputTrait;
  */
 class Update implements UpdateInterface
 {
-    use OutputTrait, BindingsTrait, IndentTrait, StackTrait, QuoterTrait, WhereTrait;
+    use OutputTrait, BindingsTrait, IndentTrait, StackTrait, QuoterTrait,
+        WhereTrait;
 
     /**
      * The table the update is targeted at.
      *
-     * @var string
      */
-    protected $table;
+    protected string $table = '';
 
     /**
      * Can be set to request a value to be returned from the update
      *
      * @var string
      */
-    protected $returningField;
+    protected string $returningField;
 
     /**
      * Instantiate and initialize the object
@@ -45,17 +42,13 @@ class Update implements UpdateInterface
         $this->initBindings();
         $this->initIndent();
         $this->initStacks();
-
-        $this->table          = '';
-        $this->returningField = null;
     }
 
     /**
      * Just a fast way to call the output() method
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->output() . PHP_EOL;
     }
@@ -63,11 +56,8 @@ class Update implements UpdateInterface
     /**
      * Set the table that is targeted for the data.
      *
-     * @param string $tableName
-     *
-     * @return $this
      */
-    public function table(string $tableName)
+    public function table(string $tableName): static
     {
         $this->table = $this->quoter()->quoteTable($tableName);
 
@@ -77,11 +67,8 @@ class Update implements UpdateInterface
     /**
      * Request back an auto sequencing field by name
      *
-     * @param string $fieldName
-     *
-     * @return $this
      */
-    public function returning($fieldName)
+    public function returning(string $fieldName): static
     {
         $this->returningField = $this->quoter()->quoteField($fieldName);
 
@@ -91,9 +78,8 @@ class Update implements UpdateInterface
     /**
      * Build the UPDATE statement
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         $this->buildBindings();
 
@@ -113,7 +99,7 @@ class Update implements UpdateInterface
      * this update query.
      *
      */
-    protected function buildBindings()
+    protected function buildBindings(): void
     {
         $this->setBindings( $this->fieldValueSet->getBoundValues() );
     }
@@ -121,7 +107,6 @@ class Update implements UpdateInterface
     /**
      * Build the table that will be getting updated
      *
-     * @return string
      */
     protected function buildTable(): string
     {
@@ -130,15 +115,12 @@ class Update implements UpdateInterface
             return PHP_EOL;
         }
 
-        $sql = PHP_EOL . $this->indent() . $this->table . PHP_EOL;
-
-        return $sql;
+        return PHP_EOL . $this->indent() . $this->table . PHP_EOL;
     }
 
     /**
-     * Build the field value assignements area of the statement
+     * Build the field value assignments area of the statement
      *
-     * @return string
      */
     protected function buildFieldValues(): string
     {
@@ -167,9 +149,8 @@ class Update implements UpdateInterface
     /**
      * Build out the WHERE clause
      *
-     * @return string
      */
-    protected function buildWhere()
+    protected function buildWhere(): string
     {
         $sql = '';
         $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
@@ -199,13 +180,12 @@ class Update implements UpdateInterface
     /**
      * Build the returning clause of the statement
      *
-     * @return string
      */
-    protected function buildReturning()
+    protected function buildReturning(): string
     {
         $sql = '';
 
-        if ( $this->returningField !== null )
+        if ( isset($this->returningField) )
         {
             $sql .= 'RETURNING'.PHP_EOL;
             $sql .= $this->indent().$this->returningField.PHP_EOL;

@@ -8,10 +8,7 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\BindingsTrait;
-use Metrol\DBSql\CaseInterface;
-use Metrol\DBSql\IndentTrait;
-use Metrol\DBSql\WhenInterface;
+use Metrol\DBSql\{BindingsTrait, CaseInterface, IndentTrait, WhenInterface};
 
 /**
  * Holds the When part of a Case/When statement
@@ -25,34 +22,28 @@ class When implements WhenInterface
      * The Case object that called this one into being.  Saved here to pass
      * back after the Then value is given.
      *
-     * @var CaseInterface
      */
-    protected $caseObj;
+    protected CaseInterface $caseObj;
 
     /**
      * The criteria string for this When
      *
-     * @var string
      */
-    protected $criteria;
+    protected string $criteria;
 
     /**
      * The result if the criteria is true
      *
-     * @var string
      */
-    protected $thenResult;
+    protected string $thenResult;
 
     /**
      * Instantiate and initialize the object
      *
-     * @param CaseInterface $caseObj
      */
     public function __construct(CaseInterface $caseObj)
     {
         $this->caseObj    = $caseObj;
-        $this->criteria   = null;
-        $this->thenResult = null;
 
         $this->initBindings();
         $this->initIndent();
@@ -62,23 +53,18 @@ class When implements WhenInterface
      * Provide the output of this WHEN object all ready to be included into the
      * CASE statement
      *
-     * @return string
      */
-    public function output()
+    public function output(): string
     {
-        $rtn = $this->buildSQL();
-
-        return $rtn;
+        return $this->buildSQL();
     }
 
     /**
      * Adds a WHEN statement to the stack and provides the WHEN object
      * to provide the stack.
      *
-     * @param string $criteria
-     * @param array  $bindValues
      */
-    public function setCriteria(string $criteria, array $bindValues = null)
+    public function setCriteria(string $criteria, array $bindValues = null): void
     {
         $this->criteria = $this->bindAssign($criteria, $bindValues);
         $this->criteria = $this->quoter()->quoteField($this->criteria);
@@ -88,12 +74,8 @@ class When implements WhenInterface
      * Attaches the THEN portion of the WHEN clause and provides back the CASE
      * that called this object.
      *
-     * @param string $thenResult
-     * @param array  $bindValues
-     *
-     * @return CaseInterface
      */
-    public function then(string $thenResult, array $bindValues = null)
+    public function then(string $thenResult, array $bindValues = null): CaseInterface
     {
         $this->thenResult = $this->bindAssign($thenResult, $bindValues);
         $this->thenResult = $this->quoter()->quoteField($this->thenResult);
@@ -104,9 +86,8 @@ class When implements WhenInterface
     /**
      * Assembles the CASE statement for the Select statement
      *
-     * @retrun string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         $sql = 'WHEN ';
         $sql .= $this->criteria.' THEN'.PHP_EOL;

@@ -15,7 +15,7 @@ use Metrol\DBSql\StackTrait;
 use Metrol\DBSql\OutputTrait;
 
 /**
- * Creates an Delete SQL statement for PostgreSQL
+ * Creates a Delete SQL statement for PostgreSQL
  *
  */
 class Delete implements DeleteInterface
@@ -23,18 +23,16 @@ class Delete implements DeleteInterface
     use OutputTrait, BindingsTrait, IndentTrait, StackTrait, QuoterTrait, WhereTrait;
 
     /**
-     * The table the delete is targeted at.
+     * The table delete is targeted at.
      *
-     * @var string
      */
-    protected $table;
+    protected string $table = '';
 
     /**
      * Can be set to request a value to be returned from the update
      *
-     * @var string
      */
-    protected $returningField;
+    protected string $returningField;
 
     /**
      * Instantiate and initialize the object
@@ -45,29 +43,22 @@ class Delete implements DeleteInterface
         $this->initBindings();
         $this->initIndent();
         $this->initStacks();
-
-        $this->table          = '';
-        $this->returningField = null;
     }
 
     /**
      * Just a fast way to call the output() method
      *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->output().PHP_EOL;
+        return $this->output() . PHP_EOL;
     }
 
     /**
      * Set the table that is targeted to delete data from
      *
-     * @param string $tableName
-     *
-     * @return $this
      */
-    public function table($tableName)
+    public function table(string $tableName): static
     {
         $this->table = $this->quoter()->quoteTable($tableName);
 
@@ -77,11 +68,8 @@ class Delete implements DeleteInterface
     /**
      * Request back information on the rows that were deleted
      *
-     * @param string $fieldName
-     *
-     * @return $this
      */
-    public function returning($fieldName)
+    public function returning(string $fieldName): static
     {
         $this->returningField = $this->quoter()->quoteField($fieldName);
 
@@ -91,11 +79,10 @@ class Delete implements DeleteInterface
     /**
      * Build the DELETE statement
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
-        $sql = 'DELETE'.PHP_EOL;
+        $sql = 'DELETE' . PHP_EOL;
 
         $sql .= $this->buildTable();
         $sql .= $this->buildWhere();
@@ -107,17 +94,16 @@ class Delete implements DeleteInterface
     /**
      * Build out the table that will have records deleted from
      *
-     * @return string
      */
-    protected function buildTable()
+    protected function buildTable(): string
     {
         if ( empty($this->table) )
         {
             return '';
         }
 
-        $sql = 'FROM'.PHP_EOL;
-        $sql .= $this->indent().$this->table.PHP_EOL;
+        $sql = 'FROM' . PHP_EOL;
+        $sql .= $this->indent() . $this->table . PHP_EOL;
 
         return $sql;
     }
@@ -125,9 +111,8 @@ class Delete implements DeleteInterface
     /**
      * Build out the WHERE clause
      *
-     * @return string
      */
-    protected function buildWhere()
+    protected function buildWhere(): string
     {
         $sql = '';
         $delimeter = PHP_EOL.$this->indent().'AND'.PHP_EOL.$this->indent();
@@ -146,9 +131,9 @@ class Delete implements DeleteInterface
 
         if ( ! empty($clauses) )
         {
-            $sql .= 'WHERE'.PHP_EOL;
+            $sql .= 'WHERE' . PHP_EOL;
             $sql .= $this->indent();
-            $sql .= implode($delimeter, $clauses).PHP_EOL;
+            $sql .= implode($delimeter, $clauses) . PHP_EOL;
         }
 
         return $sql;
@@ -157,16 +142,15 @@ class Delete implements DeleteInterface
     /**
      * Build the returning clause of the statement
      *
-     * @return string
      */
-    protected function buildReturning()
+    protected function buildReturning(): string
     {
         $sql = '';
 
-        if ( $this->returningField !== null )
+        if ( isset($this->returningField) )
         {
-            $sql .= 'RETURNING'.PHP_EOL;
-            $sql .= $this->indent().$this->returningField.PHP_EOL;
+            $sql .= 'RETURNING' . PHP_EOL;
+            $sql .= $this->indent() . $this->returningField . PHP_EOL;
         }
 
         return $sql;

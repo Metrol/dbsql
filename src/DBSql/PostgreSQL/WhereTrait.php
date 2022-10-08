@@ -8,7 +8,6 @@
 
 namespace Metrol\DBSql\PostgreSQL;
 
-use Metrol\DBSql\StatementInterface;
 use Metrol\DBSql\SelectInterface;
 use Metrol\DBSql\WhereInterface;
 
@@ -23,21 +22,14 @@ trait WhereTrait
      * Add a WHERE clause to the stack of criteria in the SELECT statement.
      * Each new clause called will be included with an "AND" in between.
      *
-     * @param string      $criteria
-     * @param mixed|array $bindValues
-     *
-     * @return $this
      */
-    public function where(string $criteria, $bindValues = null)
+    public function where(string $criteria, mixed $bindValues = null): static
     {
         if ( !is_array($bindValues) )
         {
             $bindValues = [$bindValues];
         }
 
-        /**
-         * @var StatementInterface $this
-         */
         $whereClause = new Where($this);
 
         $whereClause->setCriteria($criteria, $bindValues);
@@ -50,16 +42,9 @@ trait WhereTrait
     /**
      * Sets up a WHERE entry to see if a field has a value in the array provided
      *
-     * @param string $fieldName
-     * @param array  $values
-     *
-     * @return $this
      */
-    public function whereIn(string $fieldName, array $values)
+    public function whereIn(string $fieldName, array $values): static
     {
-        /**
-         * @var StatementInterface $this
-         */
         $whereClause = new Where($this);
 
         $whereClause->setInList($fieldName, $values, true);
@@ -73,16 +58,9 @@ trait WhereTrait
      * Sets up a WHERE entry to see if a field does not have value in the array
      * provided.
      *
-     * @param string $fieldName
-     * @param array  $values
-     *
-     * @return $this
      */
-    public function whereNotIn(string $fieldName, array $values)
+    public function whereNotIn(string $fieldName, array $values): static
     {
-        /**
-         * @var StatementInterface $this
-         */
         $whereClause = new Where($this);
 
         $whereClause->setInList($fieldName, $values, false);
@@ -97,16 +75,9 @@ trait WhereTrait
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
      *
-     * @param string          $fieldName
-     * @param SelectInterface $subSelect
-     *
-     * @return $this
      */
-    public function whereInSub(string $fieldName, SelectInterface $subSelect)
+    public function whereInSub(string $fieldName, SelectInterface $subSelect): static
     {
-        /**
-         * @var StatementInterface $this
-         */
         $whereClause = new Where($this);
 
         $whereClause->setInSelect($fieldName, $subSelect, true);
@@ -121,16 +92,9 @@ trait WhereTrait
      * the specified sub query are merged as able.  This object (the parent
      * query) has the final say on a binding value when there is a conflict.
      *
-     * @param string          $fieldName
-     * @param SelectInterface $subSelect
-     *
-     * @return $this
      */
-    public function whereNotInSub(string $fieldName, SelectInterface $subSelect)
+    public function whereNotInSub(string $fieldName, SelectInterface $subSelect): static
     {
-        /**
-         * @var StatementInterface $this
-         */
         $whereClause = new Where($this);
 
         $whereClause->setInSelect($fieldName, $subSelect, false);
@@ -148,9 +112,6 @@ trait WhereTrait
     /**
      * Push a value on to the WHERE stack
      *
-     * @param WhereInterface $whereClause
-     *
-     * @return $this
      */
-    abstract protected function wherePush(WhereInterface $whereClause);
+    abstract protected function wherePush(WhereInterface $whereClause): static;
 }

@@ -27,24 +27,21 @@ class Insert implements InsertInterface
     /**
      * The table the insert is targeted at.
      *
-     * @var string
      */
-    protected $tableInto;
+    protected string $tableInto = '';
 
     /**
      * Can be set to request a value to be returned from the insert
      *
-     * @var string|null
      */
-    protected $returningFields;
+    protected array $returningFields = [];
 
     /**
      * When specified, this SELECT statement will be used as the source of
      * values for the INSERT.
      *
-     * @var Select|null
      */
-    protected $select;
+    protected SelectInterface $select;
 
     /**
      * Instantiate and initialize the object
@@ -55,10 +52,6 @@ class Insert implements InsertInterface
         $this->initBindings();
         $this->initIndent();
         $this->initStacks();
-
-        $this->tableInto       = '';
-        $this->returningFields = [];
-        $this->select          = null;
     }
 
     /**
@@ -66,19 +59,16 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->output().PHP_EOL;
+        return $this->output() . PHP_EOL;
     }
 
     /**
      * Set the table that is targeted for the data.
      *
-     * @param string $tableName
-     *
-     * @return $this
      */
-    public function table(string $tableName)
+    public function table(string $tableName): static
     {
         $this->tableInto = $this->quoter()->quoteTable($tableName);
 
@@ -91,11 +81,8 @@ class Insert implements InsertInterface
      * - Any values that have been set will be ignored.
      * - Any bindings from the Select statement will be merged.
      *
-     * @param SelectInterface $select
-     *
-     * @return $this
      */
-    public function valueSelect(SelectInterface $select)
+    public function valueSelect(SelectInterface $select): static
     {
         $this->select = $select;
 
@@ -105,11 +92,8 @@ class Insert implements InsertInterface
     /**
      * Request back an auto sequencing field by name
      *
-     * @param string|string[]
-     *
-     * @return $this
      */
-    public function returning($fieldName)
+    public function returning(string|array $fieldName): static
     {
         if ( !is_array($fieldName) )
         {
@@ -127,18 +111,18 @@ class Insert implements InsertInterface
     /**
      * Build the INSERT statement
      *
-     * @return string
      */
-    protected function buildSQL()
+    protected function buildSQL(): string
     {
         $sql = 'INSERT'.PHP_EOL;
 
         $sql .= $this->buildTable();
         $sql .= $this->buildFields();
+        $this->buildBindings();
         $sql .= $this->buildValues();
-        $sql .= $this->buildBindings();
         $sql .= $this->buildValuesFromSelect();
         $sql .= $this->buildReturning();
+
 
         return $sql;
     }
@@ -148,7 +132,7 @@ class Insert implements InsertInterface
      *
      * @return string
      */
-    protected function buildTable()
+    protected function buildTable(): string
     {
         $sql = '';
 
@@ -167,14 +151,13 @@ class Insert implements InsertInterface
     /**
      * Build the field stack
      *
-     * @return string
      */
-    protected function buildFields()
+    protected function buildFields(): string
     {
         $sql = '';
 
-        // A set of fields isn't really required, even if it's a really good
-        // idea to have them.  If nothings there, leave it empty.
+        // A set of fields isn't really required, even if it's a good
+        // idea to have them.  If nothing is there, leave it empty.
         if ( $this->fieldValueSet->isEmpty() )
         {
             return $sql;
@@ -197,9 +180,8 @@ class Insert implements InsertInterface
     /**
      * Build out the values to be inserted
      *
-     * @return string
      */
-    protected function buildValues()
+    protected function buildValues(): string
     {
         $sql = '';
 
@@ -229,7 +211,7 @@ class Insert implements InsertInterface
      * Push the value bindings on to the stack
      *
      */
-    protected function buildBindings()
+    protected function buildBindings(): void
     {
         $this->bindings = $this->fieldValueSet->getBoundValues();
     }
@@ -238,14 +220,13 @@ class Insert implements InsertInterface
      * If the values are coming from a sub-select, this builds this for the
      * larger query.
      *
-     * @return string
      */
-    protected function buildValuesFromSelect()
+    protected function buildValuesFromSelect(): string
     {
         $sql = '';
 
         // Check for a SELECT statement and append if available
-        if ( is_object($this->select) )
+        if ( isset($this->select) )
         {
             $sql .= $this->indentStatement($this->select, 1);
 
@@ -258,9 +239,8 @@ class Insert implements InsertInterface
     /**
      * Build the returning clause of the statement
      *
-     * @return string
      */
-    protected function buildReturning()
+    protected function buildReturning(): string
     {
         $sql = '';
 

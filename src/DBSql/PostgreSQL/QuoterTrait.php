@@ -10,7 +10,7 @@ namespace Metrol\DBSql\PostgreSQL;
 
 /**
  * Provides the functionality that statements and various helpers use from the
- * Quatoable object
+ * Quotable object
  *
  */
 trait QuoterTrait
@@ -18,16 +18,14 @@ trait QuoterTrait
     /**
      * The object that handles auto quoting field and table names.
      *
-     * @var Quotable
      */
-    protected $quotable;
+    protected Quotable $quotable;
 
     /**
      * Provide the quoting utility to use on Table and Field names
      *
-     * @return Quotable
      */
-    public function quoter()
+    public function quoter(): Quotable
     {
         if ( !is_object($this->quotable) )
         {
@@ -38,14 +36,11 @@ trait QuoterTrait
     }
 
     /**
-     * Tell the quoter engine whether or not to try and automatically quote
+     * Tell the quoter engine whether to try and automatically quote
      * field and table names.  When turned off, quoting is manual.
      *
-     * @param bool $flag
-     *
-     * @return $this
      */
-    public function enableQuoting(bool $flag)
+    public function enableQuoting(bool $flag): static
     {
         $this->quoter()->enableQuoting($flag);
 
