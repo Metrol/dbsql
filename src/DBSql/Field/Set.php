@@ -11,16 +11,14 @@ namespace Metrol\DBSql\Field;
 /**
  * Maintains a set of Field Value objects for use with DB writing
  *
- * @package Metrol\DBSql
  */
 class Set
 {
     /**
      * The field value objects being handled here
      *
-     * @var Value[]
      */
-    private $values = [];
+    private array $values = [];
 
     /**
      * Instantiate the field value set
@@ -34,7 +32,6 @@ class Set
     /**
      * Returns true if the set of values is empty
      *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -51,7 +48,6 @@ class Set
     /**
      * Returns true if there are values in the set
      *
-     * @return bool
      */
     public function isNotEmpty(): bool
     {
@@ -68,11 +64,8 @@ class Set
     /**
      * Add a field value to the stack
      *
-     * @param Value $fieldValue
-     *
-     * @return $this
      */
-    public function addFieldValue(Value $fieldValue): self
+    public function addFieldValue(Value $fieldValue): static
     {
         $this->values[] = $fieldValue;
 
@@ -82,7 +75,6 @@ class Set
     /**
      * Provide all the field values that have been set into this object
      *
-     * @return Value[]
      */
     public function getFieldValues(): array
     {
@@ -92,11 +84,8 @@ class Set
     /**
      * Provide the field value object for the specified field name
      *
-     * @param string $fieldName
-     *
-     * @return Value|null
      */
-    public function getFieldValue(string $fieldName)
+    public function getFieldValue(string $fieldName): ?Value
     {
         $value = null;
 
@@ -115,7 +104,6 @@ class Set
     /**
      * Provide a list of field names from this set
      *
-     * @return string[]
      */
     public function getFieldNames(): array
     {
@@ -132,7 +120,6 @@ class Set
     /**
      * Provide a list of SQL Strings that will be put in place of actual values
      *
-     * @return string[]
      */
     public function getValueMarkers(): array
     {
@@ -152,10 +139,9 @@ class Set
     }
 
     /**
-     * Provide an array keyed on the field name, with the value being it's
+     * Provide an array keyed on the field name, with the value being its
      * value marker for the SQL.
      *
-     * @return string[]
      */
     public function getFieldNamesAndMarkers(): array
     {
@@ -180,7 +166,6 @@ class Set
     /**
      * Collect all the bound values together into a single array
      *
-     * @return array
      */
     public function getBoundValues(): array
     {

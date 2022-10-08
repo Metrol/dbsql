@@ -9,33 +9,29 @@
 namespace Metrol\DBSql\Field;
 
 /**
- * Provide specific field information for values to be used for INSERTs and
- * UPDATEs.
+ * Provide specific field information for values to be used for inserts and
+ * updates.
  *
- * @package Metrol\DBSql
  */
 class Value
 {
     /**
      * The name of the field
      *
-     * @var string
      */
-    private $fieldName;
+    private string $fieldName;
 
     /**
-     * The place holder that is used in the SQL string
+     * The placeholder that is used in the SQL string
      *
-     * @var string
      */
-    private $valueMarker = '';
+    private string $valueMarker = '';
 
     /**
      * The bindings to attach to the SQL for storing this value
      *
-     * @var array
      */
-    private $binding = [];
+    private array $binding = [];
 
     /**
      * Instantiate the field value
@@ -50,7 +46,6 @@ class Value
     /**
      * Provide the name of the field
      *
-     * @return string
      */
     public function getFieldName(): string
     {
@@ -58,15 +53,12 @@ class Value
     }
 
     /**
-     * Set the place holder that will go into the SQL instead of the actual
+     * Set the placeholder that will go into the SQL instead of the actual
      * value.  This may be a binding key, or some combination of keys along
      * with keywords.
      *
-     * @param string $marker
-     *
-     * @return $this
      */
-    public function setValueMarker(string $marker): self
+    public function setValueMarker(string $marker): static
     {
         $this->valueMarker = $marker;
 
@@ -77,7 +69,6 @@ class Value
      * Provide the string to put into the SQL statement in place of the actual
      * value.
      *
-     * @return string
      */
     public function getValueMarker(): string
     {
@@ -88,11 +79,8 @@ class Value
      * Set the binding array.  Will overwrite any existing values that have
      * been added.
      *
-     * @param array $bindingArray
-     *
-     * @return $this
      */
-    public function setBoundValues(array $bindingArray): self
+    public function setBoundValues(array $bindingArray): static
     {
         $this->binding = $bindingArray;
 
@@ -100,14 +88,11 @@ class Value
     }
 
     /**
-     * Add a single binding value to the stack
+     * Add a single binding value to the stack.
+     * Accepts any string as a key, or a ? for automatic binding
      *
-     * @param string $key   Accept any string, or a ? for automatic binding
-     * @param mixed  $value
-     *
-     * @return $this
      */
-    public function addBinding(string $key, $value): self
+    public function addBinding(string $key, mixed $value): static
     {
         $this->binding[$key] = $value;
 
@@ -117,7 +102,6 @@ class Value
     /**
      * Provide the bound values array
      *
-     * @return array
      */
     public function getBoundValues(): array
     {
@@ -127,7 +111,6 @@ class Value
     /**
      * Provide the number of items bound to this field value
      *
-     * @return integer
      */
     public function getBindCount(): int
     {
@@ -137,7 +120,6 @@ class Value
     /**
      * Provide a unique binding key
      *
-     * @return string
      */
     static public function getBindKey(): string
     {
