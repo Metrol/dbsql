@@ -27,7 +27,7 @@ trait QuoterTrait
      */
     public function quoter(): Quotable
     {
-        if ( !is_object($this->quotable) )
+        if ( ! isset($this->quotable) )
         {
             $this->quotable = new Quotable;
         }
