@@ -14,10 +14,10 @@ namespace Metrol\DBSql\MySQL;
  */
 class Quotable extends \Metrol\DBSql\Quotable
 {
-    const FIELD_OPEN  = '`';
-    const FIELD_CLOSE = '`';
-    const TABLE_OPEN  = '`';
-    const TABLE_CLOSE = '`';
+    const string FIELD_OPEN  = '`';
+    const string FIELD_CLOSE = '`';
+    const string TABLE_OPEN  = '`';
+    const string TABLE_CLOSE = '`';
 
     /**
      * Instantiate the Quotable object

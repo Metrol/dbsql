@@ -22,21 +22,21 @@ class Select implements SelectInterface
      * Joining keywords for comparisons.
      *
      */
-    const JOIN    = 'JOIN';
-    const LEFT    = 'LEFT';
-    const RIGHT   = 'RIGHT';
-    const NATURAL = 'NATURAL';
-    const FULL    = 'FULL';
+    const string JOIN    = 'JOIN';
+    const string LEFT    = 'LEFT';
+    const string RIGHT   = 'RIGHT';
+    const string NATURAL = 'NATURAL';
+    const string FULL    = 'FULL';
 
     /**
      * Sorting directions
      *
      * @const string
      */
-    const ASCENDING   = 'ASC';
-    const DESCENDING  = 'DESC';
-    const NULLS_FIRST = 'NULLS FIRST';
-    const NULLS_LAST  = 'NULLS LAST';
+    const string ASCENDING   = 'ASC';
+    const string DESCENDING  = 'DESC';
+    const string NULLS_FIRST = 'NULLS FIRST';
+    const string NULLS_LAST  = 'NULLS LAST';
 
     /**
      * Whether to use the DISTINCT keyword
@@ -198,7 +198,7 @@ class Select implements SelectInterface
      * Adds an INNER JOIN clause to the SELECT statement.
      *
      */
-    public function join(string $tableName, string $onCriteria, array $bindValues = null): static
+    public function join(string $tableName, string $onCriteria, ?array $bindValues = null): static
     {
         $tableName  = $this->quoter()->quoteTable($tableName);
         $onCriteria = $this->bindAssign($onCriteria, $bindValues);
@@ -264,7 +264,7 @@ class Select implements SelectInterface
      *
      */
     public function joinOuter(string $joinType, string $tableName, string $onCriteria,
-                              array  $bindValues = null): static
+                              ?array $bindValues = null): static
     {
         $joinType = strtoupper($joinType);
 
@@ -332,7 +332,7 @@ class Select implements SelectInterface
      *
      * @return $this
      */
-    public function order(string $fieldName, string $direction = null, string $nullOrder = null): static
+    public function order(string $fieldName, ?string $direction = null, ?string $nullOrder = null): static
     {
         if ( $direction === null )
         {
@@ -404,7 +404,7 @@ class Select implements SelectInterface
      * You must quote where needed yourself.
      *
      */
-    public function having(string $criteria, array $bindValues = null): static
+    public function having(string $criteria, ?array $bindValues = null): static
     {
         $havingClause = $this->bindAssign($criteria, $bindValues);
 

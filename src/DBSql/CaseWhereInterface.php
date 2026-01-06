@@ -18,7 +18,6 @@ interface CaseWhereInterface extends CaseInterface
      * Assembles the CASE statement, pushes it onto the Select object, then
      * passes back the Select object to continue chaining the query.
      *
-     * @return SelectInterface
      */
-    public function endCase(): SelectInterface;
+    public function endCase(?string $alias = null): SelectInterface;
 }

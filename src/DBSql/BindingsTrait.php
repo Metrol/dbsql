@@ -118,7 +118,7 @@ trait BindingsTrait
      * @return string Provide the same clause back, with every ? replaced with
      *                a named binding as it has been assigned in this object
      */
-    protected function bindAssign(string $in, array $values = null): string
+    protected function bindAssign(string $in, ?array $values = null): string
     {
         $out = $in;
 

@@ -19,5 +19,5 @@ interface CaseFieldInterface extends CaseInterface
      * passes back the Select object to continue chaining the query.
      *
      */
-    public function endCase(string $alias = null): SelectInterface;
+    public function endCase(?string $alias = null): SelectInterface;
 }

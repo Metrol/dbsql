@@ -17,15 +17,15 @@ use UnexpectedValueException;
  */
 class DBSql
 {
-    const POSTGRESQL     = 'PostgreSQL';
-    const POSTGRESQL_PDO = 'pgsql';
-    const MYSQL          = 'MySQL';
-    const MYSQL_PDO      = 'mysql';
+    const string POSTGRESQL     = 'PostgreSQL';
+    const string POSTGRESQL_PDO = 'pgsql';
+    const string MYSQL          = 'MySQL';
+    const string MYSQL_PDO      = 'mysql';
 
     /**
      *
      */
-    static public function PostgreSQL()
+    static public function PostgreSQL(): PostgreSQL
     {
         return new PostgreSQL;
     }
@@ -33,7 +33,7 @@ class DBSql
     /**
      *
      */
-    static public function MySQL()
+    static public function MySQL(): MySQL
     {
         return new MySQL;
     }

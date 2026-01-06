@@ -19,19 +19,19 @@ interface CaseInterface extends StatementInterface
      * to provide the stack.
      *
      */
-    public function when(string $criteria, array $bindValues = null): WhenInterface;
+    public function when(string $criteria, ?array $bindValues = null): WhenInterface;
 
     /**
      * The final fall through if none of the WHEN cases match.
      *
      */
-    public function elseThen(string $elseResult, array $bindValues = null): CaseInterface;
+    public function elseThen(string $elseResult, ?array $bindValues = null): CaseInterface;
 
     /**
      * Assembles the CASE statement, pushes it onto the Select object.  The
      * alias is ignored when used in a WHERE clause.
      *
      */
-    public function endCase(string $alias = null): SelectInterface;
+    public function endCase(?string $alias = null): SelectInterface;
 
 }

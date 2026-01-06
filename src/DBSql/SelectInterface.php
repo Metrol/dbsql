@@ -53,7 +53,7 @@ interface SelectInterface extends StatementInterface, StackInterface
      * Adds an INNER JOIN clause to the SELECT statement.
      *
      */
-    public function join(string $tableName, string $onCriteria, array $bindValues = null): static;
+    public function join(string $tableName, string $onCriteria, ?array $bindValues = null): static;
 
     /**
      * Adds an INNER JOIN clause to the SELECT statement with USING as the join
@@ -67,7 +67,7 @@ interface SelectInterface extends StatementInterface, StackInterface
      *
      */
     public function joinOuter(string $joinType, string $tableName, string $onCriteria,
-                              array $bindValues = null): static;
+                              ?array $bindValues = null): static;
 
     /**
      * Adds an OUTER JOIN clause to the SELECT statement with USING as the
@@ -116,7 +116,7 @@ interface SelectInterface extends StatementInterface, StackInterface
      * Add fields to order the result set by
      *
      */
-    public function order(string $fieldName, string $direction = null, string $nullOrder = null): static;
+    public function order(string $fieldName, ?string $direction = null, ?string $nullOrder = null): static;
 
     /**
      * Add a field to the GROUP BY clause.
@@ -135,7 +135,7 @@ interface SelectInterface extends StatementInterface, StackInterface
      * Each new clause called will be included with an "AND" in between.
      *
      */
-    public function having(string $criteria, array $bindValues = null): static;
+    public function having(string $criteria, ?array $bindValues = null): static;
 
     /**
      * Sets the limit for how many rows to pull back from the query.

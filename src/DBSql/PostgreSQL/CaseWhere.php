@@ -60,7 +60,7 @@ class CaseWhere implements CaseWhereInterface
      * to provide the stack.
      *
      */
-    public function when(string $criteria, array $bindValues = null): WhenInterface
+    public function when(string $criteria, ?array $bindValues = null): WhenInterface
     {
         $when = new When($this);
         $when->setCriteria($criteria, $bindValues);
@@ -74,7 +74,7 @@ class CaseWhere implements CaseWhereInterface
      * The final fall through if none of the WHEN cases match.
      *
      */
-    public function elseThen(string $elseResult, array $bindValues = null): static
+    public function elseThen(string $elseResult, ?array $bindValues = null): static
     {
         $this->elseResult = $this->bindAssign($elseResult, $bindValues);
         $this->elseResult = $this->quoter()->quoteField($this->elseResult);
@@ -87,7 +87,7 @@ class CaseWhere implements CaseWhereInterface
      * stack, then passes back the Select object to continue chaining the query.
      *
      */
-    public function endCase(string $alias = null): SelectInterface
+    public function endCase(?string $alias = null): SelectInterface
     {
         $quoteSetting = $this->select->quoter()->isEnabled();
 

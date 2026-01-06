@@ -23,7 +23,7 @@ class Union implements UnionInterface
      * PostgreSQL uses a DISTINCT union by default.
      *
      */
-    const DEFAULT_UNION = self::UNION_DISTINCT;
+    const string DEFAULT_UNION = self::UNION_DISTINCT;
 
     /**
      * The collection of Select Statements and Union types
@@ -54,7 +54,7 @@ class Union implements UnionInterface
      * Adds a select statement to the stack
      *
      */
-    public function setSelect(SelectInterface $select, string $unionType = null): static
+    public function setSelect(SelectInterface $select, ?string $unionType = null): static
     {
         $ut = '';
 

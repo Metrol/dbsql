@@ -19,8 +19,8 @@ interface UnionInterface extends StatementInterface
      *
      * @const
      */
-    const UNION_ALL       = 'ALL';
-    const UNION_DISTINCT  = 'DISTINCT';
+    const string UNION_ALL      = 'ALL';
+    const string UNION_DISTINCT = 'DISTINCT';
 
     /**
      * Adds a select statement to the stack
@@ -32,5 +32,5 @@ interface UnionInterface extends StatementInterface
      *
      * @return $this
      */
-    public function setSelect(SelectInterface $select, string $unionType = null): static;
+    public function setSelect(SelectInterface $select, ?string $unionType = null): static;
 }

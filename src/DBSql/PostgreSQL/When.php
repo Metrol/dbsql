@@ -64,7 +64,7 @@ class When implements WhenInterface
      * to provide the stack.
      *
      */
-    public function setCriteria(string $criteria, array $bindValues = null): void
+    public function setCriteria(string $criteria, ?array $bindValues = null): void
     {
         $this->criteria = $this->bindAssign($criteria, $bindValues);
         $this->criteria = $this->quoter()->quoteField($this->criteria);
@@ -75,7 +75,7 @@ class When implements WhenInterface
      * that called this object.
      *
      */
-    public function then(string $thenResult, array $bindValues = null): CaseInterface
+    public function then(string $thenResult, ?array $bindValues = null): CaseInterface
     {
         $this->thenResult = $this->bindAssign($thenResult, $bindValues);
         $this->thenResult = $this->quoter()->quoteField($this->thenResult);

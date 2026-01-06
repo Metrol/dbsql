@@ -45,7 +45,7 @@ trait WhereTrait
     {
         $whereClause = new Where($this);
 
-        $whereClause->setInList($fieldName, $values, true);
+        $whereClause->setInList($fieldName, $values);
 
         $this->wherePush($whereClause);
 
@@ -78,7 +78,7 @@ trait WhereTrait
     {
         $whereClause = new Where($this);
 
-        $whereClause->setInSelect($fieldName, $subSelect, true);
+        $whereClause->setInSelect($fieldName, $subSelect);
 
         $this->wherePush($whereClause);
 

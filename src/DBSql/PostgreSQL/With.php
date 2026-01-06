@@ -68,7 +68,7 @@ class With implements WithInterface
      */
     public function setRecursive(string $alias,
                                  Union  $union,
-                                 array  $fields = null): static
+                                 ?array $fields = null): static
     {
         $this->recursive->setUnion($alias, $union);
 
